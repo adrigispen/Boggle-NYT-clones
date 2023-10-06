@@ -1,0 +1,19 @@
+.playerRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.letterSquare {
+  width: 100px;
+  height: 100px;
+  color: aliceblue;
+  background-color: darkblue;
+  border-color: aliceblue;
+  font-size: 48px;
+}
+
+.selected {
+  color: aquamarine;
+  background-color: darkmagenta;
+}
