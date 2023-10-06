@@ -36,7 +36,7 @@ export function findWord(word: string, grid: string[][]): LetterSquareProps[] {
   } else {
     startPos.forEach((pos) => queue.push([pos]));
   }
-  while (queue) {
+  while (queue.length) {
     const path: LetterSquareProps[] = queue.shift();
     if (path.length == word.length) {
       return path;
@@ -47,6 +47,10 @@ export function findWord(word: string, grid: string[][]): LetterSquareProps[] {
       [lastLetterPosition.row - 1, lastLetterPosition.col],
       [lastLetterPosition.row, lastLetterPosition.col + 1],
       [lastLetterPosition.row, lastLetterPosition.col - 1],
+      [lastLetterPosition.row + 1, lastLetterPosition.col + 1],
+      [lastLetterPosition.row - 1, lastLetterPosition.col + 1],
+      [lastLetterPosition.row + 1, lastLetterPosition.col - 1],
+      [lastLetterPosition.row - 1, lastLetterPosition.col - 1],
     ].forEach(([t1, t2]) => {
       if (
         grid[t1] &&
