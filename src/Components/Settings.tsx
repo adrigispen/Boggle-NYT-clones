@@ -1,4 +1,4 @@
-import { SettingsProps } from "./Settings.types";
+import { SettingsProps } from "./Types";
 
 export const Settings: React.FC<SettingsProps> = ({
   settingsData,
@@ -61,99 +61,97 @@ export const Settings: React.FC<SettingsProps> = ({
   }
 
   return (
-    <>
-      <div>
-        <div className="settingsRow">
-          <h2>Settings</h2>
-        </div>
-        <div className="settingsRow">
-          <h3>Players</h3>
-          <ul>
-            {rows}
-            <li className="playerRow">
-              <button onClick={() => addPlayer()}>Add Player</button>
-            </li>
-          </ul>
-        </div>
-        <div className="settingsRow">
-          <h3>Board Size</h3>
-          <label>
-            <input
-              type="radio"
-              name="boardSize"
-              value="3"
-              onChange={() => setSize(3)}
-              checked={settingsData.size === 3}
-            />
-            3x3
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="boardSize"
-              value="4"
-              onChange={() => setSize(4)}
-              checked={settingsData.size === 4}
-            />
-            4x4
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="boardSize"
-              value="5"
-              onChange={() => setSize(5)}
-              checked={settingsData.size === 5}
-            />
-            5x5
-          </label>
-        </div>
-        <div className="settingsRow">
-          <h3>Language</h3>
-          <label>
-            <input
-              type="radio"
-              name="language"
-              value="English"
-              onChange={() => setLanguage("English")}
-              checked={settingsData.language === "English"}
-            />
-            English
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="language"
-              value="Deutsch"
-              onChange={() => setLanguage("Deutsch")}
-              checked={settingsData.language === "Deutsch"}
-            />
-            Deutsch
-          </label>
-        </div>
-        <div className="settingsRow">
-          <h3>Game play</h3>
-          <label>
-            <input
-              type="checkbox"
-              name="generousMode"
-              onClick={toggleGenerous}
-              checked={settingsData.generousMode}
-            />
-            Generous mode
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="speedMode"
-              onClick={toggleSpeed}
-              checked={settingsData.speedMode}
-            />
-            Speed mode
-          </label>
-        </div>
+    <div>
+      <div className="settingsRow">
+        <h2>Settings</h2>
       </div>
-    </>
+      <div className="settingsRow">
+        <h3>Players</h3>
+        <ul>
+          {rows}
+          <li className="playerRow">
+            <button onClick={() => addPlayer()}>Add Player</button>
+          </li>
+        </ul>
+      </div>
+      <div className="settingsRow">
+        <h3>Board Size</h3>
+        <label>
+          <input
+            type="radio"
+            name="boardSize"
+            value="3"
+            onChange={() => setSize(3)}
+            checked={settingsData.size === 3}
+          />
+          3x3
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="boardSize"
+            value="4"
+            onChange={() => setSize(4)}
+            checked={settingsData.size === 4}
+          />
+          4x4
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="boardSize"
+            value="5"
+            onChange={() => setSize(5)}
+            checked={settingsData.size === 5}
+          />
+          5x5
+        </label>
+      </div>
+      <div className="settingsRow">
+        <h3>Language</h3>
+        <label>
+          <input
+            type="radio"
+            name="language"
+            value="English"
+            onChange={() => setLanguage("English")}
+            checked={settingsData.language === "English"}
+          />
+          English
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="language"
+            value="Deutsch"
+            onChange={() => setLanguage("Deutsch")}
+            checked={settingsData.language === "Deutsch"}
+          />
+          Deutsch
+        </label>
+      </div>
+      <div className="settingsRow">
+        <h3>Game play</h3>
+        <label>
+          <input
+            type="checkbox"
+            name="generousMode"
+            onChange={toggleGenerous}
+            checked={settingsData.generousMode}
+          />
+          Generous mode
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            name="speedMode"
+            onChange={toggleSpeed}
+            checked={settingsData.speedMode}
+          />
+          Speed mode
+        </label>
+      </div>
+    </div>
   );
 };
 
