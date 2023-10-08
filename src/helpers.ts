@@ -19,6 +19,17 @@ export function getLetter(
   }
 }
 
+export const score = new Map([
+  [1, 0],
+  [2, 0],
+  [3, 1],
+  [4, 1],
+  [5, 2],
+  [6, 3],
+  [7, 5],
+  [8, 11],
+]);
+
 export function getNewGrid(size: number, language: string): string[][] {
   return Array(size * size)
     .fill("")
@@ -50,7 +61,6 @@ export function findWord(
   const startPos = gridList.filter(
     ({ letter }) => letter == word.charAt(0).toUpperCase()
   );
-  console.log(word);
   if (!startPos.length) {
     return [];
   } else {

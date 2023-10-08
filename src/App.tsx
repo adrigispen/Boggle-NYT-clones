@@ -2,8 +2,9 @@ import Settings from "./Components/Settings";
 import { SettingsModal } from "./Components/SettingsModal";
 import { Grid } from "./Components/Grid";
 import { useState } from "react";
-import { getNewGrid, findWord } from "./helpers";
+import { getNewGrid, findWord, score } from "./helpers";
 import { PlayerData } from "./Components/Types";
+import { Scoreboard } from "./Components/Scoreboard";
 
 function App() {
   // settings state
@@ -32,7 +33,6 @@ function App() {
   const [grid, setGrid] = useState(initialGrid);
 
   // player data state
-
   const initialPlayerData: PlayerData[] = Array(settingsData.players.length)
     .fill("")
     .map(
@@ -41,6 +41,7 @@ function App() {
           playerName: settingsData.players[i],
           currentSearch: "",
           wordsFound: [""],
+          currentScore: 0,
         } as PlayerData)
     );
 
@@ -61,22 +62,31 @@ function App() {
       grid,
       settingsData.generousMode
     );
-    const newWords = pathSelectionGrid.length
+    const word = pathSelectionGrid.length
+      ? playerData[currentPlayer].currentSearch
+      : "";
+    const newWords = word.length
       ? playerData[currentPlayer].wordsFound.concat(
           playerData[currentPlayer].currentSearch
         )
       : playerData[currentPlayer].wordsFound;
+    const wordScore = word.length > 8 ? 11 : (score.get(word.length) as number);
+    if (word.length) {
+      setSelectionGrid(pathSelectionGrid);
+    } else {
+      setSelectionGrid(noHighlights);
+    }
     const newPlayerData = playerData.map((data, i) =>
       i == currentPlayer
-        ? { ...data, wordsFound: newWords, currentSearch: "" }
+        ? {
+            ...data,
+            wordsFound: newWords,
+            currentSearch: "",
+            currentScore: playerData[currentPlayer].currentScore + wordScore,
+          }
         : data
     );
     setPlayerData(newPlayerData);
-    if (pathSelectionGrid.length) {
-      setSelectionGrid(pathSelectionGrid);
-    } else {
-      // display "word not on the board!"
-    }
     setCurrentPlayer(
       settingsData.speedMode
         ? (currentPlayer + 1) % settingsData.players.length
@@ -128,13 +138,7 @@ function App() {
           />
           <button onClick={handleSearch}>🔎</button>
         </label>
-        <div>
-          <ul>
-            {playerData[currentPlayer].wordsFound.map((word, i) => (
-              <li key={i}>{word}</li>
-            ))}
-          </ul>
-        </div>
+        <Scoreboard {...playerData[currentPlayer]} />
       </div>
     </>
   );

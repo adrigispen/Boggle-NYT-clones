@@ -36,6 +36,7 @@ export interface PlayerData {
   playerName: string;
   currentSearch: string;
   wordsFound: string[];
+  currentScore: number;
 }
 
 export interface SettingsModalProps {
