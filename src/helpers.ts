@@ -1,4 +1,4 @@
-import { LetterSquare } from "./Components/Types";
+import { LetterSquare } from "./components/Types";
 
 export function getLetter(
   language: string,
@@ -19,7 +19,7 @@ export function getLetter(
   }
 }
 
-export const score = new Map([
+export const score = new Map<number, number>([
   [1, 0],
   [2, 0],
   [3, 1],
@@ -77,10 +77,10 @@ export function findWord(
     }
     const lastLetterPosition = path[path.length - 1];
     [
-      [lastLetterPosition.row, lastLetterPosition.col + 1],
-      [lastLetterPosition.row, lastLetterPosition.col - 1],
       [lastLetterPosition.row + 1, lastLetterPosition.col],
       [lastLetterPosition.row - 1, lastLetterPosition.col],
+      [lastLetterPosition.row, lastLetterPosition.col + 1],
+      [lastLetterPosition.row, lastLetterPosition.col - 1],
       [lastLetterPosition.row + 1, lastLetterPosition.col + 1],
       [lastLetterPosition.row - 1, lastLetterPosition.col + 1],
       [lastLetterPosition.row + 1, lastLetterPosition.col - 1],
@@ -109,7 +109,7 @@ const en_US_16_die: string[] = [
   "LUPETS",
   "ACITOA",
   "YLGKUE",
-  "QuBMJOA",
+  "QBMJOA",
   "EHISPN",
   "VETIGN",
   "BALIYT",

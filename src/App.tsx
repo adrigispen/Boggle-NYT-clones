@@ -1,10 +1,11 @@
-import Settings from "./Components/Settings";
-import { SettingsModal } from "./Components/SettingsModal";
-import { Grid } from "./Components/Grid";
+import Settings from "./components/Settings";
+import { SettingsModal } from "./components/SettingsModal";
+import { Grid } from "./components/Grid";
 import { useState } from "react";
 import { getNewGrid, findWord, score } from "./helpers";
-import { PlayerData } from "./Components/Types";
-import { Scoreboard } from "./Components/Scoreboard";
+import { PlayerData } from "./components/Types";
+import { Scoreboard } from "./components/Scoreboard";
+import { checkWord } from "./services/WordCheckService";
 
 function App() {
   // settings state
@@ -31,6 +32,7 @@ function App() {
   const [selectionGrid, setSelectionGrid] = useState(noHighlights);
 
   const [grid, setGrid] = useState(initialGrid);
+  const [error, setError] = useState("");
 
   // player data state
   const initialPlayerData: PlayerData[] = Array(settingsData.players.length)
@@ -56,37 +58,45 @@ function App() {
     setPlayerData(newPlayerData);
   }
 
-  function handleSearch() {
-    const pathSelectionGrid = findWord(
-      playerData[currentPlayer].currentSearch,
-      grid,
-      settingsData.generousMode
+  async function handleSearch() {
+    const clearedSearchPlayerData = playerData.map((d, i) =>
+      i == currentPlayer ? { ...d, currentSearch: "" } : d
     );
-    const word = pathSelectionGrid.length
-      ? playerData[currentPlayer].currentSearch
-      : "";
-    const newWords = word.length
-      ? playerData[currentPlayer].wordsFound.concat(
-          playerData[currentPlayer].currentSearch
-        )
-      : playerData[currentPlayer].wordsFound;
-    const wordScore = word.length > 8 ? 11 : (score.get(word.length) as number);
-    if (word.length) {
-      setSelectionGrid(pathSelectionGrid);
-    } else {
+    try {
+      const [word] = await checkWord(playerData[currentPlayer].currentSearch);
+      const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
+      if (!pathSelectionGrid.length) {
+        setError("Word does not appear on the board!");
+        setSelectionGrid(noHighlights);
+        setPlayerData(clearedSearchPlayerData);
+      } else if (playerData[currentPlayer].wordsFound.indexOf(word) != -1) {
+        setError("Already found!");
+        setSelectionGrid(noHighlights);
+        setPlayerData(clearedSearchPlayerData);
+      } else {
+        setError("");
+        setSelectionGrid(pathSelectionGrid);
+        const newWords = [word].concat(playerData[currentPlayer].wordsFound);
+        const wordScore =
+          word.length > 8 ? 11 : (score.get(word.length) as number);
+        const newPlayerData = playerData.map((data, i) =>
+          i == currentPlayer
+            ? {
+                ...data,
+                wordsFound: newWords,
+                currentSearch: "",
+                currentScore:
+                  playerData[currentPlayer].currentScore + wordScore,
+              }
+            : data
+        );
+        setPlayerData(newPlayerData);
+      }
+    } catch (err) {
+      setError(`Not a valid ${settingsData.language} word`);
       setSelectionGrid(noHighlights);
+      setPlayerData(clearedSearchPlayerData);
     }
-    const newPlayerData = playerData.map((data, i) =>
-      i == currentPlayer
-        ? {
-            ...data,
-            wordsFound: newWords,
-            currentSearch: "",
-            currentScore: playerData[currentPlayer].currentScore + wordScore,
-          }
-        : data
-    );
-    setPlayerData(newPlayerData);
     setCurrentPlayer(
       settingsData.speedMode
         ? (currentPlayer + 1) % settingsData.players.length
@@ -138,6 +148,7 @@ function App() {
           />
           <button onClick={handleSearch}>🔎</button>
         </label>
+        {error && <label className="error">{error}</label>}
         <Scoreboard {...playerData[currentPlayer]} />
       </div>
     </>

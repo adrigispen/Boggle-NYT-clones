@@ -43,3 +43,7 @@ export interface SettingsModalProps {
   isOpen: boolean;
   children: JSX.Element[];
 }
+
+export interface Entry {
+  word: string;
+}
