@@ -1,13 +1,18 @@
 import React from "react";
-import { GridProps } from "./Settings.types";
+import { GridProps } from "./Types";
 import { LetterSquare } from "./LetterSquare";
 
-export const Grid: React.FC<GridProps> = ({ grid }) => {
-
+export const Grid: React.FC<GridProps> = ({ grid, selectionGrid }) => {
   const board = grid.map((row: string[], index: number) => (
-    <div className="row">
+    <div key={`row ${index}`} className="row">
       {row.map((letter: string, i: number) => (
-        <LetterSquare row={index} col={i} letter={letter} />
+        <LetterSquare
+          key={`(${index},${i})`}
+          row={index}
+          col={i}
+          letter={letter}
+          selected={selectionGrid[index][i]}
+        />
       ))}
     </div>
   ));
