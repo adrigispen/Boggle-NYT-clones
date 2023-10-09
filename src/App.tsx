@@ -53,31 +53,26 @@ function App() {
   const [playerData, setPlayerData] = useState(initialPlayerData);
 
   // look for and display words
+  // needs: currentSearch, selectionGrid, settingsData, grid, error, playerData
   async function handleSearch() {
     try {
       const [word] = await checkWord(currentSearch);
       const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
       if (!pathSelectionGrid.length) {
-        setError("Word does not appear on the board!");
-        setSelectionGrid(noHighlights);
-        setCurrentSearch("");
+        clearAndShowError("Word does not appear on the board!");
       } else if (playerData[currentPlayer].wordsFound.indexOf(word) != -1) {
-        setError("Already found!");
-        setSelectionGrid(noHighlights);
-        setCurrentSearch("");
+        clearAndShowError("Already found!");
       } else {
         setError("");
         setSelectionGrid(pathSelectionGrid);
-        const newWords = [word].concat(playerData[currentPlayer].wordsFound);
-        const wordScore =
-          word.length > 8 ? 11 : (score.get(word.length) as number);
         const newPlayerData = playerData.map((data, i) =>
           i == currentPlayer
             ? {
                 ...data,
-                wordsFound: newWords,
+                wordsFound: [word].concat(playerData[currentPlayer].wordsFound),
                 currentScore:
-                  playerData[currentPlayer].currentScore + wordScore,
+                  playerData[currentPlayer].currentScore +
+                  (word.length > 8 ? 11 : (score.get(word.length) as number)),
               }
             : data
         );
@@ -85,15 +80,19 @@ function App() {
         setCurrentSearch("");
       }
     } catch (err) {
-      setError(`Not a valid ${settingsData.language} word`);
-      setSelectionGrid(noHighlights);
-      setCurrentSearch("");
+      clearAndShowError(`Not a valid ${settingsData.language} word`);
     }
     setCurrentPlayer(
       settingsData.speedMode
         ? (currentPlayer + 1) % settingsData.players.length
         : currentPlayer
     );
+  }
+
+  function clearAndShowError(error: string) {
+    setError(error);
+    setSelectionGrid(noHighlights);
+    setCurrentSearch("");
   }
 
   // create new game

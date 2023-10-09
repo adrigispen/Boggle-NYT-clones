@@ -11,11 +11,11 @@ export function getLetter(
       ? en_US_16_die[index][randomIndex]
       : size == 5
       ? en_US_25_die[index][randomIndex]
-      : en_US[Math.floor(Math.random() * en_US.length)];
+      : en_US[Math.floor(Math.random() * en_US.length)].toUpperCase();
   } else {
     return size == 4
       ? de_16_die[index][randomIndex]
-      : de[Math.floor(Math.random() * de.length)];
+      : de[Math.floor(Math.random() * de.length)].toUpperCase();
   }
 }
 
