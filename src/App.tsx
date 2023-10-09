@@ -6,6 +6,7 @@ import { getNewGrid, findWord, score } from "./helpers";
 import { PlayerData } from "./components/Types";
 import { Scoreboard } from "./components/Scoreboard";
 import { checkWord } from "./services/WordCheckService";
+import { SearchSection } from "./components/SearchSection";
 
 function App() {
   // settings state
@@ -41,38 +42,29 @@ function App() {
       (p, i) =>
         ({
           playerName: settingsData.players[i],
-          currentSearch: "",
           wordsFound: [""],
           currentScore: 0,
         } as PlayerData)
     );
 
+  const [currentSearch, setCurrentSearch] = useState("");
+
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [playerData, setPlayerData] = useState(initialPlayerData);
 
   // look for and display words
-  function setCurrentSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    const newPlayerData = playerData.map((data, i) =>
-      i == currentPlayer ? { ...data, currentSearch: e.target.value } : data
-    );
-    setPlayerData(newPlayerData);
-  }
-
   async function handleSearch() {
-    const clearedSearchPlayerData = playerData.map((d, i) =>
-      i == currentPlayer ? { ...d, currentSearch: "" } : d
-    );
     try {
-      const [word] = await checkWord(playerData[currentPlayer].currentSearch);
+      const [word] = await checkWord(currentSearch);
       const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
       if (!pathSelectionGrid.length) {
         setError("Word does not appear on the board!");
         setSelectionGrid(noHighlights);
-        setPlayerData(clearedSearchPlayerData);
+        setCurrentSearch("");
       } else if (playerData[currentPlayer].wordsFound.indexOf(word) != -1) {
         setError("Already found!");
         setSelectionGrid(noHighlights);
-        setPlayerData(clearedSearchPlayerData);
+        setCurrentSearch("");
       } else {
         setError("");
         setSelectionGrid(pathSelectionGrid);
@@ -84,30 +76,24 @@ function App() {
             ? {
                 ...data,
                 wordsFound: newWords,
-                currentSearch: "",
                 currentScore:
                   playerData[currentPlayer].currentScore + wordScore,
               }
             : data
         );
         setPlayerData(newPlayerData);
+        setCurrentSearch("");
       }
     } catch (err) {
       setError(`Not a valid ${settingsData.language} word`);
       setSelectionGrid(noHighlights);
-      setPlayerData(clearedSearchPlayerData);
+      setCurrentSearch("");
     }
     setCurrentPlayer(
       settingsData.speedMode
         ? (currentPlayer + 1) % settingsData.players.length
         : currentPlayer
     );
-  }
-
-  function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
   }
 
   // create new game
@@ -136,19 +122,12 @@ function App() {
           selectionGrid={selectionGrid}
           setSelectionGrid={setSelectionGrid}
         />
-        <label>
-          Search for words
-          <input
-            name="search"
-            value={playerData[currentPlayer].currentSearch}
-            onChange={(e) => {
-              setCurrentSearch(e);
-            }}
-            onKeyDown={(e) => handleEnter(e)}
-          />
-          <button onClick={handleSearch}>🔎</button>
-        </label>
-        {error && <label className="error">{error}</label>}
+        <SearchSection
+          currentSearch={currentSearch}
+          setCurrentSearch={setCurrentSearch}
+          handleSearch={handleSearch}
+          error={error}
+        />
         <Scoreboard {...playerData[currentPlayer]} />
       </div>
     </>

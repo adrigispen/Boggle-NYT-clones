@@ -34,7 +34,6 @@ export interface SettingsProps {
 
 export interface PlayerData {
   playerName: string;
-  currentSearch: string;
   wordsFound: string[];
   currentScore: number;
 }
@@ -46,4 +45,11 @@ export interface SettingsModalProps {
 
 export interface Entry {
   word: string;
+}
+
+export interface SearchProps {
+  currentSearch: string;
+  setCurrentSearch: (word: string) => void;
+  handleSearch: () => void;
+  error: string;
 }
