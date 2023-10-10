@@ -391,3 +391,6 @@ const de: string[] = [
   "q",
   "y",
 ];
+
+export const ponsApiSecret =
+  "f06f4cec449369eee1abc5fa987dbf35e421d03b4f772bd42fc531bd6af95bde";
