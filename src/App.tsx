@@ -7,6 +7,7 @@ import { PlayerData } from "./components/Types";
 import { Scoreboard } from "./components/Scoreboard";
 import { checkWord } from "./services/WordCheckService";
 import { SearchSection } from "./components/SearchSection";
+import { FinalScores } from "./components/FinalScores";
 
 function App() {
   // settings state
@@ -51,12 +52,13 @@ function App() {
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [playerData, setPlayerData] = useState(initialPlayerData);
+  const [gameOver, setGameOver] = useState(false);
 
   // look for and display words
   // needs: currentSearch, selectionGrid, settingsData, grid, error, playerData
   async function handleSearch() {
     try {
-      const [word] = await checkWord(currentSearch);
+      const [word] = await checkWord(currentSearch, settingsData.language);
       const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
       if (!pathSelectionGrid.length) {
         clearAndShowError("Word does not appear on the board!");
@@ -87,6 +89,24 @@ function App() {
         ? (currentPlayer + 1) % settingsData.players.length
         : currentPlayer
     );
+  }
+
+  function endTurn() {
+    if (settingsData.speedMode) {
+      setCurrentPlayer((currentPlayer + 1) % settingsData.players.length);
+      setSelectionGrid(noHighlights);
+      setError("");
+    } else {
+      if (currentPlayer < settingsData.players.length - 1) {
+        setCurrentPlayer(currentPlayer + 1);
+        setSelectionGrid(noHighlights);
+        setError("");
+      } else {
+        setGameOver(true);
+        setSelectionGrid(noHighlights);
+        setError("");
+      }
+    }
   }
 
   function clearAndShowError(error: string) {
@@ -127,7 +147,10 @@ function App() {
           handleSearch={handleSearch}
           error={error}
         />
-        <Scoreboard {...playerData[currentPlayer]} />
+        {!gameOver && (
+          <Scoreboard {...playerData[currentPlayer]} endTurn={endTurn} />
+        )}
+        {gameOver && <FinalScores playerData={playerData} />}
       </div>
     </>
   );

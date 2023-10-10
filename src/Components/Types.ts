@@ -38,6 +38,10 @@ export interface PlayerData {
   currentScore: number;
 }
 
+export interface ScoreboardData extends PlayerData {
+  endTurn: () => void;
+}
+
 export interface SettingsModalProps {
   isOpen: boolean;
   children: JSX.Element[];
@@ -52,4 +56,8 @@ export interface SearchProps {
   setCurrentSearch: (word: string) => void;
   handleSearch: () => void;
   error: string;
+}
+
+export interface FinalScoresProps {
+  playerData: PlayerData[];
 }
