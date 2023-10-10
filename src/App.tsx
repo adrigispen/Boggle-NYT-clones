@@ -48,15 +48,19 @@ function App() {
         } as PlayerData)
     );
 
-  const [currentSearch, setCurrentSearch] = useState("");
-
+  //const [currentSearch, setCurrentSearch] = useState("");
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [playerData, setPlayerData] = useState(initialPlayerData);
+
+  // game state
   const [gameOver, setGameOver] = useState(false);
 
   // look for and display words
   // needs: currentSearch, selectionGrid, settingsData, grid, error, playerData
-  async function handleSearch() {
+  // could use dispatchers and observers - useReducer & useContext
+  // useMemo, useCallback - could cache functions
+  // use components only for display, try to pull out all the logic into a reducer game service
+  async function handleSearch(currentSearch: string) {
     try {
       const [word] = await checkWord(currentSearch, settingsData.language);
       const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
@@ -79,7 +83,6 @@ function App() {
             : data
         );
         setPlayerData(newPlayerData);
-        setCurrentSearch("");
       }
     } catch (err) {
       clearAndShowError(`Not a valid ${settingsData.language} word`);
@@ -91,6 +94,12 @@ function App() {
     );
   }
 
+  function clearAndShowError(error: string) {
+    setError(error);
+    setSelectionGrid(noHighlights);
+  }
+
+  // end turn or game
   function endTurn() {
     if (settingsData.speedMode) {
       setCurrentPlayer((currentPlayer + 1) % settingsData.players.length);
@@ -109,12 +118,6 @@ function App() {
     }
   }
 
-  function clearAndShowError(error: string) {
-    setError(error);
-    setSelectionGrid(noHighlights);
-    setCurrentSearch("");
-  }
-
   // create new game
   function handleGameStart() {
     setGrid(getNewGrid(settingsData.size, settingsData.language));
@@ -122,7 +125,7 @@ function App() {
     setPlayerData(initialPlayerData);
     setShowSettings(false);
   }
-
+  console.log("rerendering");
   return (
     <>
       <div>
@@ -141,16 +144,12 @@ function App() {
           selectionGrid={selectionGrid}
           setSelectionGrid={setSelectionGrid}
         />
-        <SearchSection
-          currentSearch={currentSearch}
-          setCurrentSearch={setCurrentSearch}
-          handleSearch={handleSearch}
-          error={error}
-        />
-        {!gameOver && (
+        <SearchSection onSubmit={handleSearch} error={error} />
+        {!gameOver ? (
           <Scoreboard {...playerData[currentPlayer]} endTurn={endTurn} />
+        ) : (
+          <FinalScores playerData={playerData} />
         )}
-        {gameOver && <FinalScores playerData={playerData} />}
       </div>
     </>
   );

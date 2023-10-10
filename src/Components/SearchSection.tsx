@@ -1,30 +1,23 @@
 import { SearchProps } from "./Types";
 
-export const SearchSection: React.FC<SearchProps> = ({
-  currentSearch,
-  setCurrentSearch,
-  handleSearch,
-  error,
-}) => {
-  function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  }
-
+export const SearchSection: React.FC<SearchProps> = ({ onSubmit, error }) => {
   return (
     <>
-      <label>
-        Search for words
-        <input
-          name="search"
-          value={currentSearch}
-          onChange={(e) => setCurrentSearch(e.target.value)}
-          onKeyDown={(e) => handleEnter(e)}
-        />
-        <button onClick={handleSearch}>🔎</button>
-      </label>
-      {error && <label className="error">{error}</label>}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(e);
+          onSubmit(e.currentTarget.search.value);
+          e.currentTarget.reset();
+        }}
+      >
+        <label>
+          Search for words
+          <input name="search" />
+          <button type="submit">🔎</button>
+        </label>
+        {error && <label className="error">{error}</label>}
+      </form>
     </>
   );
 };

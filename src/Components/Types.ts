@@ -52,9 +52,7 @@ export interface Entry {
 }
 
 export interface SearchProps {
-  currentSearch: string;
-  setCurrentSearch: (word: string) => void;
-  handleSearch: () => void;
+  onSubmit: (value: string) => void;
   error: string;
 }
 
