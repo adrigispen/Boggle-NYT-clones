@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { SettingsProps } from "./Types";
 
-export const Settings: React.FC<SettingsProps> = ({
-  settingsData,
-  setSettingsData,
-}) => {
-  const rows = settingsData.players.map((name: string, index: number) => (
+export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
+  const [players, setPlayers] = useState(["", ""]);
+
+  const rows = players.map((name: string, index: number) => (
     <li key={index}>
       <div className="playerRow">
         <label>Player {index + 1}</label>
@@ -25,132 +25,87 @@ export const Settings: React.FC<SettingsProps> = ({
   ));
 
   function deletePlayer(index: number) {
-    const nextPlayers = settingsData.players.filter((e, i) => i !== index);
-    setSettingsData({ ...settingsData, players: nextPlayers });
+    setPlayers(players.filter((e, i) => i !== index));
   }
 
   function addPlayer() {
-    const nextPlayers = settingsData.players.concat("");
-    setSettingsData({ ...settingsData, players: nextPlayers });
+    setPlayers(players.concat(""));
   }
 
   function setName(value: string, index: number) {
-    const nextPlayers = settingsData.players.map((e, i) =>
-      i == index ? value : e
-    );
-    setSettingsData({ ...settingsData, players: nextPlayers });
-  }
-
-  function setSize(value: number) {
-    setSettingsData({ ...settingsData, size: value });
-  }
-
-  function setLanguage(value: string) {
-    setSettingsData({ ...settingsData, language: value });
-  }
-
-  function toggleGenerous() {
-    setSettingsData({
-      ...settingsData,
-      generousMode: !settingsData.generousMode,
-    });
-  }
-
-  function toggleSpeed() {
-    setSettingsData({ ...settingsData, speedMode: !settingsData.speedMode });
+    setPlayers(players.map((e, i) => (i == index ? value : e)));
   }
 
   return (
     <div>
-      <div className="settingsRow">
-        <h2>Settings</h2>
-      </div>
-      <div className="settingsRow">
-        <h3>Players</h3>
-        <ul>
-          {rows}
-          <li className="playerRow">
-            <button onClick={() => addPlayer()}>Add Player</button>
-          </li>
-        </ul>
-      </div>
-      <div className="settingsRow">
-        <h3>Board Size</h3>
-        <label>
-          <input
-            type="radio"
-            name="boardSize"
-            value="3"
-            onChange={() => setSize(3)}
-            checked={settingsData.size === 3}
-          />
-          3x3
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="boardSize"
-            value="4"
-            onChange={() => setSize(4)}
-            checked={settingsData.size === 4}
-          />
-          4x4
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="boardSize"
-            value="5"
-            onChange={() => setSize(5)}
-            checked={settingsData.size === 5}
-          />
-          5x5
-        </label>
-      </div>
-      <div className="settingsRow">
-        <h3>Language</h3>
-        <label>
-          <input
-            type="radio"
-            name="language"
-            value="English"
-            onChange={() => setLanguage("English")}
-            checked={settingsData.language === "English"}
-          />
-          English
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="language"
-            value="Deutsch"
-            onChange={() => setLanguage("Deutsch")}
-            checked={settingsData.language === "Deutsch"}
-          />
-          Deutsch
-        </label>
-      </div>
-      <div className="settingsRow">
-        <h3>Game play</h3>
-        <label>
-          <input
-            type="checkbox"
-            name="generousMode"
-            onChange={toggleGenerous}
-            checked={settingsData.generousMode}
-          />
-          Generous mode
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="speedMode"
-            onChange={toggleSpeed}
-            checked={settingsData.speedMode}
-          />
-          Speed mode
-        </label>
-      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleGameStart(
+            Number(e.currentTarget.boardSize.value),
+            e.currentTarget.language.value,
+            players,
+            e.currentTarget.speedMode.checked,
+            e.currentTarget.generousMode.checked
+          );
+        }}
+      >
+        <div className="settingsRow">
+          <h2>Settings</h2>
+        </div>
+        <div className="settingsRow">
+          <h3>Players</h3>
+          <ul>
+            {rows}
+            <li className="playerRow">
+              <button onClick={() => addPlayer()}>Add Player</button>
+            </li>
+          </ul>
+        </div>
+        <div className="settingsRow">
+          <h3>Board Size</h3>
+          <label>
+            <input type="radio" name="boardSize" value="3" />
+            3x3
+          </label>
+          <label>
+            <input type="radio" name="boardSize" value="4" defaultChecked />
+            4x4
+          </label>
+          <label>
+            <input type="radio" name="boardSize" value="5" />
+            5x5
+          </label>
+        </div>
+        <div className="settingsRow">
+          <h3>Language</h3>
+          <label>
+            <input
+              type="radio"
+              name="language"
+              value="English"
+              defaultChecked
+            />
+            English
+          </label>
+          <label>
+            <input type="radio" name="language" value="Deutsch" />
+            Deutsch
+          </label>
+        </div>
+        <div className="settingsRow">
+          <h3>Game play</h3>
+          <label>
+            <input type="checkbox" name="generousMode" />
+            Generous mode
+          </label>
+          <label>
+            <input type="checkbox" name="speedMode" />
+            Speed mode
+          </label>
+        </div>
+        <button type="submit">Play Game</button>
+      </form>
     </div>
   );
 };

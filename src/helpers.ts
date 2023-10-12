@@ -1,4 +1,4 @@
-import { LetterSquare } from "./components/Types";
+import { BoggleGame, LetterSquare, PlayerData } from "./components/Types";
 
 export function getLetter(
   language: string,
@@ -6,6 +6,7 @@ export function getLetter(
   index: number
 ): string {
   const randomIndex = Math.floor(Math.random() * 6);
+  console.log(en_US_16_die[3][randomIndex]);
   if (language == "English") {
     return size == 4
       ? en_US_16_die[index][randomIndex]
@@ -36,12 +37,13 @@ export function getNewGrid(size: number, language: string): string[][] {
     .map((e, i) => getLetter(language, size, i))
     .reduce(
       (acc: string[][], letter: string, index: number) => {
+        console.log(acc);
         acc[Math.floor(index / size)][index % size] = letter;
         return acc;
       },
       Array(size)
-        .fill("")
-        .map(() => Array(size).fill(""))
+        .fill("i")
+        .map(() => Array(size).fill("i"))
     );
 }
 
@@ -394,3 +396,46 @@ const de: string[] = [
 
 export const ponsApiSecret =
   "f06f4cec449369eee1abc5fa987dbf35e421d03b4f772bd42fc531bd6af95bde";
+
+export const dudenKey = "lS0kNVnlGJ2kXY1fI62vN2AZrcfrsN6Q5KUOcSel";
+
+export function noHighlights(size: number): boolean[][] {
+  return Array(size)
+    .fill(false)
+    .map(() => Array(size).fill(false));
+}
+
+export function initializePlayersData(players: string[]): PlayerData[] {
+  return Array(players.length)
+    .fill("")
+    .map((p, i) => ({
+      playerName: players[i],
+      wordsFound: [""],
+      currentScore: 0,
+    }));
+}
+
+export const defaultGame: BoggleGame = {
+  settings: {
+    size: 4,
+    language: "English",
+    generousMode: false,
+    speedMode: false,
+  },
+  playersData: [
+    {
+      playerName: "Player 1",
+      wordsFound: [],
+      currentScore: 0,
+    },
+    {
+      playerName: "Player 2",
+      wordsFound: [],
+      currentScore: 0,
+    },
+  ],
+  grid: getNewGrid(4, "English"),
+  selectionGrid: noHighlights(4),
+  currentPlayer: 0,
+  error: "",
+};

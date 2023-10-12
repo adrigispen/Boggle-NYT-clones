@@ -6,7 +6,6 @@ export const SearchSection: React.FC<SearchProps> = ({ onSubmit, error }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(e);
           onSubmit(e.currentTarget.search.value);
           e.currentTarget.reset();
         }}

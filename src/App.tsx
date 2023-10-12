@@ -2,156 +2,135 @@ import Settings from "./components/Settings";
 import { SettingsModal } from "./components/SettingsModal";
 import { Grid } from "./components/Grid";
 import { useState } from "react";
-import { getNewGrid, findWord, score } from "./helpers";
-import { PlayerData } from "./components/Types";
 import { Scoreboard } from "./components/Scoreboard";
-import { checkWord } from "./services/WordCheckService";
 import { SearchSection } from "./components/SearchSection";
 import { FinalScores } from "./components/FinalScores";
+import {
+  defaultGame,
+  findWord,
+  getNewGrid,
+  initializePlayersData,
+  noHighlights,
+  score,
+} from "./helpers";
+import { checkWord } from "./services/WordCheckService";
 
 function App() {
   // settings state
   const [showSettings, setShowSettings] = useState(false);
+  const [game, setGame] = useState(defaultGame);
 
-  const [settingsData, setSettingsData] = useState({
-    players: ["Player 1", "Player 2"],
-    size: 4,
-    language: "English",
-    generousMode: true,
-    speedMode: false,
-  });
-
-  // grid and selection state
-  const initialGrid: string[][] = getNewGrid(
-    settingsData.size,
-    settingsData.language
-  );
-
-  const noHighlights: boolean[][] = Array(settingsData.size)
-    .fill(false)
-    .map(() => Array(settingsData.size).fill(false));
-
-  const [selectionGrid, setSelectionGrid] = useState(noHighlights);
-
-  const [grid, setGrid] = useState(initialGrid);
-  const [error, setError] = useState("");
-
-  // player data state
-  const initialPlayerData: PlayerData[] = Array(settingsData.players.length)
-    .fill("")
-    .map(
-      (p, i) =>
-        ({
-          playerName: settingsData.players[i],
-          wordsFound: [""],
-          currentScore: 0,
-        } as PlayerData)
-    );
-
-  //const [currentSearch, setCurrentSearch] = useState("");
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [playerData, setPlayerData] = useState(initialPlayerData);
-
-  // game state
-  const [gameOver, setGameOver] = useState(false);
-
-  // look for and display words
-  // needs: currentSearch, selectionGrid, settingsData, grid, error, playerData
-  // could use dispatchers and observers - useReducer & useContext
-  // useMemo, useCallback - could cache functions
-  // use components only for display, try to pull out all the logic into a reducer game service
   async function handleSearch(currentSearch: string) {
+    let error = "";
+    let selectionGrid = noHighlights(game.settings.size);
+    let newPlayersData = game.playersData;
+    const nextPlayer = game.settings.speedMode
+      ? (game.currentPlayer + 1) % game.playersData.length
+      : game.currentPlayer;
     try {
-      const [word] = await checkWord(currentSearch, settingsData.language);
-      const pathSelectionGrid = findWord(word, grid, settingsData.generousMode);
+      const [word] = await checkWord(currentSearch, game.settings.language);
+      const pathSelectionGrid = findWord(
+        word,
+        game.grid,
+        game.settings.generousMode
+      );
       if (!pathSelectionGrid.length) {
-        clearAndShowError("Word does not appear on the board!");
-      } else if (playerData[currentPlayer].wordsFound.indexOf(word) != -1) {
-        clearAndShowError("Already found!");
+        error = "Word does not appear on the board!";
+      } else if (
+        game.playersData[game.currentPlayer].wordsFound.indexOf(word) != -1
+      ) {
+        error = "Already found!";
       } else {
-        setError("");
-        setSelectionGrid(pathSelectionGrid);
-        const newPlayerData = playerData.map((data, i) =>
-          i == currentPlayer
+        selectionGrid = pathSelectionGrid;
+        newPlayersData = game.playersData.map((data, i) =>
+          i == game.currentPlayer
             ? {
                 ...data,
-                wordsFound: [word].concat(playerData[currentPlayer].wordsFound),
+                wordsFound: [word].concat(
+                  game.playersData[game.currentPlayer].wordsFound
+                ),
                 currentScore:
-                  playerData[currentPlayer].currentScore +
+                  game.playersData[game.currentPlayer].currentScore +
                   (word.length > 8 ? 11 : (score.get(word.length) as number)),
               }
             : data
         );
-        setPlayerData(newPlayerData);
       }
     } catch (err) {
-      clearAndShowError(`Not a valid ${settingsData.language} word`);
+      error = `Not a valid ${game.settings.language} word`;
+      selectionGrid = noHighlights(game.settings.size);
     }
-    setCurrentPlayer(
-      settingsData.speedMode
-        ? (currentPlayer + 1) % settingsData.players.length
-        : currentPlayer
-    );
+    setGame({
+      ...game,
+      playersData: newPlayersData,
+      selectionGrid,
+      error,
+      currentPlayer: nextPlayer,
+    });
   }
 
-  function clearAndShowError(error: string) {
-    setError(error);
-    setSelectionGrid(noHighlights);
-  }
-
-  // end turn or game
   function endTurn() {
-    if (settingsData.speedMode) {
-      setCurrentPlayer((currentPlayer + 1) % settingsData.players.length);
-      setSelectionGrid(noHighlights);
-      setError("");
-    } else {
-      if (currentPlayer < settingsData.players.length - 1) {
-        setCurrentPlayer(currentPlayer + 1);
-        setSelectionGrid(noHighlights);
-        setError("");
-      } else {
-        setGameOver(true);
-        setSelectionGrid(noHighlights);
-        setError("");
-      }
-    }
+    const selectionGrid = noHighlights(game.settings.size);
+    const error = "";
+    const newPlayer = game.settings.speedMode
+      ? (game.currentPlayer + 1) % game.playersData.length
+      : game.currentPlayer < game.playersData.length - 1
+      ? game.currentPlayer + 1
+      : -1;
+    setGame({
+      ...game,
+      currentPlayer: newPlayer,
+      error: error,
+      selectionGrid: selectionGrid,
+    });
   }
 
-  // create new game
-  function handleGameStart() {
-    setGrid(getNewGrid(settingsData.size, settingsData.language));
-    setSelectionGrid(noHighlights);
-    setPlayerData(initialPlayerData);
+  function handleGameStart(
+    size: number,
+    language: string,
+    players: string[],
+    speedMode: boolean,
+    generousMode: boolean
+  ) {
+    const playersData = initializePlayersData(players);
+    const grid = getNewGrid(size, language);
+    const selectionGrid = noHighlights(size);
+    const newGame = {
+      settings: {
+        size,
+        language,
+        speedMode,
+        generousMode,
+      },
+      playersData,
+      grid,
+      selectionGrid,
+      currentPlayer: 0,
+      error: "",
+    };
+    setGame(newGame);
     setShowSettings(false);
   }
+
   console.log("rerendering");
   return (
-    <>
-      <div>
-        <h1>Speedy Boggle</h1>
-        <button onClick={() => setShowSettings(true)}>Settings</button>
-        <SettingsModal isOpen={showSettings}>
-          <Settings
-            settingsData={settingsData}
-            setSettingsData={setSettingsData}
-          />
-          <button onClick={handleGameStart}>Play Game</button>
-        </SettingsModal>
-        <Grid
-          grid={grid}
-          setGrid={setGrid}
-          selectionGrid={selectionGrid}
-          setSelectionGrid={setSelectionGrid}
+    <div>
+      <h1>Speedy Boggle</h1>
+      <button onClick={() => setShowSettings(true)}>Settings</button>
+      <SettingsModal isOpen={showSettings}>
+        <Settings handleGameStart={handleGameStart} />
+      </SettingsModal>
+      <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
+      <SearchSection onSubmit={handleSearch} error={game.error} />
+      {!game.currentPlayer ? (
+        <Scoreboard
+          {...game.playersData[game.currentPlayer]}
+          endTurn={endTurn}
         />
-        <SearchSection onSubmit={handleSearch} error={error} />
-        {!gameOver ? (
-          <Scoreboard {...playerData[currentPlayer]} endTurn={endTurn} />
-        ) : (
-          <FinalScores playerData={playerData} />
-        )}
-      </div>
-    </>
+      ) : (
+        <FinalScores playerData={game.playersData} />
+      )}
+    </div>
   );
 }
 
