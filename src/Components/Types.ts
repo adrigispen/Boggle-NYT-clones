@@ -49,6 +49,10 @@ export interface Entry {
   word: string;
 }
 
+export interface dwdsEntry {
+  lemma: string;
+}
+
 export interface SearchProps {
   onSubmit: (currentSearch: string, playerData: PlayerData) => void;
 }

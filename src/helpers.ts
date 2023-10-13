@@ -416,7 +416,7 @@ export function initializePlayersData(players: string[]): PlayerData[] {
 
 export const defaultGame: BoggleGame = {
   settings: {
-    size: 4,
+    size: 3,
     language: "English",
     generousMode: false,
     speedMode: false,
@@ -433,8 +433,8 @@ export const defaultGame: BoggleGame = {
       currentScore: 0,
     },
   ],
-  grid: getNewGrid(4, "English"),
-  selectionGrid: noHighlights(4),
+  grid: getNewGrid(3, "English"),
+  selectionGrid: noHighlights(3),
   currentPlayer: 0,
   error: "",
   playing: true,

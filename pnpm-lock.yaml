@@ -17,6 +17,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  typo-js-ts:
+    specifier: ^2.0.4
+    version: 2.0.4
   use-immer:
     specifier: ^0.9.0
     version: 0.9.0(immer@10.0.3)(react@18.2.0)
@@ -1759,6 +1762,14 @@ packages:
     engines: {node: '>=12.20'}
     hasBin: true
     dev: true
+
+  /typo-js-ts@2.0.4:
+    resolution: {integrity: sha512-tUFUoXTFYUS3Yu28XcrOo2E9oe/lb1VDL6Bx4tqXM6ZBrSWdorCX7hTWM0yNdwWYPsfkwYGHazO6xGaGjsT7YQ==}
+    dev: false
+
+  /typo-js@1.2.3:
+    resolution: {integrity: sha512-67Hyl94beZX8gmTap7IDPrG5hy2cHftgsCAcGvE1tzuxGT+kRB+zSBin0wIMwysYw8RUCBCvv9UfQl8TNM75dA==}
+    dev: false
 
   /update-browserslist-db@1.0.13(browserslist@4.22.1):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}

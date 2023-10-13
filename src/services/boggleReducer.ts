@@ -3,6 +3,7 @@ import {
   BoggleAction,
   BoggleActionType,
 } from "../components/Types";
+import { findPaths } from "../findAllWords";
 import { calculateWinner, getNewGrid, noHighlights } from "../helpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
@@ -49,7 +50,8 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         : -1;
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
-        playersData = calculateWinner(game.playersData)
+        playersData = calculateWinner(game.playersData);
+        findPaths(game.grid);
       }
       return {
         ...game,
