@@ -36,7 +36,7 @@ export interface PlayerData {
   currentScore: number;
 }
 
-export interface ScoreboardData extends PlayerData {
+export interface ScoreboardData {
   endTurn: () => void;
 }
 
@@ -50,12 +50,7 @@ export interface Entry {
 }
 
 export interface SearchProps {
-  onSubmit: (value: string) => void;
-  error: string;
-}
-
-export interface FinalScoresProps {
-  playerData: PlayerData[];
+  onSubmit: (currentSearch: string, playerData: PlayerData) => void;
 }
 
 export interface BoggleGame {
@@ -65,6 +60,7 @@ export interface BoggleGame {
   selectionGrid: boolean[][];
   currentPlayer: number;
   error: string;
+  playing: boolean;
 }
 
 export enum BoggleActionType {
@@ -84,12 +80,12 @@ export type BoggleAction =
     }
   | {
       type: BoggleActionType.TURN_ENDED;
-      payload: SwitchPlayerPayload;
     };
 
 export interface SearchPayload {
+  selectionGrid: boolean[][];
+  error: string;
   playerData: PlayerData;
-  currentSearch: string;
 }
 
 export interface NewGamePayload {
@@ -98,8 +94,4 @@ export interface NewGamePayload {
   speedMode: boolean;
   generousMode: boolean;
   playersData: PlayerData[];
-}
-
-export interface SwitchPlayerPayload {
-  currentPlayer: number;
 }

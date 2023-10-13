@@ -1,4 +1,5 @@
 import { BoggleGame, LetterSquare, PlayerData } from "./components/Types";
+import { checkWord } from "./services/WordCheckService";
 
 export function getLetter(
   language: string,
@@ -6,7 +7,6 @@ export function getLetter(
   index: number
 ): string {
   const randomIndex = Math.floor(Math.random() * 6);
-  console.log(en_US_16_die[3][randomIndex]);
   if (language == "English") {
     return size == 4
       ? en_US_16_die[index][randomIndex]
@@ -37,13 +37,12 @@ export function getNewGrid(size: number, language: string): string[][] {
     .map((e, i) => getLetter(language, size, i))
     .reduce(
       (acc: string[][], letter: string, index: number) => {
-        console.log(acc);
         acc[Math.floor(index / size)][index % size] = letter;
         return acc;
       },
       Array(size)
-        .fill("i")
-        .map(() => Array(size).fill("i"))
+        .fill("")
+        .map(() => Array(size).fill(""))
     );
 }
 
@@ -438,4 +437,48 @@ export const defaultGame: BoggleGame = {
   selectionGrid: noHighlights(4),
   currentPlayer: 0,
   error: "",
+  playing: true,
 };
+
+export async function searchForWord(
+  currentSearch: string,
+  language: string,
+  playerData: PlayerData,
+  grid: string[][],
+  generous: boolean
+): Promise<{
+  selectionGrid: boolean[][];
+  error: string;
+  playerData: PlayerData;
+}> {
+  let error = "";
+  let selectionGrid = noHighlights(grid.length);
+  let newWordsFound = playerData.wordsFound;
+  let newScore = playerData.currentScore;
+  try {
+    const [word] = await checkWord(currentSearch, language);
+    const pathSelectionGrid = findWord(word, grid, generous);
+    if (!pathSelectionGrid.length) {
+      error = "Word does not appear on the board!";
+    } else if (playerData.wordsFound.indexOf(word) != -1) {
+      error = "Already found!";
+    } else {
+      selectionGrid = pathSelectionGrid;
+      newWordsFound = [word].concat(playerData.wordsFound);
+      newScore += word.length > 8 ? 11 : (score.get(word.length) as number);
+    }
+  } catch (err) {
+    error = `Not a valid ${language} word`;
+    selectionGrid = noHighlights(grid.length);
+  }
+  const newPlayerData = {
+    ...playerData,
+    currentScore: newScore,
+    wordsFound: newWordsFound,
+  };
+  return {
+    selectionGrid,
+    error,
+    playerData: newPlayerData,
+  };
+}

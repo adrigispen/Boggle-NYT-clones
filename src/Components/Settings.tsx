@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SettingsProps } from "./Types";
 
 export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
-  const [players, setPlayers] = useState(["", ""]);
+  const [players, setPlayers] = useState(["Player 1", "Player 2"]);
 
   const rows = players.map((name: string, index: number) => (
     <li key={index}>
@@ -11,7 +11,7 @@ export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
         <div>
           <input
             name={`player${index}`}
-            value={name ? name : `Player ${index + 1}`}
+            value={name}
             onChange={(e) => setName(e.target.value, index)}
           />
           {index != 0 && (

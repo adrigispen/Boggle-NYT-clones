@@ -1,12 +1,13 @@
-import React from "react";
-import { ScoreboardData } from "./Types";
+import React, { useContext } from "react";
+import { BoggleGame, ScoreboardData } from "./Types";
+import { BoggleContext } from "../services/BoggleContext";
 
-export const Scoreboard: React.FC<ScoreboardData> = ({
-  playerName,
-  wordsFound,
-  currentScore,
-  endTurn,
-}) => {
+export const Scoreboard: React.FC<ScoreboardData> = ({ endTurn }) => {
+  const { playersData, currentPlayer } = useContext(
+    BoggleContext
+  ) as BoggleGame;
+  const { playerName, wordsFound, currentScore } = playersData[currentPlayer];
+
   const scoreboard = (
     <>
       <h2>{playerName}</h2>
@@ -14,7 +15,7 @@ export const Scoreboard: React.FC<ScoreboardData> = ({
       <h3>{currentScore}</h3>
       <ul>
         {wordsFound.map((word, i) =>
-          word.length ? <li key={i}>{word}</li> : <></>
+          word.length ? <li key={i}>{word}</li> : <div key={i} />
         )}
       </ul>
     </>
