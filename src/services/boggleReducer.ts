@@ -3,7 +3,7 @@ import {
   BoggleAction,
   BoggleActionType,
 } from "../components/Types";
-import { getNewGrid, noHighlights } from "../helpers";
+import { calculateWinner, getNewGrid, noHighlights } from "../helpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {
@@ -29,9 +29,7 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
     case BoggleActionType.WORD_SEARCHED: {
       const { playerData, selectionGrid, error } = action.payload;
       const playersData = game.playersData.map((data) =>
-        data.playerName == playerData.playerName
-          ? playerData
-          : data
+        data.playerName == playerData.playerName ? playerData : data
       );
       return {
         ...game,
@@ -41,6 +39,7 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       };
     }
     case BoggleActionType.TURN_ENDED: {
+      let playersData = game.playersData;
       const selectionGrid = noHighlights(game.settings.size);
       const error = "";
       const newPlayer = game.settings.speedMode
@@ -49,10 +48,14 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         ? game.currentPlayer + 1
         : -1;
       const playing = newPlayer == -1 ? false : true;
+      if (!playing) {
+        playersData = calculateWinner(game.playersData)
+      }
       return {
         ...game,
         selectionGrid,
         error,
+        playersData,
         currentPlayer: newPlayer,
         playing,
       };

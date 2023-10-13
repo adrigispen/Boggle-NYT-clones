@@ -11,7 +11,6 @@ import { BoggleActionType, PlayerData } from "./components/Types";
 import { BoggleContext, BoggleDispatchContext } from "./services/BoggleContext";
 
 function App() {
-  // settings state
   const [showSettings, setShowSettings] = useState(false);
   const [game, dispatch] = useReducer(boggleReducer, defaultGame);
 
@@ -32,6 +31,12 @@ function App() {
             playerData,
           },
         });
+        // doesn't display the word - this action is too fast, resets the board to noHighlights
+        if (game.settings.speedMode) {
+          dispatch({
+            type: BoggleActionType.TURN_ENDED,
+          });
+        }
       })
       .catch((err) => console.log(err));
   }

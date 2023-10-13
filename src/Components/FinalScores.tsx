@@ -13,7 +13,10 @@ export const FinalScores: React.FC = () => {
           <ul>
             {wordsFound.map((word, index) =>
               word.length ? (
-                <li key={`${i},${index}`}>{word}</li>
+                <li
+                  key={`${i},${index}`}
+                  dangerouslySetInnerHTML={{ __html: word }}
+                ></li>
               ) : (
                 <div key={`${i},${index}`} />
               )

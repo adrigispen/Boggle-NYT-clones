@@ -482,3 +482,31 @@ export async function searchForWord(
     playerData: newPlayerData,
   };
 }
+
+export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
+  const allWords = playersData.reduce(
+    (acc, cv) => acc.concat(cv.wordsFound),
+    [""]
+  );
+  const duplicates = allWords.filter(
+    (word) => allWords.indexOf(word) != allWords.lastIndexOf(word)
+  );
+  const newPlayersData = playersData.map(
+    ({ playerName, wordsFound, currentScore }) => {
+      let toSubtract = 0;
+      const words = wordsFound
+        .filter((word) => word.length > 0)
+        .map((word) => {
+          if (duplicates.indexOf(word) != -1) {
+            toSubtract += score.get(word.length) as number;
+            return word.strike();
+          } else {
+            return word;
+          }
+        });
+      const newScore = Number(currentScore - toSubtract);
+      return { playerName, wordsFound: words, currentScore: newScore };
+    }
+  );
+  return newPlayersData;
+}
