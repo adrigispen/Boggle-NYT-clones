@@ -32,7 +32,8 @@ function validEnglishPrefix(word: string): boolean {
   return true;
 }
 
-export function findPaths(grid: string[][]): LetterSquare[][] {
+export function findWords(grid: string[][]): string[] {
+  let words: string[] = [];
   const gridList: LetterSquare[] = grid
     .map((row, rowi) =>
       row.map((char, i) => {
@@ -42,12 +43,13 @@ export function findPaths(grid: string[][]): LetterSquare[][] {
     .flat();
   const queue: LetterSquare[][] = [];
   gridList.forEach((pos) => queue.push([pos]));
-  while (queue.length < 10000) {
+  while (queue.length < 100000) {
     const path: LetterSquare[] | undefined = queue.shift();
     if (path === undefined || path === null) break;
     const word = path.map(({ letter }) => letter).join("");
     if (validEnglishPrefix(word)) {
-      console.log(word, dictionary.check(word.toLowerCase()));
+      if (word.length > 2 && dictionary.check(word.toLowerCase()))
+        words = [word.toLowerCase()].concat(words);
       const lastLetterPosition = path[path.length - 1];
       [
         [lastLetterPosition.row + 1, lastLetterPosition.col],
@@ -69,5 +71,5 @@ export function findPaths(grid: string[][]): LetterSquare[][] {
       });
     }
   }
-  return queue;
+  return words.filter((word, index) => words.indexOf(word) === index);
 }
