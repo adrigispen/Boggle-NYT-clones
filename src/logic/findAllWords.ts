@@ -1,4 +1,4 @@
-import { LetterSquare, PlayerData } from "./components/Types";
+import { LetterSquare, PlayerData } from "../components/Types";
 import { Typo } from "typo-js-ts";
 import { score } from "./helpers";
 

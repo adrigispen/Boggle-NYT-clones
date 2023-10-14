@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { BoggleGame, ScoreboardData } from "./Types";
-import { BoggleContext } from "../services/BoggleContext";
+import { BoggleContext } from "../logic/BoggleContext";
 
 export const Scoreboard: React.FC<ScoreboardData> = ({ endTurn }) => {
   const { playersData, currentPlayer } = useContext(

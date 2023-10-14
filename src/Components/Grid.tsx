@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BoggleGame } from "./Types";
 import { LetterSquare } from "./LetterSquare";
-import { BoggleContext } from "../services/BoggleContext";
+import { BoggleContext } from "../logic/BoggleContext";
 
 export const Grid: React.FC = () => {
   const game = useContext(BoggleContext) as BoggleGame;

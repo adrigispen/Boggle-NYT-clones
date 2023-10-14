@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { BoggleGame, SearchProps } from "./Types";
-import { BoggleContext } from "../services/BoggleContext";
+import { BoggleContext } from "../logic/BoggleContext";
 
 export const SearchSection: React.FC<SearchProps> = ({ onSubmit }) => {
   const game = useContext(BoggleContext) as BoggleGame;

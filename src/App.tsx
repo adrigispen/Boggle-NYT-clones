@@ -5,10 +5,14 @@ import { useReducer, useState } from "react";
 import { Scoreboard } from "./components/Scoreboard";
 import { SearchSection } from "./components/SearchSection";
 import { FinalScores } from "./components/FinalScores";
-import { defaultGame, initializePlayersData, searchForWord } from "./helpers";
-import boggleReducer from "./services/boggleReducer";
+import {
+  defaultGame,
+  initializePlayersData,
+  searchForWord,
+} from "./logic/helpers";
+import boggleReducer from "./logic/boggleReducer";
 import { BoggleActionType, PlayerData } from "./components/Types";
-import { BoggleContext, BoggleDispatchContext } from "./services/BoggleContext";
+import { BoggleContext, BoggleDispatchContext } from "./logic/BoggleContext";
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);

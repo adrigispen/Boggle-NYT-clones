@@ -3,8 +3,8 @@ import {
   BoggleAction,
   BoggleActionType,
 } from "../components/Types";
-import { findWords } from "../findAllWords";
-import { calculateWinner, getNewGrid, noHighlights } from "../helpers";
+import { findWords } from "./findAllWords";
+import { calculateWinner, getNewGrid, noHighlights } from "./helpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {
