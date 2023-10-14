@@ -1,36 +1,41 @@
 import { useState } from "react";
 import { SettingsProps } from "./Types";
 
-export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
+export const Settings: React.FC<SettingsProps> = ({
+  handleGameStart,
+  setShowSettings,
+}) => {
   const [players, setPlayers] = useState(["Player 1", "Player 2"]);
 
   const rows = players.map((name: string, index: number) => (
-    <li key={index}>
-      <div className="playerRow">
-        <label>Player {index + 1}</label>
-        <div>
-          <input
-            name={`player${index}`}
-            value={name}
-            onChange={(e) => setName(e.target.value, index)}
-          />
-          {index != 0 && (
-            <button value={index} onClick={() => deletePlayer(index)}>
-              🗑️
-            </button>
-          )}
-        </div>
+    <div key={index} className="playerRow">
+      <div className="inputCol">
+        <input
+          name={`player${index}`}
+          value={name}
+          onChange={(e) => setName(e.target.value, index)}
+        />
+        {index != 0 && (
+          <button
+            className="delete"
+            value={index}
+            onClick={(e) => deletePlayer(e, index)}
+          >
+            🗑️
+          </button>
+        )}
       </div>
-    </li>
+    </div>
   ));
 
-  function deletePlayer(index: number) {
+  function deletePlayer(e: React.MouseEvent, index: number) {
+    e.preventDefault();
     setPlayers(players.filter((e, i) => i !== index));
   }
 
   function addPlayer(e: React.MouseEvent) {
     e.preventDefault();
-    setPlayers(players.concat(""));
+    setPlayers(players.concat(`Player ${players.length + 1}`));
   }
 
   function setName(value: string, index: number) {
@@ -51,61 +56,83 @@ export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
           );
         }}
       >
-        <div className="settingsRow">
-          <h2>Settings</h2>
-        </div>
-        <div className="settingsRow">
-          <h3>Players</h3>
-          <ul>
+        <h2>Settings</h2>
+        <div className="settingsGroup">
+          <h3 className="inputGroupLabel">Players</h3>
+          <div className="inputGroup">
             {rows}
-            <li className="playerRow">
-              <button onClick={(e) => addPlayer(e)}>Add Player</button>
-            </li>
-          </ul>
+            <div className="playerRow">
+              <div className="inputCol">
+                <button
+                  className="addPlayer"
+                  onClick={(e) => addPlayer(e)}
+                  name="addPlayer"
+                >
+                  Add Player
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="settingsRow">
-          <h3>Board Size</h3>
-          <label>
-            <input type="radio" name="boardSize" value="3" defaultChecked />
-            3x3
-          </label>
-          <label>
-            <input type="radio" name="boardSize" value="4" />
-            4x4
-          </label>
-          <label>
-            <input type="radio" name="boardSize" value="5" />
-            5x5
-          </label>
+        <div className="settingsGroup">
+          <h3 className="inputGroupLabel">Board Size</h3>
+          <div className="inputGroup">
+            <label>
+              <input type="radio" name="boardSize" value="3" defaultChecked />
+              3x3
+            </label>
+            <label>
+              <input type="radio" name="boardSize" value="4" />
+              4x4
+            </label>
+            <label>
+              <input type="radio" name="boardSize" value="5" />
+              5x5
+            </label>
+          </div>
         </div>
-        <div className="settingsRow">
-          <h3>Language</h3>
-          <label>
-            <input
-              type="radio"
-              name="language"
-              value="English"
-              defaultChecked
-            />
-            English
-          </label>
-          <label>
-            <input type="radio" name="language" value="Deutsch" />
-            Deutsch
-          </label>
+        <div className="settingsGroup">
+          <h3 className="inputGroupLabel">Language</h3>
+          <div className="inputGroup">
+            <label>
+              <input
+                type="radio"
+                name="language"
+                value="English"
+                defaultChecked
+              />
+              English
+            </label>
+            <label>
+              <input type="radio" name="language" value="Deutsch" />
+              Deutsch
+            </label>
+          </div>
         </div>
-        <div className="settingsRow">
-          <h3>Game play</h3>
-          <label>
-            <input type="checkbox" name="generousMode" />
-            Generous mode
-          </label>
-          <label>
-            <input type="checkbox" name="speedMode" />
-            Speed mode
-          </label>
+        <div className="settingsGroup">
+          <h3 className="inputGroupLabel">Game play</h3>
+          <div className="inputGroup">
+            <label>
+              <input type="checkbox" name="generousMode" />
+              Generous mode
+            </label>
+            <label>
+              <input type="checkbox" name="speedMode" />
+              Speed mode
+            </label>
+          </div>
         </div>
-        <button type="submit">Play Game</button>
+        <div className="footer">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setShowSettings(false);
+            }}
+          >
+            Close
+          </button>
+          <button type="submit">Start Game</button>
+        </div>
       </form>
     </div>
   );

@@ -69,18 +69,36 @@ function App() {
   return (
     <BoggleContext.Provider value={game}>
       <BoggleDispatchContext.Provider value={dispatch}>
-        <h1>Speedy Boggle</h1>
-        <button onClick={() => setShowSettings(true)}>Settings</button>
         <SettingsModal isOpen={showSettings}>
-          <Settings handleGameStart={handleGameStart} />
+          <Settings
+            handleGameStart={handleGameStart}
+            setShowSettings={setShowSettings}
+          />
         </SettingsModal>
-        <Grid />
-        <SearchSection onSubmit={handleSearch} />
-        {game.currentPlayer !== -1 ? (
-          <Scoreboard endTurn={endTurn} />
-        ) : (
-          <FinalScores />
-        )}
+        <div className="header">
+          <h1>
+            Speedy Boggle
+            <button
+              className="openSettings"
+              onClick={() => setShowSettings(true)}
+            >
+              ⚙️
+            </button>
+          </h1>
+        </div>
+        <div className="content">
+          <div className="gamePanel">
+            <SearchSection onSubmit={handleSearch} />
+            <Grid />
+          </div>
+          <div className="resultsPanel">
+            {game.currentPlayer !== -1 ? (
+              <Scoreboard endTurn={endTurn} />
+            ) : (
+              <FinalScores />
+            )}
+          </div>
+        </div>
       </BoggleDispatchContext.Provider>
     </BoggleContext.Provider>
   );

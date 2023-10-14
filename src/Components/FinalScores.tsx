@@ -8,8 +8,10 @@ export const FinalScores: React.FC = () => {
     ({ playerName, currentScore, wordsFound }, i) => {
       return (
         <div key={`scores${i}`}>
-          <h2>{playerName}</h2>
-          <h3>{currentScore}</h3>
+          <h2>
+            {playerName}
+            <span className="score">{currentScore}</span>
+          </h2>
           <ul>
             {wordsFound.map((word, index) => (
               <li
@@ -23,5 +25,5 @@ export const FinalScores: React.FC = () => {
     }
   );
 
-  return <div className="scoreboard">{scores}</div>;
+  return <div className="wordsFoundDisplay">{scores}</div>;
 };

@@ -10,9 +10,14 @@ export const Scoreboard: React.FC<ScoreboardData> = ({ endTurn }) => {
 
   const scoreboard = (
     <>
-      <h2>{playerName}</h2>
-      <button onClick={endTurn}>End my turn</button>
-      <h3>{currentScore}</h3>
+      <h2>
+        {playerName}
+        <span className="score">{currentScore} points</span>
+      </h2>
+      <button className="endTurn" onClick={endTurn}>
+        End my turn
+      </button>
+
       <ul>
         {wordsFound.map((word, i) => (
           <li key={i}>{word}</li>
@@ -21,5 +26,5 @@ export const Scoreboard: React.FC<ScoreboardData> = ({ endTurn }) => {
     </>
   );
 
-  return <div className="scoreboard">{scoreboard}</div>;
+  return <div className="wordsFoundDisplay">{scoreboard}</div>;
 };

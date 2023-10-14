@@ -23,6 +23,7 @@ export interface SettingsProps {
     speedMode: boolean,
     generousMode: boolean
   ) => void;
+  setShowSettings: (value: boolean) => void;
 }
 
 export interface PlayerData {

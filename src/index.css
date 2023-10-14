@@ -1,7 +1,20 @@
+body {
+  font-family: "Avenir Next";
+  display: flex;
+  margin: 0;
+  padding-left: 100px;
+}
+
+button,
+input {
+  font-family: "Avenir Next";
+}
+
 .playerRow {
   display: flex;
   flex-direction: row;
   width: 100%;
+  align-items: center;
 }
 
 .letterSquare {
@@ -16,4 +29,147 @@
 .selected {
   color: aquamarine;
   background-color: darkmagenta;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+.inputCol input {
+  height: 25px;
+  flex-grow: 1;
+  margin: 0 0 0 8px;
+  padding: 1px 0 0 5px;
+}
+
+.inputCol .addPlayer {
+  height: 30px;
+  flex-grow: 1;
+  margin: 0 0 0 8px;
+}
+
+.addPlayer {
+  height: 30px;
+  padding: 0 50px;
+  margin: 16px 80px 16px 80px;
+  width: 200px;
+}
+
+.inputCol {
+  display: flex;
+  width: 250px;
+}
+
+.delete {
+  font-size: 14px;
+  height: 30px;
+  padding: 0px 8px 0px 8px;
+}
+
+.inputGroup {
+  width: 400px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsGroup {
+  display: flex;
+  margin: 8px;
+  align-items: first baseline;
+}
+
+.inputGroupLabel {
+  width: 150px;
+  text-align: right;
+  padding-right: 16px;
+}
+
+dialog {
+  border: 2px black;
+  width: 500px;
+  flex-direction: column;
+  position: fixed;
+  bottom: 500px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 3px 7px;
+}
+
+.footer {
+  display: flex;
+  height: 100px;
+  width: 100%;
+  align-items: end;
+  justify-content: flex-end;
+}
+
+.footer button {
+  height: 50px;
+  margin: 10px 5px;
+  padding: 0px 15px;
+  font-size: 16px;
+}
+
+.content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: first baseline;
+}
+
+.gamePanel {
+  padding-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gamePanel input {
+  font-size: 16px;
+  width: 80%;
+  height: 30px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.searchBtn,
+.openSettings {
+  font-size: 16px;
+  height: 36px;
+  padding: 0px 10px 0px 10px;
+  width: 40px;
+}
+
+.resultsPanel {
+}
+
+.wordsFoundDisplay {
+}
+
+.score {
+  float: right;
+  font-weight: 100;
+  margin-left: 20px;
+}
+
+.header {
+  width: 500px;
+}
+
+.openSettings {
+  margin-left: 30px;
+}
+
+.endTurn {
+  height: 35px;
+  padding: 0 20px 0 20px;
+}
+
+.error {
+  color: maroon;
 }
