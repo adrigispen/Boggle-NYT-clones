@@ -28,7 +28,8 @@ export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
     setPlayers(players.filter((e, i) => i !== index));
   }
 
-  function addPlayer() {
+  function addPlayer(e: React.MouseEvent) {
+    e.preventDefault();
     setPlayers(players.concat(""));
   }
 
@@ -58,18 +59,18 @@ export const Settings: React.FC<SettingsProps> = ({ handleGameStart }) => {
           <ul>
             {rows}
             <li className="playerRow">
-              <button onClick={() => addPlayer()}>Add Player</button>
+              <button onClick={(e) => addPlayer(e)}>Add Player</button>
             </li>
           </ul>
         </div>
         <div className="settingsRow">
           <h3>Board Size</h3>
           <label>
-            <input type="radio" name="boardSize" value="3" />
+            <input type="radio" name="boardSize" value="3" defaultChecked />
             3x3
           </label>
           <label>
-            <input type="radio" name="boardSize" value="4" defaultChecked />
+            <input type="radio" name="boardSize" value="4" />
             4x4
           </label>
           <label>

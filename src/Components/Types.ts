@@ -1,8 +1,3 @@
-export interface GridProps {
-  grid: string[][];
-  selectionGrid: boolean[][];
-}
-
 export interface LetterSquare {
   row: number;
   col: number;
@@ -80,13 +75,13 @@ export type BoggleAction =
     }
   | {
       type: BoggleActionType.WORD_SEARCHED;
-      payload: SearchPayload;
+      payload: SearchResultPayload;
     }
   | {
       type: BoggleActionType.TURN_ENDED;
     };
 
-export interface SearchPayload {
+export interface SearchResultPayload {
   selectionGrid: boolean[][];
   error: string;
   playerData: PlayerData;

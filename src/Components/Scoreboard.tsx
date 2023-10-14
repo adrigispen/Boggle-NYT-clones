@@ -14,9 +14,9 @@ export const Scoreboard: React.FC<ScoreboardData> = ({ endTurn }) => {
       <button onClick={endTurn}>End my turn</button>
       <h3>{currentScore}</h3>
       <ul>
-        {wordsFound.map((word, i) =>
-          word.length ? <li key={i}>{word}</li> : <div key={i} />
-        )}
+        {wordsFound.map((word, i) => (
+          <li key={i}>{word}</li>
+        ))}
       </ul>
     </>
   );

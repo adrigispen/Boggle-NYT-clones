@@ -1,5 +1,6 @@
-import { LetterSquare } from "./components/Types";
+import { LetterSquare, PlayerData } from "./components/Types";
 import { Typo } from "typo-js-ts";
+import { score } from "./helpers";
 
 const dictionary = new Typo("en_US");
 
@@ -32,7 +33,7 @@ function validEnglishPrefix(word: string): boolean {
   return true;
 }
 
-export function findWords(grid: string[][]): string[] {
+export function findWords(grid: string[][]): PlayerData {
   let words: string[] = [];
   const gridList: LetterSquare[] = grid
     .map((row, rowi) =>
@@ -43,7 +44,7 @@ export function findWords(grid: string[][]): string[] {
     .flat();
   const queue: LetterSquare[][] = [];
   gridList.forEach((pos) => queue.push([pos]));
-  while (queue.length < 100000) {
+  while (queue.length < 1000000) {
     const path: LetterSquare[] | undefined = queue.shift();
     if (path === undefined || path === null) break;
     const word = path.map(({ letter }) => letter).join("");
@@ -71,5 +72,14 @@ export function findWords(grid: string[][]): string[] {
       });
     }
   }
-  return words.filter((word, index) => words.indexOf(word) === index);
+  words = words.filter((word, index) => words.indexOf(word) === index);
+  return {
+    playerName: "BoggleBot",
+    wordsFound: words,
+    currentScore: words.reduce(
+      (acc, cv) =>
+        acc + (cv.length > 8 ? 11 : (score.get(cv.length) as number)),
+      0
+    ),
+  };
 }

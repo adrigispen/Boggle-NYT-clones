@@ -70,9 +70,7 @@ export function findWord(
   while (queue.length) {
     const path: LetterSquare[] = queue.shift() as LetterSquare[];
     if (path.length == word.length) {
-      const newSelectionGrid = Array(grid.length)
-        .fill(false)
-        .map(() => Array(grid.length).fill(false));
+      const newSelectionGrid = noHighlights(grid.length);
       path.forEach((pos) => (newSelectionGrid[pos.row][pos.col] = true));
       return newSelectionGrid;
     }
@@ -405,13 +403,12 @@ export function noHighlights(size: number): boolean[][] {
 }
 
 export function initializePlayersData(players: string[]): PlayerData[] {
-  return Array(players.length)
-    .fill("")
-    .map((p, i) => ({
-      playerName: players[i],
-      wordsFound: [""],
-      currentScore: 0,
-    }));
+  const wordsFound: string[] = [];
+  return players.map((p) => ({
+    playerName: p,
+    wordsFound,
+    currentScore: 0,
+  }));
 }
 
 export const defaultGame: BoggleGame = {
@@ -469,7 +466,6 @@ export async function searchForWord(
     }
   } catch (err) {
     error = `Not a valid ${language} word`;
-    selectionGrid = noHighlights(grid.length);
   }
   const newPlayerData = {
     ...playerData,
@@ -491,22 +487,19 @@ export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
   const duplicates = allWords.filter(
     (word) => allWords.indexOf(word) != allWords.lastIndexOf(word)
   );
-  const newPlayersData = playersData.map(
-    ({ playerName, wordsFound, currentScore }) => {
-      let toSubtract = 0;
-      const words = wordsFound
-        .filter((word) => word.length > 0)
-        .map((word) => {
-          if (duplicates.indexOf(word) != -1) {
-            toSubtract += score.get(word.length) as number;
-            return word.strike();
-          } else {
-            return word;
-          }
-        });
-      const newScore = Number(currentScore - toSubtract);
-      return { playerName, wordsFound: words, currentScore: newScore };
-    }
-  );
-  return newPlayersData;
+  return playersData.map(({ playerName, wordsFound, currentScore }) => {
+    let toSubtract = 0;
+    const words = wordsFound
+      .filter((word) => word.length > 0)
+      .map((word) => {
+        if (duplicates.indexOf(word) != -1) {
+          toSubtract += score.get(word.length) as number;
+          return word.strike();
+        } else {
+          return word;
+        }
+      });
+    const newScore = Number(currentScore - toSubtract);
+    return { playerName, wordsFound: words, currentScore: newScore };
+  });
 }

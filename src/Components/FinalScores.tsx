@@ -11,16 +11,12 @@ export const FinalScores: React.FC = () => {
           <h2>{playerName}</h2>
           <h3>{currentScore}</h3>
           <ul>
-            {wordsFound.map((word, index) =>
-              word.length ? (
-                <li
-                  key={`${i},${index}`}
-                  dangerouslySetInnerHTML={{ __html: word }}
-                ></li>
-              ) : (
-                <div key={`${i},${index}`} />
-              )
-            )}
+            {wordsFound.map((word, index) => (
+              <li
+                key={`${i},${index}`}
+                dangerouslySetInnerHTML={{ __html: word }}
+              ></li>
+            ))}
           </ul>
         </div>
       );
