@@ -50,7 +50,11 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         : -1;
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
-        const boggleBotData = findWords(game.grid);
+        const boggleBotData = findWords(
+          game.grid,
+          game.settings.generousMode,
+          game.settings.language
+        );
         const newPlayersData = [...game.playersData, boggleBotData];
         playersData = calculateWinner(newPlayersData);
       }

@@ -55,29 +55,75 @@ export function initializePlayersData(players: string[]): PlayerData[] {
 
 export const defaultGame: BoggleGame = {
   settings: {
-    size: 3,
+    size: 4,
     language: "English",
-    generousMode: false,
+    generousMode: true,
     speedMode: false,
   },
   playersData: [
     {
-      playerName: "Player 1",
-      wordsFound: [],
-      currentScore: 0,
-    },
-    {
-      playerName: "Player 2",
+      playerName: "Adrienne",
       wordsFound: [],
       currentScore: 0,
     },
   ],
-  grid: getNewGrid(3, "English"),
-  selectionGrid: noHighlights(3),
+  grid: getNewGrid(4, "English"),
+  selectionGrid: noHighlights(4),
   currentPlayer: 0,
   error: "",
   playing: true,
 };
+
+export function wordOnBoard(
+  word: string,
+  grid: string[][],
+  canReuseSquares: boolean
+): boolean {
+  const gridList: LetterSquare[] = grid
+    .map((row, rowi) =>
+      row.map((char, i) => {
+        return { row: rowi, col: i, letter: char };
+      })
+    )
+    .flat();
+  const queue: LetterSquare[][] = [];
+  const startPos = gridList.filter(
+    ({ letter }) => letter == word.charAt(0).toUpperCase()
+  );
+  if (!startPos.length) {
+    return false;
+  } else {
+    startPos.forEach((pos) => queue.push([pos]));
+  }
+  while (queue.length) {
+    const path: LetterSquare[] = queue.shift() as LetterSquare[];
+    if (path.length == word.length) {
+      return true;
+    }
+    const lastLetterPosition = path[path.length - 1];
+    [
+      [lastLetterPosition.row + 1, lastLetterPosition.col],
+      [lastLetterPosition.row - 1, lastLetterPosition.col],
+      [lastLetterPosition.row, lastLetterPosition.col + 1],
+      [lastLetterPosition.row, lastLetterPosition.col - 1],
+      [lastLetterPosition.row + 1, lastLetterPosition.col + 1],
+      [lastLetterPosition.row - 1, lastLetterPosition.col + 1],
+      [lastLetterPosition.row + 1, lastLetterPosition.col - 1],
+      [lastLetterPosition.row - 1, lastLetterPosition.col - 1],
+    ].forEach(([t1, t2]) => {
+      if (
+        grid[t1] &&
+        grid[t1][t2] &&
+        grid[t1][t2] == word.charAt(path.length).toUpperCase() &&
+        (canReuseSquares ||
+          path.filter((pos) => pos.row == t1 && pos.col == t2).length == 0)
+      ) {
+        queue.push([...path, { row: t1, col: t2, letter: grid[t1][t2] }]);
+      }
+    });
+  }
+  return false;
+}
 
 // game play helpers
 function findWord(
