@@ -9,11 +9,10 @@ Not yet done :D
 ### Boggle todos:
 
 - Speed mode - need an 'End Game' button? How to end speed mode?
-- Make it look better - CSS
+- Refactor CSS (it's terrible)
 - Remove word highlights and errors after timeout (half a second?)
-- Refactor 'findWords' to go through each word in the dictionary, rather than trying BFS
+- Refactor method to find whether a word is on the board - not DRY
 - Stop using API?? Use dictionary instead
-- Configure dictionary to not allow proper nouns, see what settings are possible
 
 ### Next up
 
