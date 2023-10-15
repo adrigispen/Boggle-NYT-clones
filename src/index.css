@@ -178,3 +178,38 @@ input[type="checkbox"] {
 .error {
   color: maroon;
 }
+
+.hexagon {
+  background-color: darkblue;
+  color: aliceblue;
+  border-color: aliceblue;
+  height: 120px;
+  width: 120px;
+  padding: 25px;
+  margin: -35px 35px;
+  border-radius: 60px;
+  font-size: 48px;
+}
+
+.centerTile {
+  background-color: darkgoldenrod;
+  z-index: 1;
+  margin: -30px 10px;
+  width: 120px;
+}
+
+.spellingBeeRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.spellingBeeBoard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
+}
+

@@ -33,6 +33,7 @@ export interface SettingsProps {
 export interface SpellingBeeSettingsProps {
   handleGameStart: (language: string, players: string[]) => void;
   setShowSettings: (value: boolean) => void;
+  playerNames: string[];
 }
 
 export interface PlayerData {
@@ -110,7 +111,8 @@ export interface NewGamePayload {
 
 export interface SpellingBeeGame {
   language: string;
-  letters: string[];
+  centerLetter: string;
+  edgeLetters: string[];
   playersData: PlayerData[];
   error: string;
   currentPlayer: number;
@@ -121,6 +123,7 @@ export enum SpellingBeeActionType {
   GAME_STARTED = "GAME_STARTED",
   WORD_SEARCHED = "WORD_SEARCHED",
   TURN_ENDED = "TURN_ENDED",
+  SHUFFLE = "SHUFFLE",
 }
 
 export type SpellingBeeAction =
@@ -134,6 +137,10 @@ export type SpellingBeeAction =
     }
   | {
       type: SpellingBeeActionType.TURN_ENDED;
+    }
+  | {
+      type: SpellingBeeActionType.SHUFFLE;
+      payload: SpellingBeeShufflePayload;
     };
 
 export interface SpellingBeeSearchResultPayload {
@@ -141,7 +148,19 @@ export interface SpellingBeeSearchResultPayload {
   playerData: PlayerData;
 }
 
+export interface SpellingBeeShufflePayload {
+  edgeLetters: string[];
+}
+
 export interface NewSpellingBeePayload {
   language: string;
   playersData: PlayerData[];
+  centerLetter: string;
+  edgeLetters: string[];
+}
+
+export interface BoardProps {
+  edgeLetters: string[];
+  centerLetter: string;
+  shuffleEdgeLetters: () => void;
 }

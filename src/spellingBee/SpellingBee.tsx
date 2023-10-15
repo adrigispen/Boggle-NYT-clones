@@ -1,15 +1,13 @@
 import { useReducer, useState } from "react";
 import spellingBeeReducer from "../logic/spellingBeeReducer";
 import {
+  getNewLetters,
   initializePlayersData,
   randomSpellingBee,
   searchForSpellingBeeWord,
+  shuffle,
 } from "../logic/helpers";
 import { PlayerData, SpellingBeeActionType } from "../components/Types";
-import {
-  SpellingBeeContext,
-  SpellingBeeDispatchContext,
-} from "../logic/Context";
 import { SettingsModal } from "../components/SettingsModal";
 import { SearchSection } from "../components/SearchSection";
 import { Scoreboard } from "../components/Scoreboard";
@@ -19,14 +17,16 @@ import SpellingBeeSettings from "./components/SpellingBeeSettings";
 
 export const SpellingBee: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const [game, dispatch] = useReducer(spellingBeeReducer, randomSpellingBee);
+  const randomBee = randomSpellingBee();
+  const [game, dispatch] = useReducer(spellingBeeReducer, randomBee);
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     searchForSpellingBeeWord(
       currentSearch,
       game.language,
       playerData,
-      game.letters
+      game.centerLetter,
+      game.edgeLetters
     )
       .then(({ error, playerData }) => {
         dispatch({
@@ -48,54 +48,66 @@ export const SpellingBee: React.FC = () => {
 
   function handleGameStart(language: string, players: string[]) {
     const playersData = initializePlayersData(players);
+    const { centerLetter, edgeLetters } = getNewLetters(language);
     setShowSettings(false);
     dispatch({
       type: SpellingBeeActionType.GAME_STARTED,
-      payload: { language, playersData },
+      payload: { language, playersData, centerLetter, edgeLetters },
+    });
+  }
+
+  function shuffleLetters() {
+    const newEdgeLetters = shuffle(game.edgeLetters);
+    dispatch({
+      type: SpellingBeeActionType.SHUFFLE,
+      payload: { edgeLetters: newEdgeLetters },
     });
   }
 
   return (
-    <SpellingBeeContext.Provider value={game}>
-      <SpellingBeeDispatchContext.Provider value={dispatch}>
-        <SettingsModal isOpen={showSettings}>
-          <SpellingBeeSettings
-            handleGameStart={handleGameStart}
-            setShowSettings={setShowSettings}
+    <>
+      <SettingsModal isOpen={showSettings}>
+        <SpellingBeeSettings
+          playerNames={game.playersData.map(({ playerName }) => playerName)}
+          handleGameStart={handleGameStart}
+          setShowSettings={setShowSettings}
+        />
+      </SettingsModal>
+      <div className="header">
+        <h1>
+          Spelling Bee
+          <button
+            className="openSettings"
+            onClick={() => setShowSettings(true)}
+          >
+            ⚙️
+          </button>
+        </h1>
+      </div>
+      <div className="content">
+        <div className="gamePanel">
+          <SearchSection
+            error={game.error}
+            playerData={game.playersData[game.currentPlayer]}
+            onSubmit={handleSearch}
           />
-        </SettingsModal>
-        <div className="header">
-          <h1>
-            Spelling Bee
-            <button
-              className="openSettings"
-              onClick={() => setShowSettings(true)}
-            >
-              ⚙️
-            </button>
-          </h1>
+          <SpellingBeeBoard
+            centerLetter={game.centerLetter}
+            edgeLetters={game.edgeLetters}
+            shuffleEdgeLetters={shuffleLetters}
+          />
         </div>
-        <div className="content">
-          <div className="gamePanel">
-            <SearchSection
-              error={game.error}
+        <div className="resultsPanel">
+          {game.currentPlayer !== -1 ? (
+            <Scoreboard
               playerData={game.playersData[game.currentPlayer]}
-              onSubmit={handleSearch}
+              endTurn={endTurn}
             />
-            <SpellingBeeBoard />
-          </div>
-          <div className="resultsPanel">
-            {game.currentPlayer !== -1 ? (
-              <Scoreboard
-                playerData={game.playersData[game.currentPlayer]}
-                endTurn={endTurn}
-              />
-            ) : (
-              <FinalScores playersData={game.playersData} />
-            )}
-          </div>
+          ) : (
+            <FinalScores playersData={game.playersData} />
+          )}
         </div>
-      </SpellingBeeDispatchContext.Provider>
-    </SpellingBeeContext.Provider>
+      </div>
+    </>
   );
 };

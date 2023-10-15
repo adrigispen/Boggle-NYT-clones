@@ -1,18 +1,14 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
-  SpellingBeeGame,
   SpellingBeeSettingsProps,
 } from "../../components/Types";
-import { SpellingBeeContext } from "../../logic/Context";
 
 export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
   handleGameStart,
   setShowSettings,
+  playerNames,
 }) => {
-  const game = useContext(SpellingBeeContext) as SpellingBeeGame;
-  const currentPlayers = game.playersData.map(({ playerName }) => playerName);
-
-  const [players, setPlayers] = useState(currentPlayers);
+  const [players, setPlayers] = useState(playerNames);
   const rows = players.map((name: string, index: number) => (
     <div key={index} className="playerRow">
       <div className="inputCol">
