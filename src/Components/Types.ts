@@ -4,6 +4,10 @@ export interface LetterSquare {
   letter: string;
 }
 
+export interface FinalScoresProps {
+  playersData: PlayerData[];
+}
+
 export interface LetterSquareProps extends LetterSquare {
   selected: boolean | undefined;
 }
@@ -26,6 +30,11 @@ export interface SettingsProps {
   setShowSettings: (value: boolean) => void;
 }
 
+export interface SpellingBeeSettingsProps {
+  handleGameStart: (language: string, players: string[]) => void;
+  setShowSettings: (value: boolean) => void;
+}
+
 export interface PlayerData {
   playerName: string;
   wordsFound: string[];
@@ -33,6 +42,7 @@ export interface PlayerData {
 }
 
 export interface ScoreboardData {
+  playerData: PlayerData;
   endTurn: () => void;
 }
 
@@ -51,6 +61,8 @@ export interface dwdsEntry {
 
 export interface SearchProps {
   onSubmit: (currentSearch: string, playerData: PlayerData) => void;
+  error: string;
+  playerData: PlayerData;
 }
 
 export interface BoggleGame {
@@ -93,5 +105,43 @@ export interface NewGamePayload {
   language: string;
   speedMode: boolean;
   generousMode: boolean;
+  playersData: PlayerData[];
+}
+
+export interface SpellingBeeGame {
+  language: string;
+  letters: string[];
+  playersData: PlayerData[];
+  error: string;
+  currentPlayer: number;
+  playing: boolean;
+}
+
+export enum SpellingBeeActionType {
+  GAME_STARTED = "GAME_STARTED",
+  WORD_SEARCHED = "WORD_SEARCHED",
+  TURN_ENDED = "TURN_ENDED",
+}
+
+export type SpellingBeeAction =
+  | {
+      type: SpellingBeeActionType.GAME_STARTED;
+      payload: NewSpellingBeePayload;
+    }
+  | {
+      type: SpellingBeeActionType.WORD_SEARCHED;
+      payload: SpellingBeeSearchResultPayload;
+    }
+  | {
+      type: SpellingBeeActionType.TURN_ENDED;
+    };
+
+export interface SpellingBeeSearchResultPayload {
+  error: string;
+  playerData: PlayerData;
+}
+
+export interface NewSpellingBeePayload {
+  language: string;
   playersData: PlayerData[];
 }

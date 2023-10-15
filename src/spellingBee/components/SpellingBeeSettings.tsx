@@ -1,12 +1,15 @@
 import { useContext, useState } from "react";
-import { BoggleGame, SettingsProps } from "./Types";
-import { BoggleContext } from "../logic/Context";
+import {
+  SpellingBeeGame,
+  SpellingBeeSettingsProps,
+} from "../../components/Types";
+import { SpellingBeeContext } from "../../logic/Context";
 
-export const Settings: React.FC<SettingsProps> = ({
+export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
   handleGameStart,
   setShowSettings,
 }) => {
-  const game = useContext(BoggleContext) as BoggleGame;
+  const game = useContext(SpellingBeeContext) as SpellingBeeGame;
   const currentPlayers = game.playersData.map(({ playerName }) => playerName);
 
   const [players, setPlayers] = useState(currentPlayers);
@@ -50,13 +53,7 @@ export const Settings: React.FC<SettingsProps> = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleGameStart(
-            Number(e.currentTarget.boardSize.value),
-            e.currentTarget.language.value,
-            players,
-            e.currentTarget.speedMode.checked,
-            e.currentTarget.generousMode.checked
-          );
+          handleGameStart(e.currentTarget.languageSB.value, players);
         }}
       >
         <h2>Settings</h2>
@@ -78,50 +75,20 @@ export const Settings: React.FC<SettingsProps> = ({
           </div>
         </div>
         <div className="settingsGroup">
-          <h3 className="inputGroupLabel">Board Size</h3>
-          <div className="inputGroup">
-            <label>
-              <input type="radio" name="boardSize" value="3" />
-              3x3
-            </label>
-            <label>
-              <input type="radio" name="boardSize" value="4" defaultChecked />
-              4x4
-            </label>
-            <label>
-              <input type="radio" name="boardSize" value="5" />
-              5x5
-            </label>
-          </div>
-        </div>
-        <div className="settingsGroup">
           <h3 className="inputGroupLabel">Language</h3>
           <div className="inputGroup">
             <label>
               <input
                 type="radio"
-                name="language"
+                name="languageSB"
                 value="English"
                 defaultChecked
               />
               English
             </label>
             <label>
-              <input type="radio" name="language" value="Deutsch" />
+              <input type="radio" name="languageSB" value="Deutsch" />
               Deutsch
-            </label>
-          </div>
-        </div>
-        <div className="settingsGroup">
-          <h3 className="inputGroupLabel">Game play</h3>
-          <div className="inputGroup">
-            <label>
-              <input type="checkbox" name="generousMode" defaultChecked />
-              Generous mode
-            </label>
-            <label>
-              <input type="checkbox" name="speedMode" />
-              Speed mode
             </label>
           </div>
         </div>
@@ -141,4 +108,4 @@ export const Settings: React.FC<SettingsProps> = ({
   );
 };
 
-export default Settings;
+export default SpellingBeeSettings;
