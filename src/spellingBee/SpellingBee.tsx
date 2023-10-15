@@ -56,6 +56,21 @@ export const SpellingBee: React.FC = () => {
     });
   }
 
+  function getNewBoard() {
+    const { centerLetter, edgeLetters } = getNewLetters(game.language);
+    const playersData = game.playing
+      ? game.playersData
+      : initializePlayersData(
+          game.playersData
+            .map(({ playerName }) => playerName)
+            .filter((p) => p !== "SpellingBeeBot")
+        );
+    dispatch({
+      type: SpellingBeeActionType.GAME_STARTED,
+      payload: { ...game, playersData, centerLetter, edgeLetters },
+    });
+  }
+
   function shuffleLetters() {
     const newEdgeLetters = shuffle(game.edgeLetters);
     dispatch({
@@ -95,6 +110,7 @@ export const SpellingBee: React.FC = () => {
             centerLetter={game.centerLetter}
             edgeLetters={game.edgeLetters}
             shuffleEdgeLetters={shuffleLetters}
+            getNewBoard={getNewBoard}
           />
         </div>
         <div className="resultsPanel">

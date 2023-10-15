@@ -60,7 +60,7 @@ export function findSpellingBeeWords(
       : Object.keys(dictionaryDe.dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
-      word.length > 4 && // we'll let players have a chance to win - SBB only finds 5+ words
+      (word.length > 3 || (language === "Deutsch" && word.length > 2)) && // we'll let players have a chance to win - SBB only finds 4+ words in Eng, 3+ in German
       word !== word.toUpperCase() && // don't want abbreviations
       (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
       word.indexOf(centerLetter) !== -1 &&

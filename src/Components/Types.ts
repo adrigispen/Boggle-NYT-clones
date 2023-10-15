@@ -163,4 +163,5 @@ export interface BoardProps {
   edgeLetters: string[];
   centerLetter: string;
   shuffleEdgeLetters: () => void;
+  getNewBoard: () => void;
 }

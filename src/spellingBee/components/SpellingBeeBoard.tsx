@@ -5,6 +5,7 @@ export const SpellingBeeBoard: React.FC<BoardProps> = ({
   centerLetter,
   edgeLetters,
   shuffleEdgeLetters,
+  getNewBoard,
 }) => {
   return (
     <>
@@ -29,9 +30,14 @@ export const SpellingBeeBoard: React.FC<BoardProps> = ({
           <button className="hexagon">{edgeLetters[5].toUpperCase()}</button>
         </div>
       </div>
-      <button className="endTurn" onClick={shuffleEdgeLetters}>
-        Shuffle Letters
-      </button>
+      <div>
+        <button className="endTurn" onClick={shuffleEdgeLetters}>
+          Shuffle Letters
+        </button>
+        <button className="endTurn" onClick={getNewBoard}>
+          New Board
+        </button>
+      </div>
     </>
   );
 };
