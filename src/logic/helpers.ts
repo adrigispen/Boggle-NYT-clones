@@ -1,6 +1,7 @@
 import { BoggleGame, LetterSquare, PlayerData } from "../components/Types";
 import { checkWord } from "./WordCheckService";
 import { de, de_16_die, en_US, en_US_16_die, en_US_25_die } from "./constants";
+import { checkDictionary } from "./findAllWords";
 
 // grid helpers
 export function getLetter(
@@ -195,7 +196,9 @@ export async function searchForWord(
   let newWordsFound = playerData.wordsFound;
   let newScore = playerData.currentScore;
   try {
-    const [word] = await checkWord(currentSearch, language);
+    const [word] = checkDictionary(currentSearch, language)
+      ? [currentSearch]
+      : await checkWord(currentSearch, language);
     const pathSelectionGrid = findWord(word, grid, generous);
     if (!pathSelectionGrid.length) {
       error = "Word does not appear on the board!";

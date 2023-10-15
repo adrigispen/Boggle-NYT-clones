@@ -26,7 +26,7 @@ export function findWords(
       : Object.keys(dictionaryDe.dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
-      word.length > 2 && // don't want really short words
+      word.length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
       word !== word.toUpperCase() && // don't want abbreviations
       (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
       wordOnBoard(word, grid, canReuseSquares)
@@ -42,4 +42,10 @@ export function findWords(
       0
     ),
   };
+}
+
+export function checkDictionary(word: string, language: string): boolean {
+  return language == "English"
+    ? dictionaryEn.check(word)
+    : dictionaryDe.check(word);
 }
