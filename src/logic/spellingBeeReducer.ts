@@ -36,7 +36,10 @@ export default function spellingBeeReducer(
     case SpellingBeeActionType.TURN_ENDED: {
       let playersData = game.playersData;
       const error = "";
-      const newPlayer = (game.currentPlayer + 1) % game.playersData.length;
+      const newPlayer =
+        game.currentPlayer < game.playersData.length - 1
+          ? game.currentPlayer + 1
+          : -1;
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
         const spellingBeeBotData = findSpellingBeeWords(
