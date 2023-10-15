@@ -137,6 +137,14 @@ input[type="checkbox"] {
   margin-bottom: 7px;
 }
 
+.searchBtn {
+  flex-grow: 1;
+}
+
+.searchBar {
+  flex-grow: 10;
+}
+
 .searchBtn,
 .openSettings {
   font-size: 16px;
@@ -157,12 +165,9 @@ input[type="checkbox"] {
   margin-left: 20px;
 }
 
-.header {
-  width: 500px;
-}
-
 .openSettings {
-  margin-left: 30px;
+  float: right;
+  margin-top: 10px;
 }
 
 .endTurn {

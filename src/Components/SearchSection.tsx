@@ -16,7 +16,7 @@ export const SearchSection: React.FC<SearchProps> = ({ onSubmit }) => {
         }}
       >
         <div className="search">
-          <input name="search" />
+          <input className="searchBar" name="search" />
           <button className="searchBtn" type="submit">
             🔎
           </button>
