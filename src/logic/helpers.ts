@@ -169,7 +169,7 @@ export async function searchForWord(
     } else {
       selectionGrid = pathSelectionGrid;
       newWordsFound = [word].concat(playerData.wordsFound);
-      newScore += word.length > 8 ? 11 : (score.get(word.length) as number);
+      newScore += getScore(word.length);
     }
   } catch (err) {
     error = `Not a valid ${language} word`;
@@ -197,6 +197,10 @@ export const score = new Map<number, number>([
   [8, 11],
 ]);
 
+export function getScore(length: number) {
+  return length > 8 ? 11 : (score.get(length) as number);
+}
+
 // game over helpers
 export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
   const allWords = playersData.reduce(
@@ -212,7 +216,7 @@ export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
       .filter((word) => word.length > 0)
       .map((word) => {
         if (duplicates.indexOf(word) != -1) {
-          toSubtract += score.get(word.length) as number;
+          toSubtract += getScore(word.length);
           return word.strike();
         } else {
           return word;
@@ -282,7 +286,7 @@ export async function searchForSpellingBeeWord(
       error = "Word is not on the board!";
     } else {
       newWordsFound = [word].concat(playerData.wordsFound);
-      newScore += word.length > 8 ? 11 : (score.get(word.length) as number);
+      newScore += getScore(word.length);
     }
   } catch (err) {
     error = `Not a valid ${language} word`;

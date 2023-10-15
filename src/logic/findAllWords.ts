@@ -1,6 +1,6 @@
 import { PlayerData } from "../components/Types";
 import { Typo } from "typo-js-ts";
-import { score, wordOnBoard } from "./helpers";
+import { getScore, wordOnBoard } from "./helpers";
 
 const dictionaryEn = new Typo("en_US");
 
@@ -36,11 +36,7 @@ export function findWords(
   return {
     playerName: "BoggleBot",
     wordsFound: words.sort((a, b) => b.length - a.length),
-    currentScore: words.reduce(
-      (acc, cv) =>
-        acc + (cv.length > 8 ? 11 : (score.get(cv.length) as number)),
-      0
-    ),
+    currentScore: words.reduce((acc, cv) => acc + getScore(cv.length), 0),
   };
 }
 
@@ -74,10 +70,6 @@ export function findSpellingBeeWords(
   return {
     playerName: "SpellingBeeBot",
     wordsFound: words.sort((a, b) => b.length - a.length),
-    currentScore: words.reduce(
-      (acc, cv) =>
-        acc + (cv.length > 8 ? 11 : (score.get(cv.length) as number)),
-      0
-    ),
+    currentScore: words.reduce((acc, cv) => acc + getScore(cv.length), 0),
   };
 }
