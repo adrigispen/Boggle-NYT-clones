@@ -4,7 +4,7 @@ import {
   SpellingBeeActionType,
 } from "../components/Types";
 import { findSpellingBeeWords } from "./findAllWords";
-import { calculateWinner, getNewLetters } from "./helpers";
+import { calculateWinner } from "./helpers";
 
 export default function spellingBeeReducer(
   game: SpellingBeeGame,
@@ -12,11 +12,11 @@ export default function spellingBeeReducer(
 ) {
   switch (action.type) {
     case SpellingBeeActionType.GAME_STARTED: {
-      const letters = getNewLetters(action.payload.language);
       return {
         language: action.payload.language,
         playersData: action.payload.playersData,
-        letters,
+        centerLetter: action.payload.centerLetter,
+        edgeLetters: action.payload.edgeLetters,
         error: "",
         currentPlayer: 0,
         playing: true,
@@ -44,7 +44,8 @@ export default function spellingBeeReducer(
       if (!playing) {
         const spellingBeeBotData = findSpellingBeeWords(
           game.language,
-          game.letters
+          game.centerLetter,
+          game.edgeLetters
         );
         const newPlayersData = [...game.playersData, spellingBeeBotData];
         playersData = calculateWinner(newPlayersData);
@@ -55,6 +56,12 @@ export default function spellingBeeReducer(
         playersData,
         currentPlayer: newPlayer,
         playing,
+      };
+    }
+    case SpellingBeeActionType.SHUFFLE: {
+      return {
+        ...game,
+        edgeLetters: action.payload.edgeLetters,
       };
     }
   }

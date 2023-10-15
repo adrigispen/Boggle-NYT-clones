@@ -229,44 +229,68 @@ export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
 
 // spelling bee helpers
 
-const englishLetters = "abcdefghijklmnopqrstuvwxzy".split("");
-const germanLetters = "qwertzuiopüasdfghjklöäyxcvbnm".split("");
-
-export function getNewLetters(language: string): string[] {
-  const letters = Array(7).fill("");
-  return letters.map(() =>
-    language == "English"
-      ? englishLetters.splice(
-          Math.floor(Math.random() * englishLetters.length),
-          1
-        )[0]
-      : germanLetters.splice(
-          Math.floor(Math.random() * germanLetters.length),
-          1
-        )[0]
-  );
+export function getNewLetters(language: string): {
+  centerLetter: string;
+  edgeLetters: string[];
+} {
+  const englishLetters = "abcdefghijklmnopqrstuvwxzy".split("");
+  const germanLetters = "qwertzuiopüasdfghjklöäyxcvbnm".split("");
+  const letters = Array(7)
+    .fill("")
+    .map((l, i) =>
+      language === "English"
+        ? englishLetters.splice(
+            Math.floor(Math.random() * (englishLetters.length - (i + 1))),
+            1
+          )[0]
+        : germanLetters.splice(
+            Math.floor(Math.random() * (germanLetters.length - (i + 1))),
+            1
+          )[0]
+    );
+  return { centerLetter: letters[0], edgeLetters: letters.slice(1) };
 }
 
-export const randomSpellingBee: SpellingBeeGame = {
-  language: "English",
-  letters: getNewLetters("English"),
-  playersData: [
-    {
-      playerName: "Adrienne",
-      wordsFound: [],
-      currentScore: 0,
-    },
-  ],
-  error: "",
-  currentPlayer: 0,
-  playing: true,
-};
+export function shuffle(letters: string[]): string[] {
+  let currentIndex = letters.length,
+    randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [letters[currentIndex], letters[randomIndex]] = [
+      letters[randomIndex],
+      letters[currentIndex],
+    ];
+  }
+  return letters;
+}
+
+export function randomSpellingBee(): SpellingBeeGame {
+  const { centerLetter, edgeLetters } = getNewLetters("English");
+  return {
+    language: "English",
+    centerLetter,
+    edgeLetters,
+    playersData: [
+      {
+        playerName: "Adrienne",
+        wordsFound: [],
+        currentScore: 0,
+      },
+    ],
+    error: "",
+    currentPlayer: 0,
+    playing: true,
+  };
+}
 
 export async function searchForSpellingBeeWord(
   currentSearch: string,
   language: string,
   playerData: PlayerData,
-  letters: string[]
+  centerLetter: string,
+  edgeLetters: string[]
 ): Promise<{
   error: string;
   playerData: PlayerData;
@@ -278,11 +302,15 @@ export async function searchForSpellingBeeWord(
     const [word] = checkDictionary(currentSearch, language)
       ? [currentSearch]
       : await checkWord(currentSearch, language);
-    if (word.indexOf(letters[0]) === -1) {
+    if (word.indexOf(centerLetter) === -1) {
       error = "Must use center letter!";
     } else if (playerData.wordsFound.indexOf(word) != -1) {
       error = "Already found!";
-    } else if ([...word].some((letter) => letters.indexOf(letter) === -1)) {
+    } else if (
+      [...word].some(
+        (letter) => edgeLetters.concat(centerLetter).indexOf(letter) === -1
+      )
+    ) {
       error = "Word is not on the board!";
     } else {
       newWordsFound = [word].concat(playerData.wordsFound);

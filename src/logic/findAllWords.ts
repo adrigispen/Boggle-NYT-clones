@@ -50,7 +50,8 @@ export function checkDictionary(word: string, language: string): boolean {
 
 export function findSpellingBeeWords(
   language: string,
-  letters: string[]
+  centerLetter: string,
+  edgeLetters: string[]
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
@@ -62,8 +63,10 @@ export function findSpellingBeeWords(
       word.length > 4 && // we'll let players have a chance to win - SBB only finds 5+ words
       word !== word.toUpperCase() && // don't want abbreviations
       (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
-      word.indexOf(letters[0]) !== -1 &&
-      [...word].every((letter) => letters.indexOf(letter) !== -1)
+      word.indexOf(centerLetter) !== -1 &&
+      [...word].every(
+        (letter) => edgeLetters.concat(centerLetter).indexOf(letter) !== -1
+      )
     )
       words = words.concat(word);
   });
