@@ -4,9 +4,7 @@ Implementation of variations of NYT's Spelling Bee game and the classic board ga
 
 Boggle has various settings - 'generous' mode to allow you to reuse letters (e.g. if your grid had only 1 u, you could reuse it to spell usual), and 'speed mode' where you switch players with each word.
 
-Spelling Bee is not quite finished - in the Times' version, the letters are displayed on a board as a honeycomb, with one letter in the middle - that letter must always be used. My game currently has the same logic but without the visual at the moment. The 'middle letter' that must be included in each word is listed first in the current implementation.
-
-Both are also available in German :dancer:
+Spelling Bee is not quite finished - in the Times' version, it's always possible to find a 'pangram,' or a word that uses all 7 letters. I'm not using any such criteria to choose my letters right now, they're a just random set of 7 (means at the moment it can be unplayable if you get unlucky).
 
 ## Status
 
@@ -21,8 +19,8 @@ Not yet done :D
 
 ### Spelling Bee todos:
 
-- Draw the board :weary: (currently shows letters in a column, the 'center' letter [the one you must use in each word] is listed first)
-- Allow shuffling the outside letters
+- Add some logic to pull a reasonable set of letters, such that the player can always make a pangram
+- make my circles into hexagons :weary:
 - Speed mode? maybe
 
 ### Next up
