@@ -1,12 +1,15 @@
-import { useState } from "react";
-import { SettingsProps } from "./Types";
+import { useContext, useState } from "react";
+import { BoggleGame, SettingsProps } from "./Types";
+import { BoggleContext } from "../logic/BoggleContext";
 
 export const Settings: React.FC<SettingsProps> = ({
   handleGameStart,
   setShowSettings,
 }) => {
-  const [players, setPlayers] = useState(["Player 1", "Player 2"]);
+  const game = useContext(BoggleContext) as BoggleGame;
+  const currentPlayers = game.playersData.map(({ playerName }) => playerName);
 
+  const [players, setPlayers] = useState(currentPlayers);
   const rows = players.map((name: string, index: number) => (
     <div key={index} className="playerRow">
       <div className="inputCol">
@@ -78,11 +81,11 @@ export const Settings: React.FC<SettingsProps> = ({
           <h3 className="inputGroupLabel">Board Size</h3>
           <div className="inputGroup">
             <label>
-              <input type="radio" name="boardSize" value="3" defaultChecked />
+              <input type="radio" name="boardSize" value="3" />
               3x3
             </label>
             <label>
-              <input type="radio" name="boardSize" value="4" />
+              <input type="radio" name="boardSize" value="4" defaultChecked />
               4x4
             </label>
             <label>
@@ -113,7 +116,7 @@ export const Settings: React.FC<SettingsProps> = ({
           <h3 className="inputGroupLabel">Game play</h3>
           <div className="inputGroup">
             <label>
-              <input type="checkbox" name="generousMode" />
+              <input type="checkbox" name="generousMode" defaultChecked />
               Generous mode
             </label>
             <label>
