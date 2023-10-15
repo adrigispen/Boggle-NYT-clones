@@ -1,11 +1,10 @@
-import { useContext } from "react";
-import { BoggleGame, SearchProps } from "./Types";
-import { BoggleContext } from "../logic/BoggleContext";
+import { SearchProps } from "./Types";
 
-export const SearchSection: React.FC<SearchProps> = ({ onSubmit }) => {
-  const game = useContext(BoggleContext) as BoggleGame;
-  const playerData = game.playersData[game.currentPlayer];
-
+export const SearchSection: React.FC<SearchProps> = ({
+  onSubmit,
+  error,
+  playerData,
+}) => {
   return (
     <>
       <form
@@ -22,7 +21,7 @@ export const SearchSection: React.FC<SearchProps> = ({ onSubmit }) => {
           </button>
         </div>
       </form>
-      <div>{game.error && <label className="error">{game.error}</label>}</div>
+      <div>{error && <label className="error">{error}</label>}</div>
     </>
   );
 };

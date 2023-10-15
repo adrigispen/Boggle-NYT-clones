@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
-import { BoggleGame } from "./Types";
-import { BoggleContext } from "../logic/BoggleContext";
+import React from "react";
+import { FinalScoresProps } from "./Types";
 
-export const FinalScores: React.FC = () => {
-  const game = useContext(BoggleContext) as BoggleGame;
-  const scores = game.playersData.map(
+export const FinalScores: React.FC<FinalScoresProps> = ({ playersData }) => {
+  const scores = playersData.map(
     ({ playerName, currentScore, wordsFound }, i) => {
       return (
         <div key={`scores${i}`}>
