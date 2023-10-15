@@ -38,9 +38,7 @@ function App() {
         });
         // doesn't display the word - this action is too fast, resets the board to noHighlights
         if (game.settings.speedMode) {
-          dispatch({
-            type: BoggleActionType.TURN_ENDED,
-          });
+          endTurn();
         }
       })
       .catch((err) => console.log(err));
