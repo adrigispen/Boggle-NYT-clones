@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
-import { BoggleGame } from "./Types";
+import React from "react";
 import { LetterSquare } from "./LetterSquare";
-import { BoggleContext } from "../logic/Context";
+import { GridProps } from "./Types";
 
-export const Grid: React.FC = () => {
-  const game = useContext(BoggleContext) as BoggleGame;
-  const board = game.grid.map((row: string[], index: number) => (
+export const Grid: React.FC<GridProps> = ({ grid, selectionGrid }) => {
+  const board = grid.map((row: string[], index: number) => (
     <div key={`row ${index}`} className="row">
       {row.map((letter: string, i: number) => (
         <LetterSquare
@@ -13,7 +11,7 @@ export const Grid: React.FC = () => {
           row={index}
           col={i}
           letter={letter}
-          selected={game.selectionGrid[index][i]}
+          selected={selectionGrid[index][i]}
         />
       ))}
     </div>

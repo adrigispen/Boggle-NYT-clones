@@ -94,7 +94,7 @@ function App() {
                 playerData={game.playersData[game.currentPlayer]}
                 onSubmit={handleSearch}
               />
-              <Grid />
+              <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
             </div>
             <div className="resultsPanel">
               {game.currentPlayer !== -1 ? (

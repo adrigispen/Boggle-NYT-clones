@@ -30,12 +30,12 @@ export const SpellingBeeBoard: React.FC<BoardProps> = ({
           <button className="hexagon">{edgeLetters[5].toUpperCase()}</button>
         </div>
       </div>
-      <div>
-        <button className="endTurn" onClick={shuffleEdgeLetters}>
+      <div className="beeButtons">
+        <button className="beeButton" onClick={shuffleEdgeLetters}>
           Shuffle Letters
         </button>
-        <button className="endTurn" onClick={getNewBoard}>
-          New Board
+        <button className="beeButton" onClick={getNewBoard}>
+          New Game
         </button>
       </div>
     </>

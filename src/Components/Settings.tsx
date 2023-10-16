@@ -20,9 +20,10 @@ export const Settings: React.FC<SettingsProps> = ({
         />
         {index != 0 && (
           <button
+            type="button"
             className="delete"
             value={index}
-            onClick={(e) => deletePlayer(e, index)}
+            onClick={() => deletePlayer(index)}
           >
             🗑️
           </button>
@@ -31,13 +32,11 @@ export const Settings: React.FC<SettingsProps> = ({
     </div>
   ));
 
-  function deletePlayer(e: React.MouseEvent, index: number) {
-    e.preventDefault();
-    setPlayers(players.filter((e, i) => i !== index));
+  function deletePlayer(index: number) {
+    setPlayers(players.filter((_, i) => i !== index));
   }
 
-  function addPlayer(e: React.MouseEvent) {
-    e.preventDefault();
+  function addPlayer() {
     setPlayers(players.concat(`Player ${players.length + 1}`));
   }
 
@@ -68,7 +67,8 @@ export const Settings: React.FC<SettingsProps> = ({
               <div className="inputCol">
                 <button
                   className="addPlayer"
-                  onClick={(e) => addPlayer(e)}
+                  type="button"
+                  onClick={addPlayer}
                   name="addPlayer"
                 >
                   Add Player

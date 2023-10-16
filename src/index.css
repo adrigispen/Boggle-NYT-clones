@@ -170,7 +170,8 @@ input[type="checkbox"] {
   margin-top: 10px;
 }
 
-.endTurn {
+.endTurn,
+.beeButton {
   height: 35px;
   padding: 0 20px 0 20px;
 }
@@ -210,6 +211,15 @@ input[type="checkbox"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 50px;
+  margin: 70px 0px;
 }
 
+.beeButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* flex could go based on columns - 3 columns rather than 5 rows 
+Search - 
+*/

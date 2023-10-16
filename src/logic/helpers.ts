@@ -4,7 +4,7 @@ import {
   PlayerData,
   SpellingBeeGame,
 } from "../components/Types";
-import { checkWord } from "./WordCheckService";
+import { getEntryFromAPI } from "./WordCheckService";
 import { de, de_16_die, en_US, en_US_16_die, en_US_25_die } from "./constants";
 import { checkDictionary } from "./findAllWords";
 
@@ -31,7 +31,7 @@ export function getLetter(
 export function getNewGrid(size: number, language: string): string[][] {
   return Array(size * size)
     .fill("")
-    .map((e, i) => getLetter(language, size, i))
+    .map((_, i) => getLetter(language, size, i))
     .reduce(
       (acc: string[][], letter: string, index: number) => {
         acc[Math.floor(index / size)][index % size] = letter;
@@ -160,7 +160,7 @@ export async function searchForWord(
   try {
     const [word] = checkDictionary(currentSearch, language)
       ? [currentSearch]
-      : await checkWord(currentSearch, language);
+      : await getEntryFromAPI(currentSearch, language);
     const pathSelectionGrid = findWord(word, grid, generous);
     if (!pathSelectionGrid.length) {
       error = "Word does not appear on the board!";
@@ -237,7 +237,7 @@ export function getNewLetters(language: string): {
   const germanLetters = "qwertzuiopüasdfghjklöäyxcvbnm".split("");
   const letters = Array(7)
     .fill("")
-    .map((l, i) =>
+    .map((_, i) =>
       language === "English"
         ? englishLetters.splice(
             Math.floor(Math.random() * (englishLetters.length - (i + 1))),
@@ -301,7 +301,7 @@ export async function searchForSpellingBeeWord(
   try {
     const [word] = checkDictionary(currentSearch, language)
       ? [currentSearch]
-      : await checkWord(currentSearch, language);
+      : await getEntryFromAPI(currentSearch, language);
     if (word.indexOf(centerLetter) === -1) {
       error = "Must use center letter!";
     } else if (playerData.wordsFound.indexOf(word) != -1) {

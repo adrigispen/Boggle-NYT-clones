@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Entry, dwdsEntry } from "../components/Types";
 
-export function checkWord(word: string, language: string) {
+export function getEntryFromAPI(word: string, language: string) {
   return language == "English"
     ? axios
         .get(

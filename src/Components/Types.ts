@@ -8,6 +8,11 @@ export interface FinalScoresProps {
   playersData: PlayerData[];
 }
 
+export interface GridProps {
+  grid: string[][];
+  selectionGrid: boolean[][];
+}
+
 export interface LetterSquareProps extends LetterSquare {
   selected: boolean | undefined;
 }

@@ -1,7 +1,5 @@
 import { useState } from "react";
-import {
-  SpellingBeeSettingsProps,
-} from "../../components/Types";
+import { SpellingBeeSettingsProps } from "../../components/Types";
 
 export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
   handleGameStart,
@@ -32,7 +30,7 @@ export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
 
   function deletePlayer(e: React.MouseEvent, index: number) {
     e.preventDefault();
-    setPlayers(players.filter((e, i) => i !== index));
+    setPlayers(players.filter((_, i) => i !== index));
   }
 
   function addPlayer(e: React.MouseEvent) {
