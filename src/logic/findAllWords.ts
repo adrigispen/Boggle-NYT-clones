@@ -1,4 +1,4 @@
-import { PlayerData } from "../components/Types";
+import { PlayerData } from "../shared/logic/Types";
 import { Typo } from "typo-js-ts";
 import { getScore, wordOnBoard } from "./helpers";
 

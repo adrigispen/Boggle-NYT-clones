@@ -1,5 +1,5 @@
 import React from "react";
-import { LetterSquareProps } from "./Types";
+import { LetterSquareProps } from "../../shared/logic/Types";
 
 export const LetterSquare: React.FC<LetterSquareProps> = ({
   row,

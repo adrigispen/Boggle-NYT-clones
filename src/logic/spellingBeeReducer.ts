@@ -2,7 +2,7 @@ import {
   SpellingBeeGame,
   SpellingBeeAction,
   SpellingBeeActionType,
-} from "../components/Types";
+} from "../shared/logic/Types";
 import { findSpellingBeeWords } from "./findAllWords";
 import { calculateWinner } from "./helpers";
 

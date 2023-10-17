@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { BoggleGame, SettingsProps } from "./Types";
-import { BoggleContext } from "../logic/Context";
+import { BoggleGame, SettingsProps } from "../../shared/logic/Types";
+import { BoggleContext } from "../../logic/Context";
 
 export const Settings: React.FC<SettingsProps> = ({
   handleGameStart,

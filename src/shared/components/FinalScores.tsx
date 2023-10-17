@@ -1,5 +1,5 @@
 import React from "react";
-import { FinalScoresProps } from "./Types";
+import { FinalScoresProps } from "../logic/Types";
 
 export const FinalScores: React.FC<FinalScoresProps> = ({ playersData }) => {
   const scores = playersData.map(

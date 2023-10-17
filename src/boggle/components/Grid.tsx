@@ -1,6 +1,6 @@
 import React from "react";
 import { LetterSquare } from "./LetterSquare";
-import { GridProps } from "./Types";
+import { GridProps } from "../../shared/logic/Types";
 
 export const Grid: React.FC<GridProps> = ({ grid, selectionGrid }) => {
   const board = grid.map((row: string[], index: number) => (

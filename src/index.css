@@ -2,7 +2,24 @@ body {
   font-family: "Avenir Next";
   display: flex;
   margin: 0;
-  padding-left: 100px;
+}
+
+#sidebar {
+  width: 200px;
+  float: left;
+  margin: 20px;
+}
+
+#sidebar ul,
+#sidebar li {
+  list-style-type: none;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  width: 1000px;
 }
 
 button,
@@ -218,7 +235,6 @@ input[type="checkbox"] {
   display: flex;
   justify-content: space-between;
 }
-
 
 /* flex could go based on columns - 3 columns rather than 5 rows 
 Search - 

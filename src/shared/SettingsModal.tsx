@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { SettingsModalProps } from "./Types";
+import { SettingsModalProps } from "./logic/Types";
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,

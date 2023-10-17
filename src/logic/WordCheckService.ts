@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Entry, dwdsEntry } from "../components/Types";
+import { Entry, dwdsEntry } from "../shared/logic/Types";
 
 export function getEntryFromAPI(word: string, language: string) {
   return language == "English"

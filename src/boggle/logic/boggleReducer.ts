@@ -2,9 +2,9 @@ import {
   BoggleGame,
   BoggleAction,
   BoggleActionType,
-} from "../components/Types";
-import { findWords } from "./findAllWords";
-import { calculateWinner, getNewGrid, noHighlights } from "./helpers";
+} from "../../shared/logic/Types";
+import { findWords } from "../../logic/findAllWords";
+import { calculateWinner, getNewGrid, noHighlights } from "../../logic/helpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {

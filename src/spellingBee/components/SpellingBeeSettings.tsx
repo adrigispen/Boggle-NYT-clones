@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SpellingBeeSettingsProps } from "../../components/Types";
+import { SpellingBeeSettingsProps } from "../../shared/logic/Types";
 
 export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
   handleGameStart,

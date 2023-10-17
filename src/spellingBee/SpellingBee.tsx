@@ -7,11 +7,11 @@ import {
   searchForSpellingBeeWord,
   shuffle,
 } from "../logic/helpers";
-import { PlayerData, SpellingBeeActionType } from "../components/Types";
-import { SettingsModal } from "../components/SettingsModal";
-import { SearchSection } from "../components/SearchSection";
-import { Scoreboard } from "../components/Scoreboard";
-import { FinalScores } from "../components/FinalScores";
+import { PlayerData, SpellingBeeActionType } from "../shared/logic/Types";
+import { SettingsModal } from "../shared/components/SettingsModal";
+import { SearchSection } from "../shared/components/SearchSection";
+import { Scoreboard } from "../shared/components/Scoreboard";
+import { FinalScores } from "../shared/components/FinalScores";
 import { SpellingBeeBoard } from "./components/SpellingBeeBoard";
 import SpellingBeeSettings from "./components/SpellingBeeSettings";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { BoardProps } from "../../components/Types";
+import { BoardProps } from "../../shared/logic/Types";
 
 export const SpellingBeeBoard: React.FC<BoardProps> = ({
   centerLetter,
