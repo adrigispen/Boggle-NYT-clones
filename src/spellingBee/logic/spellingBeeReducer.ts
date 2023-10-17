@@ -2,9 +2,9 @@ import {
   SpellingBeeGame,
   SpellingBeeAction,
   SpellingBeeActionType,
-} from "../shared/logic/Types";
-import { findSpellingBeeWords } from "./findAllWords";
-import { calculateWinner } from "./helpers";
+} from "../../shared/logic/Types";
+import { findSpellingBeeWords } from "../../shared/logic/findAllWords";
+import { calculateWinner } from "../../shared/logic/helpers";
 
 export default function spellingBeeReducer(
   game: SpellingBeeGame,

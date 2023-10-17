@@ -1,12 +1,12 @@
 import { useReducer, useState } from "react";
-import spellingBeeReducer from "../logic/spellingBeeReducer";
+import spellingBeeReducer from "./logic/spellingBeeReducer";
 import {
   getNewLetters,
   initializePlayersData,
   randomSpellingBee,
   searchForSpellingBeeWord,
   shuffle,
-} from "../logic/helpers";
+} from "../shared/logic/helpers";
 import { PlayerData, SpellingBeeActionType } from "../shared/logic/Types";
 import { SettingsModal } from "../shared/components/SettingsModal";
 import { SearchSection } from "../shared/components/SearchSection";

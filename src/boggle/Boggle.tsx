@@ -4,9 +4,9 @@ import {
   defaultGame,
   initializePlayersData,
   searchForWord,
-} from "../logic/helpers";
+} from "../shared/logic/helpers";
 import { BoggleActionType, PlayerData } from "../shared/logic/Types";
-import { BoggleContext, BoggleDispatchContext } from "../logic/Context";
+import { BoggleContext, BoggleDispatchContext } from "./logic/Context";
 import { SettingsModal } from "../shared/SettingsModal";
 import Settings from "./components/Settings";
 import { SearchSection } from "../shared/components/SearchSection";

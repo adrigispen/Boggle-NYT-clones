@@ -1,9 +1,4 @@
-import {
-  BoggleGame,
-  LetterSquare,
-  PlayerData,
-  SpellingBeeGame,
-} from "../shared/logic/Types";
+import { BoggleGame, LetterSquare, PlayerData, SpellingBeeGame } from "./Types";
 import { getEntryFromAPI } from "./WordCheckService";
 import { de, de_16_die, en_US, en_US_16_die, en_US_25_die } from "./constants";
 import { checkDictionary } from "./findAllWords";

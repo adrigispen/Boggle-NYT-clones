@@ -3,8 +3,12 @@ import {
   BoggleAction,
   BoggleActionType,
 } from "../../shared/logic/Types";
-import { findWords } from "../../logic/findAllWords";
-import { calculateWinner, getNewGrid, noHighlights } from "../../logic/helpers";
+import { findWords } from "../../shared/logic/findAllWords";
+import {
+  calculateWinner,
+  getNewGrid,
+  noHighlights,
+} from "../../shared/logic/helpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {
