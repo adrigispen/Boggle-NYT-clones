@@ -32,10 +32,6 @@ export const Boggle: React.FC = () => {
         playerData: newPlayerData ?? playerData,
       },
     });
-    // doesn't display the word - this action is too fast, resets the board to noHighlights
-    if (game.settings.speedMode) {
-      endTurn();
-    }
   }
 
   function endTurn() {
@@ -57,6 +53,13 @@ export const Boggle: React.FC = () => {
       type: BoggleActionType.GAME_STARTED,
       payload: { size, language, speedMode, generousMode, playersData },
     });
+  }
+
+  function clearHighlightAndRotateIfSpeedMode() {
+    dispatch({
+      type: BoggleActionType.HIGHLIGHT_CLEARED,
+    });
+    if (game.settings.speedMode) endTurn();
   }
 
   return (
@@ -87,7 +90,11 @@ export const Boggle: React.FC = () => {
                 playerData={game.playersData[game.currentPlayer]}
                 onSubmit={handleSearch}
               />
-              <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
+              <Grid
+                grid={game.grid}
+                selectionGrid={game.selectionGrid}
+                clearHighlight={clearHighlightAndRotateIfSpeedMode}
+              />
             </div>
             <div className="resultsPanel">
               {game.currentPlayer !== -1 ? (

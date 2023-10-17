@@ -11,6 +11,7 @@ export interface FinalScoresProps {
 export interface GridProps {
   grid: string[][];
   selectionGrid: boolean[][];
+  clearHighlight: () => void;
 }
 
 export interface LetterSquareProps extends LetterSquare {
@@ -85,6 +86,7 @@ export enum BoggleActionType {
   GAME_STARTED = "GAME_STARTED",
   WORD_SEARCHED = "WORD_SEARCHED",
   TURN_ENDED = "TURN_ENDED",
+  HIGHLIGHT_CLEARED = "HIGHLIGHT_CLEARED",
 }
 
 export type BoggleAction =
@@ -97,7 +99,7 @@ export type BoggleAction =
       payload: SearchResultPayload;
     }
   | {
-      type: BoggleActionType.TURN_ENDED;
+      type: BoggleActionType.TURN_ENDED | BoggleActionType.HIGHLIGHT_CLEARED;
     };
 
 export interface SearchResultPayload {

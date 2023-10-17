@@ -68,5 +68,14 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         playing,
       };
     }
+    case BoggleActionType.HIGHLIGHT_CLEARED: {
+      const selectionGrid = noHighlights(game.settings.size);
+      const error = "";
+      return {
+        ...game,
+        selectionGrid,
+        error,
+      };
+    }
   }
 }
