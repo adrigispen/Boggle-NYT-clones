@@ -1,4 +1,4 @@
-import { SearchProps } from "./Types";
+import { SearchProps } from "../logic/Types";
 
 export const SearchSection: React.FC<SearchProps> = ({
   onSubmit,

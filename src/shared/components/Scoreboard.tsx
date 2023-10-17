@@ -1,5 +1,5 @@
 import React from "react";
-import { ScoreboardData } from "./Types";
+import { ScoreboardData } from "../logic/Types";
 
 export const Scoreboard: React.FC<ScoreboardData> = ({
   playerData,

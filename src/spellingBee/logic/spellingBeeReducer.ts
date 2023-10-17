@@ -3,8 +3,8 @@ import {
   SpellingBeeAction,
   SpellingBeeActionType,
 } from "../../shared/logic/Types";
-import { findSpellingBeeWords } from "../../shared/logic/findAllWords";
-import { calculateWinner } from "../../shared/logic/helpers";
+import { findAllSpellingBeeWords } from "../../shared/logic/dictionaryWordCheckService";
+import { calculateWinner } from "../../shared/logic/scoringHelpers";
 
 export default function spellingBeeReducer(
   game: SpellingBeeGame,
@@ -42,7 +42,7 @@ export default function spellingBeeReducer(
           : -1;
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
-        const spellingBeeBotData = findSpellingBeeWords(
+        const spellingBeeBotData = findAllSpellingBeeWords(
           game.language,
           game.centerLetter,
           game.edgeLetters

@@ -15,7 +15,7 @@ Not yet done :D
 - Speed mode - need an 'End Game' button? How to end speed mode?
 - Refactor CSS (it's terrible)
 - Remove word highlights and errors after timeout (half a second?)
-- Move it to a component
+- bug fixes: German game is looking for correct capitalization right now :sweat: and recognizes capitalized words as different from lower case :see_no_evil:
 
 ### Spelling Bee todos:
 
@@ -25,6 +25,7 @@ Not yet done :D
 
 ### Next up
 
-- Add router and Wordle
+- Add Wordle
+- Use effect to load dictionaries?? Need something to load the dictionaries besides logging to the console :eyes:
 - Err rename repository
 - Add BE - login, save scores, show stats, let you play with friends, etc. Need to write endpoints to save data and deploy via heroku, would need to rework scoring & gameplay... hmm.

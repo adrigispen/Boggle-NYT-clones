@@ -3,12 +3,9 @@ import {
   BoggleAction,
   BoggleActionType,
 } from "../../shared/logic/Types";
-import { findWords } from "../../shared/logic/findAllWords";
-import {
-  calculateWinner,
-  getNewGrid,
-  noHighlights,
-} from "../../shared/logic/helpers";
+import { findAllWordsOnBoggleBoard } from "../../shared/logic/dictionaryWordCheckService";
+import { calculateWinner } from "../../shared/logic/scoringHelpers";
+import { getNewGrid, noHighlights } from "./gridHelpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {
@@ -54,7 +51,7 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         : -1;
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
-        const boggleBotData = findWords(
+        const boggleBotData = findAllWordsOnBoggleBoard(
           game.grid,
           game.settings.generousMode,
           game.settings.language

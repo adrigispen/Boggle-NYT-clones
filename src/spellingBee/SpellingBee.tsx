@@ -2,11 +2,10 @@ import { useReducer, useState } from "react";
 import spellingBeeReducer from "./logic/spellingBeeReducer";
 import {
   getNewLetters,
-  initializePlayersData,
   randomSpellingBee,
-  searchForSpellingBeeWord,
   shuffle,
-} from "../shared/logic/helpers";
+} from "./logic/beeHelpers.ts";
+
 import { PlayerData, SpellingBeeActionType } from "../shared/logic/Types";
 import { SettingsModal } from "../shared/components/SettingsModal";
 import { SearchSection } from "../shared/components/SearchSection";
@@ -14,6 +13,8 @@ import { Scoreboard } from "../shared/components/Scoreboard";
 import { FinalScores } from "../shared/components/FinalScores";
 import { SpellingBeeBoard } from "./components/SpellingBeeBoard";
 import SpellingBeeSettings from "./components/SpellingBeeSettings";
+import { initializePlayersData } from "../shared/logic/scoringHelpers.ts";
+import { searchForSpellingBeeWord } from "../shared/logic/dictionaryWordCheckService.ts";
 
 export const SpellingBee: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -21,23 +22,20 @@ export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(spellingBeeReducer, randomBee);
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
-    searchForSpellingBeeWord(
+    const { error, newPlayerData } = searchForSpellingBeeWord(
       currentSearch,
       game.language,
       playerData,
       game.centerLetter,
       game.edgeLetters
-    )
-      .then(({ error, playerData }) => {
-        dispatch({
-          type: SpellingBeeActionType.WORD_SEARCHED,
-          payload: {
-            error,
-            playerData,
-          },
-        });
-      })
-      .catch((err) => console.log(err));
+    );
+    dispatch({
+      type: SpellingBeeActionType.WORD_SEARCHED,
+      payload: {
+        error,
+        playerData: newPlayerData ?? playerData,
+      },
+    });
   }
 
   function endTurn() {
