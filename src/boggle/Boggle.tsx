@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import boggleReducer from "./logic/boggleReducer";
-import { defaultGame, noHighlights } from "./logic/gridHelpers";
+import { defaultGame } from "./logic/gridHelpers";
 import { BoggleActionType, PlayerData } from "../shared/logic/Types";
 import { BoggleContext, BoggleDispatchContext } from "./logic/Context";
 import { SettingsModal } from "../shared/components/SettingsModal";
@@ -28,10 +28,10 @@ export const Boggle: React.FC = () => {
       type: BoggleActionType.WORD_SEARCHED,
       payload: {
         error,
-        selectionGrid: selectionGrid ?? noHighlights(game.settings.size),
         playerData: newPlayerData ?? playerData,
       },
     });
+    if (selectionGrid) updateGrid(selectionGrid);
   }
 
   function endTurn() {
@@ -55,11 +55,13 @@ export const Boggle: React.FC = () => {
     });
   }
 
-  function clearHighlightAndRotateIfSpeedMode() {
+  function updateGrid(selectionGrid: boolean[][]) {
     dispatch({
-      type: BoggleActionType.HIGHLIGHT_CLEARED,
+      type: BoggleActionType.GRID_UPDATED,
+      payload: {
+        selectionGrid,
+      },
     });
-    if (game.settings.speedMode) endTurn();
   }
 
   return (
@@ -93,7 +95,7 @@ export const Boggle: React.FC = () => {
               <Grid
                 grid={game.grid}
                 selectionGrid={game.selectionGrid}
-                clearHighlight={clearHighlightAndRotateIfSpeedMode}
+                updateGrid={updateGrid}
               />
             </div>
             <div className="resultsPanel">

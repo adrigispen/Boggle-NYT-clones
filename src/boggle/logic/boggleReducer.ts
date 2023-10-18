@@ -29,21 +29,18 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       };
     }
     case BoggleActionType.WORD_SEARCHED: {
-      const { playerData, selectionGrid, error } = action.payload;
+      const { playerData, error } = action.payload;
       const playersData = game.playersData.map((data) =>
         data.playerName == playerData.playerName ? playerData : data
       );
       return {
         ...game,
         playersData,
-        selectionGrid,
         error,
       };
     }
     case BoggleActionType.TURN_ENDED: {
       let playersData = game.playersData;
-      const selectionGrid = noHighlights(game.settings.size);
-      const error = "";
       const newPlayer = game.settings.speedMode
         ? (game.currentPlayer + 1) % game.playersData.length
         : game.currentPlayer < game.playersData.length - 1
@@ -61,20 +58,16 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       }
       return {
         ...game,
-        selectionGrid,
-        error,
         playersData,
         currentPlayer: newPlayer,
         playing,
       };
     }
-    case BoggleActionType.HIGHLIGHT_CLEARED: {
-      const selectionGrid = noHighlights(game.settings.size);
-      const error = "";
+    case BoggleActionType.GRID_UPDATED: {
+      const selectionGrid = action.payload.selectionGrid;
       return {
         ...game,
         selectionGrid,
-        error,
       };
     }
   }

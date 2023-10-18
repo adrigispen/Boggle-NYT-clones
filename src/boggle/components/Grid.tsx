@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import { LetterSquare } from "./LetterSquare";
 import { GridProps } from "../../shared/logic/Types";
+import { noHighlights } from "../logic/gridHelpers";
 
 export const Grid: React.FC<GridProps> = ({
   grid,
   selectionGrid,
-  clearHighlight,
+  updateGrid,
 }) => {
   useEffect(() => {
-    const timeout = setTimeout(function () {
-      clearHighlight();
-    }, 700);
+    const timeout = setTimeout(
+      () => updateGrid(noHighlights(grid.length)),
+      700
+    );
     return () => clearTimeout(timeout);
-  });
+  }, [grid.length, selectionGrid, updateGrid]);
 
   const board = grid.map((row: string[], index: number) => (
     <div key={`row ${index}`} className="row">
