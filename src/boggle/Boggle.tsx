@@ -32,6 +32,7 @@ export const Boggle: React.FC = () => {
       },
     });
     if (selectionGrid) updateGrid(selectionGrid);
+    if (game.settings.speedMode) endTurn();
   }
 
   function endTurn() {

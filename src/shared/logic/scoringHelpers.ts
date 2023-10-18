@@ -48,3 +48,15 @@ export function calculateWinner(playersData: PlayerData[]): PlayerData[] {
     return { playerName, wordsFound: words, currentScore: newScore };
   });
 }
+
+export function getNextPlayer(
+  speedMode: boolean,
+  currentPlayer: number,
+  playersData: PlayerData[]
+): number {
+  return speedMode
+    ? (currentPlayer + 1) % playersData.length
+    : currentPlayer < playersData.length - 1
+    ? currentPlayer + 1
+    : -1;
+}

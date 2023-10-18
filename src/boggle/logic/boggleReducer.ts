@@ -4,7 +4,10 @@ import {
   BoggleActionType,
 } from "../../shared/logic/Types";
 import { findAllWordsOnBoggleBoard } from "../../shared/logic/dictionaryWordCheckService";
-import { calculateWinner } from "../../shared/logic/scoringHelpers";
+import {
+  calculateWinner,
+  getNextPlayer,
+} from "../../shared/logic/scoringHelpers";
 import { getNewGrid, noHighlights } from "./gridHelpers";
 
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
@@ -41,11 +44,11 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
     }
     case BoggleActionType.TURN_ENDED: {
       let playersData = game.playersData;
-      const newPlayer = game.settings.speedMode
-        ? (game.currentPlayer + 1) % game.playersData.length
-        : game.currentPlayer < game.playersData.length - 1
-        ? game.currentPlayer + 1
-        : -1;
+      const newPlayer = getNextPlayer(
+        game.settings.speedMode,
+        game.currentPlayer,
+        game.playersData
+      );
       const playing = newPlayer == -1 ? false : true;
       if (!playing) {
         const boggleBotData = findAllWordsOnBoggleBoard(
@@ -68,6 +71,7 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       return {
         ...game,
         selectionGrid,
+        error: "",
       };
     }
   }
