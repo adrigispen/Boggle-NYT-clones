@@ -187,6 +187,13 @@ input[type="checkbox"] {
   margin-top: 10px;
 }
 
+.headerBtn {
+  float: right;
+  margin: 10px;
+  height: 36px;
+  padding: 0 20px;
+}
+
 .endTurn,
 .beeButton {
   height: 35px;

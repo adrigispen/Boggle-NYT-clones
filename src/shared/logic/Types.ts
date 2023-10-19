@@ -70,6 +70,7 @@ export interface SearchProps {
   onSubmit: (currentSearch: string, playerData: PlayerData) => void;
   error: string;
   playerData: PlayerData;
+  playing: boolean;
 }
 
 export interface BoggleGame {
@@ -87,6 +88,7 @@ export enum BoggleActionType {
   WORD_SEARCHED = "WORD_SEARCHED",
   TURN_ENDED = "TURN_ENDED",
   GRID_UPDATED = "UPDATE_GRID",
+  GAME_ENDED = "GAME_ENDED",
 }
 
 export type BoggleAction =
@@ -99,7 +101,7 @@ export type BoggleAction =
       payload: SearchResultPayload;
     }
   | {
-      type: BoggleActionType.TURN_ENDED;
+      type: BoggleActionType.TURN_ENDED | BoggleActionType.GAME_ENDED;
     }
   | {
       type: BoggleActionType.GRID_UPDATED;
@@ -138,6 +140,7 @@ export enum SpellingBeeActionType {
   WORD_SEARCHED = "WORD_SEARCHED",
   TURN_ENDED = "TURN_ENDED",
   SHUFFLE = "SHUFFLE",
+  GAME_ENDED = "GAME_ENDED",
 }
 
 export type SpellingBeeAction =
@@ -150,7 +153,7 @@ export type SpellingBeeAction =
       payload: SpellingBeeSearchResultPayload;
     }
   | {
-      type: SpellingBeeActionType.TURN_ENDED;
+      type: SpellingBeeActionType.TURN_ENDED | SpellingBeeActionType.GAME_ENDED;
     }
   | {
       type: SpellingBeeActionType.SHUFFLE;

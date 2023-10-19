@@ -44,6 +44,12 @@ export const SpellingBee: React.FC = () => {
     });
   }
 
+  function endGame() {
+    dispatch({
+      type: SpellingBeeActionType.GAME_ENDED,
+    });
+  }
+
   function handleGameStart(language: string, players: string[]) {
     const playersData = initializePlayersData(players);
     const { centerLetter, edgeLetters } = getNewLetters(language);
@@ -95,6 +101,9 @@ export const SpellingBee: React.FC = () => {
           >
             ⚙️
           </button>
+          <button className="headerBtn" onClick={endGame}>
+            End Game
+          </button>
         </h1>
       </div>
       <div className="content">
@@ -103,6 +112,7 @@ export const SpellingBee: React.FC = () => {
             error={game.error}
             playerData={game.playersData[game.currentPlayer]}
             onSubmit={handleSearch}
+            playing={game.playing}
           />
           <SpellingBeeBoard
             centerLetter={game.centerLetter}

@@ -4,6 +4,7 @@ export const SearchSection: React.FC<SearchProps> = ({
   onSubmit,
   error,
   playerData,
+  playing,
 }) => {
   return (
     <>
@@ -15,8 +16,8 @@ export const SearchSection: React.FC<SearchProps> = ({
         }}
       >
         <div className="search">
-          <input className="searchBar" name="search" />
-          <button className="searchBtn" type="submit">
+          <input className="searchBar" name="search" disabled={!playing} />
+          <button className="searchBtn" type="submit" disabled={!playing}>
             🔎
           </button>
         </div>

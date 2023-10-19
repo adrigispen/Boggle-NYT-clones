@@ -12,20 +12,26 @@ Not yet done :D
 
 ### Boggle todos:
 
-- Speed mode - need an 'End Game' button? How to end speed mode?
+- 'End turn' not working perfectly, should really be dispatched right after the highlight is removed...
+- removing the highlight can happen in a ref, not an effect  
 - Refactor CSS (it's terrible)
-- Remove word highlights and errors after timeout (half a second?)
 - bug fixes: German game is looking for correct capitalization right now :sweat: and recognizes capitalized words as different from lower case :see_no_evil:
+- end game vs. see all solutions - I should give players a choice
+- what should go in the header component? it needs a different name 
 
 ### Spelling Bee todos:
 
-- Add some logic to pull a reasonable set of letters, such that the player can always make a pangram
+- Add some logic to pull a reasonable set of letters, so the player can always make a pangram
 - make my circles into hexagons :weary:
-- Speed mode? maybe
+- Add speed mode
+- extract the header
+- figure out how to reuse the logic I've already written for Boggle
 
 ### Next up
 
+- refactor to pull out more shared logic - basically all score-keeping is the same across games. 1)playersData 2)current player 3)end game 4)end turn 5)speedmode - should only be active if 2+ players
+- what's DIFFERENT about the two games? 1)the grid itself, 2)the logic for checking if a word is on the board
 - Add Wordle
-- Use effect to load dictionaries?? Need something to load the dictionaries besides logging to the console :eyes:
+- load dictionaries when app loads, no need for an effect
 - Err rename repository
 - Add BE - login, save scores, show stats, let you play with friends, etc. Need to write endpoints to save data and deploy via heroku, would need to rework scoring & gameplay... hmm.

@@ -43,22 +43,13 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       };
     }
     case BoggleActionType.TURN_ENDED: {
-      let playersData = game.playersData;
+      const playersData = game.playersData;
       const newPlayer = getNextPlayer(
         game.settings.speedMode,
         game.currentPlayer,
         game.playersData
       );
       const playing = newPlayer == -1 ? false : true;
-      if (!playing) {
-        const boggleBotData = findAllWordsOnBoggleBoard(
-          game.grid,
-          game.settings.generousMode,
-          game.settings.language
-        );
-        const newPlayersData = [...game.playersData, boggleBotData];
-        playersData = calculateWinner(newPlayersData);
-      }
       return {
         ...game,
         playersData,
@@ -72,6 +63,24 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
         ...game,
         selectionGrid,
         error: "",
+      };
+    }
+    case BoggleActionType.GAME_ENDED: {
+      let finalPlayersData = game.playersData;
+      if (game.playing) {
+        const boggleBotData = findAllWordsOnBoggleBoard(
+          game.grid,
+          game.settings.generousMode,
+          game.settings.language
+        );
+        const newPlayersData = [...game.playersData, boggleBotData];
+        finalPlayersData = calculateWinner(newPlayersData);
+      }
+      return {
+        ...game,
+        playersData: finalPlayersData,
+        currentPlayer: -1,
+        playing: false,
       };
     }
   }

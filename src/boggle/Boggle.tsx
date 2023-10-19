@@ -1,20 +1,18 @@
-import { useReducer, useState } from "react";
+import { useReducer, useRef } from "react";
 import boggleReducer from "./logic/boggleReducer";
 import { defaultGame } from "./logic/gridHelpers";
 import { BoggleActionType, PlayerData } from "../shared/logic/Types";
 import { BoggleContext, BoggleDispatchContext } from "./logic/Context";
-import { SettingsModal } from "../shared/components/SettingsModal";
-import Settings from "./components/Settings";
 import { SearchSection } from "../shared/components/SearchSection";
 import { Grid } from "./components/Grid";
 import { Scoreboard } from "../shared/components/Scoreboard";
 import { FinalScores } from "../shared/components/FinalScores";
-import { initializePlayersData } from "../shared/logic/scoringHelpers";
 import { searchForWord } from "../shared/logic/dictionaryWordCheckService";
+import { Header } from "../shared/components/Header";
 
 export const Boggle: React.FC = () => {
-  const [showSettings, setShowSettings] = useState(false);
   const [game, dispatch] = useReducer(boggleReducer, defaultGame);
+  const switchPlayerRef = useRef<number | null>(null);
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     const { error, selectionGrid, newPlayerData } = searchForWord(
@@ -36,23 +34,17 @@ export const Boggle: React.FC = () => {
   }
 
   function endTurn() {
-    dispatch({
-      type: BoggleActionType.TURN_ENDED,
-    });
+    switchPlayerRef.current = setTimeout(() => {
+      dispatch({
+        type: BoggleActionType.TURN_ENDED,
+      });
+      if (!game.playing) endGame();
+    }, 2000);
   }
 
-  function handleGameStart(
-    size: number,
-    language: string,
-    players: string[],
-    speedMode: boolean,
-    generousMode: boolean
-  ) {
-    const playersData = initializePlayersData(players);
-    setShowSettings(false);
+  function endGame() {
     dispatch({
-      type: BoggleActionType.GAME_STARTED,
-      payload: { size, language, speedMode, generousMode, playersData },
+      type: BoggleActionType.GAME_ENDED,
     });
   }
 
@@ -69,29 +61,15 @@ export const Boggle: React.FC = () => {
     <>
       <BoggleContext.Provider value={game}>
         <BoggleDispatchContext.Provider value={dispatch}>
-          <SettingsModal isOpen={showSettings}>
-            <Settings
-              handleGameStart={handleGameStart}
-              setShowSettings={setShowSettings}
-            />
-          </SettingsModal>
-          <div className="header">
-            <h1>
-              Speedy Boggle
-              <button
-                className="openSettings"
-                onClick={() => setShowSettings(true)}
-              >
-                ⚙️
-              </button>
-            </h1>
-          </div>
+          <Header playing={game.playing} />
+
           <div className="content">
             <div className="gamePanel">
               <SearchSection
                 error={game.error}
                 playerData={game.playersData[game.currentPlayer]}
                 onSubmit={handleSearch}
+                playing={game.playing}
               />
               <Grid
                 grid={game.grid}
@@ -100,7 +78,7 @@ export const Boggle: React.FC = () => {
               />
             </div>
             <div className="resultsPanel">
-              {game.currentPlayer !== -1 ? (
+              {game.playing ? (
                 <Scoreboard
                   playerData={game.playersData[game.currentPlayer]}
                   endTurn={endTurn}

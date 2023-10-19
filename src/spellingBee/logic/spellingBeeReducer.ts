@@ -34,22 +34,13 @@ export default function spellingBeeReducer(
       };
     }
     case SpellingBeeActionType.TURN_ENDED: {
-      let playersData = game.playersData;
+      const playersData = game.playersData;
       const error = "";
       const newPlayer =
         game.currentPlayer < game.playersData.length - 1
           ? game.currentPlayer + 1
           : -1;
       const playing = newPlayer == -1 ? false : true;
-      if (!playing) {
-        const spellingBeeBotData = findAllSpellingBeeWords(
-          game.language,
-          game.centerLetter,
-          game.edgeLetters
-        );
-        const newPlayersData = [...game.playersData, spellingBeeBotData];
-        playersData = calculateWinner(newPlayersData);
-      }
       return {
         ...game,
         error,
@@ -62,6 +53,24 @@ export default function spellingBeeReducer(
       return {
         ...game,
         edgeLetters: action.payload.edgeLetters,
+      };
+    }
+    case SpellingBeeActionType.GAME_ENDED: {
+      let finalPlayersData = game.playersData;
+      if (game.playing) {
+        const spellingBeeBotData = findAllSpellingBeeWords(
+          game.language,
+          game.centerLetter,
+          game.edgeLetters
+        );
+        const newPlayersData = [...game.playersData, spellingBeeBotData];
+        finalPlayersData = calculateWinner(newPlayersData);
+      }
+      return {
+        ...game,
+        playersData: finalPlayersData,
+        currentPlayer: -1,
+        playing: false,
       };
     }
   }

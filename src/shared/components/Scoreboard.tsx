@@ -5,6 +5,7 @@ export const Scoreboard: React.FC<ScoreboardData> = ({
   playerData,
   endTurn,
 }) => {
+  
   const scoreboard = (
     <>
       <h2>
