@@ -1,13 +1,30 @@
-import React from "react";
-import { BeeBoardProps } from "../../shared/logic/Types";
+import React, { Dispatch, useContext } from "react";
+import {
+  BeeBoardProps,
+  WordGameAction,
+  WordGameActionType,
+} from "../../shared/logic/Types";
 import { SpellingBeeTile } from "./SpellingBeeTile";
+import { shuffle } from "../logic/beeHelpers";
+import { WordGameDispatchContext } from "../../shared/logic/Context";
 
 export const SpellingBeeBoard: React.FC<BeeBoardProps> = ({
   centerLetter,
   edgeLetters,
-  shuffleEdgeLetters,
   playing,
 }) => {
+  const dispatch = useContext(
+    WordGameDispatchContext
+  ) as Dispatch<WordGameAction>;
+
+  function shuffleEdgeLetters() {
+    const newEdgeLetters = shuffle(edgeLetters);
+    dispatch({
+      type: WordGameActionType.SHUFFLED,
+      payload: { edgeLetters: newEdgeLetters },
+    });
+  }
+
   return (
     <>
       <div className="spellingBeeBoard">

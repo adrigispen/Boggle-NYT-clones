@@ -11,7 +11,6 @@ export interface FinalScoresProps {
 export interface GridProps {
   grid: string[][];
   selectionGrid: boolean[][];
-  updateGrid: (selectionGrid: boolean[][]) => void;
 }
 
 export interface LetterSquareProps extends LetterSquare {
@@ -155,6 +154,5 @@ export interface SpellingBeeShufflePayload {
 export interface BeeBoardProps {
   edgeLetters: string[];
   centerLetter: string;
-  shuffleEdgeLetters: () => void;
   playing: boolean;
 }
