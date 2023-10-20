@@ -1,5 +1,6 @@
 import React from "react";
 import { BoardProps } from "../../shared/logic/Types";
+import { SpellingBeeTile } from "./SpellingBeeTile";
 
 export const SpellingBeeBoard: React.FC<BoardProps> = ({
   centerLetter,
@@ -10,28 +11,26 @@ export const SpellingBeeBoard: React.FC<BoardProps> = ({
   return (
     <>
       <div className="spellingBeeBoard">
-        <div className="spellingBeeRow">
-          <button className="hexagon">{edgeLetters[0].toUpperCase()}</button>
+        <div className="spellingBeeCol">
+          <SpellingBeeTile letter={edgeLetters[0]} />
+          <SpellingBeeTile letter={edgeLetters[1]} />
         </div>
-        <div className="spellingBeeRow">
-          <button className="hexagon">{edgeLetters[1].toUpperCase()}</button>
-          <button className="hexagon">{edgeLetters[2].toUpperCase()}</button>
+        <div className="spellingBeeCol">
+          <SpellingBeeTile letter={edgeLetters[2]} />
+          <SpellingBeeTile center={true} letter={centerLetter} />
+          <SpellingBeeTile letter={edgeLetters[3]} />
         </div>
-        <div className="spellingBeeRow">
-          <button className="hexagon centerTile">
-            {centerLetter.toUpperCase()}
-          </button>
-        </div>
-        <div className="spellingBeeRow">
-          <button className="hexagon">{edgeLetters[3].toUpperCase()}</button>
-          <button className="hexagon">{edgeLetters[4].toUpperCase()}</button>
-        </div>
-        <div className="spellingBeeRow">
-          <button className="hexagon">{edgeLetters[5].toUpperCase()}</button>
+        <div className="spellingBeeCol">
+          <SpellingBeeTile letter={edgeLetters[4]} />
+          <SpellingBeeTile letter={edgeLetters[5]} />
         </div>
       </div>
       <div className="beeButtons">
-        <button className="beeButton" onClick={shuffleEdgeLetters} disabled={!playing}>
+        <button
+          className="beeButton"
+          onClick={shuffleEdgeLetters}
+          disabled={!playing}
+        >
           Shuffle Letters
         </button>
       </div>

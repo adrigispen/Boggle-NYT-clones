@@ -203,27 +203,55 @@ input[type="checkbox"] {
   color: maroon;
 }
 
-.hexagon {
+.left {
+  float: left;
+  border-right: 45px solid darkblue;
+  border-top: 78px solid transparent;
+  border-bottom: 78px solid transparent;
+}
+
+.centerTileLeft {
+  border-right: 45px solid darkgoldenrod;
+}
+
+.center {
+  float: left;
+  width: 90px;
+  height: 156px;
   background-color: darkblue;
+  z-index: 1;
+}
+
+.center span {
+  position: relative;
+  top: 22px;
+}
+
+.right {
+  float: left;
+  border-left: 45px solid darkblue;
+  border-top: 78px solid transparent;
+  border-bottom: 78px solid transparent;
+}
+
+.centerTileRight {
+  border-left: 45px solid darkgoldenrod;
+}
+
+.hex {
   color: aliceblue;
   border-color: aliceblue;
-  height: 120px;
-  width: 120px;
-  padding: 25px;
-  margin: -35px 35px;
-  border-radius: 60px;
-  font-size: 48px;
+  font-size: 80px;
+  margin: 3px -20px;
 }
 
 .centerTile {
   background-color: darkgoldenrod;
-  z-index: 1;
-  margin: -30px 10px;
-  width: 120px;
 }
 
-.spellingBeeRow {
+.spellingBeeCol {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -231,17 +259,12 @@ input[type="checkbox"] {
 
 .spellingBeeBoard {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 70px 0px;
+  margin: 50px 50px 50px 30px;
 }
 
 .beeButtons {
   display: flex;
   justify-content: space-between;
 }
-
-/* flex could go based on columns - 3 columns rather than 5 rows 
-Search - 
-*/
