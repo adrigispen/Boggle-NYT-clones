@@ -21,16 +21,15 @@ Not yet done :D
 
 ### Spelling Bee todos:
 
-- Add some logic to pull a reasonable set of letters, so the player can always make a pangram
 - make my circles into hexagons :weary:
-- Add speed mode
-- extract the header
 - figure out how to reuse the logic I've already written for Boggle
 
 ### Next up
 
 - refactor to pull out more shared logic - basically all score-keeping is the same across games. 1)playersData 2)current player 3)end game 4)end turn 5)speedmode - should only be active if 2+ players
 - what's DIFFERENT about the two games? 1)the grid itself, 2)the logic for checking if a word is on the board
+- how to use generic types?? the header component can be shared
+- how to not pass the game as context?? it's a terrible solution, needs to be gone from the headers
 - Add Wordle
 - load dictionaries when app loads, no need for an effect
 - Err rename repository

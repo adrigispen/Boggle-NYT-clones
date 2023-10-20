@@ -171,9 +171,8 @@ input[type="checkbox"] {
 }
 
 .resultsPanel {
-}
-
-.wordsFoundDisplay {
+  justify-content: center;
+  align-items: center;
 }
 
 .score {

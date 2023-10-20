@@ -37,7 +37,11 @@ export interface SettingsProps {
 }
 
 export interface SpellingBeeSettingsProps {
-  handleGameStart: (language: string, players: string[]) => void;
+  handleGameStart: (
+    language: string,
+    players: string[],
+    speedMode: boolean
+  ) => void;
   setShowSettings: (value: boolean) => void;
   playerNames: string[];
 }
@@ -132,6 +136,7 @@ export interface SpellingBeeGame {
   playersData: PlayerData[];
   error: string;
   currentPlayer: number;
+  speedMode: boolean;
   playing: boolean;
 }
 
@@ -174,11 +179,11 @@ export interface NewSpellingBeePayload {
   playersData: PlayerData[];
   centerLetter: string;
   edgeLetters: string[];
+  speedMode: boolean;
 }
 
 export interface BoardProps {
   edgeLetters: string[];
   centerLetter: string;
   shuffleEdgeLetters: () => void;
-  getNewBoard: () => void;
 }

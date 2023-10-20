@@ -2,7 +2,7 @@ import { useReducer, useRef } from "react";
 import boggleReducer from "./logic/boggleReducer";
 import { defaultGame } from "./logic/gridHelpers";
 import { BoggleActionType, PlayerData } from "../shared/logic/Types";
-import { BoggleContext, BoggleDispatchContext } from "./logic/Context";
+import { BoggleContext, BoggleDispatchContext } from "../shared/logic/Context";
 import { SearchSection } from "../shared/components/SearchSection";
 import { Grid } from "./components/Grid";
 import { Scoreboard } from "../shared/components/Scoreboard";

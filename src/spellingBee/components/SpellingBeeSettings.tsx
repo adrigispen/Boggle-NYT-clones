@@ -47,7 +47,11 @@ export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleGameStart(e.currentTarget.languageSB.value, players);
+          handleGameStart(
+            e.currentTarget.language.value,
+            players,
+            e.currentTarget.speedMode.checked
+          );
         }}
       >
         <h2>Settings</h2>
@@ -74,15 +78,24 @@ export const SpellingBeeSettings: React.FC<SpellingBeeSettingsProps> = ({
             <label>
               <input
                 type="radio"
-                name="languageSB"
+                name="language"
                 value="English"
                 defaultChecked
               />
               English
             </label>
             <label>
-              <input type="radio" name="languageSB" value="Deutsch" />
+              <input type="radio" name="language" value="Deutsch" />
               Deutsch
+            </label>
+          </div>
+        </div>
+        <div className="settingsGroup">
+          <h3 className="inputGroupLabel">Game play</h3>
+          <div className="inputGroup">
+            <label>
+              <input type="checkbox" name="speedMode" />
+              Speed mode
             </label>
           </div>
         </div>

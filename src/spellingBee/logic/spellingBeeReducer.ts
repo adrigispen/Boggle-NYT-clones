@@ -19,6 +19,7 @@ export default function spellingBeeReducer(
         edgeLetters: action.payload.edgeLetters,
         error: "",
         currentPlayer: 0,
+        speedMode: action.payload.speedMode,
         playing: true,
       };
     }

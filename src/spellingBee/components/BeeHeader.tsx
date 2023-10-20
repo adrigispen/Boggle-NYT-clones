@@ -1,47 +1,57 @@
 import { Dispatch, useContext, useState } from "react";
-import { SettingsModal } from "./SettingsModal";
-import Settings from "../../boggle/components/Settings";
-import { initializePlayersData } from "../logic/scoringHelpers";
-import { BoggleAction, BoggleActionType, BoggleGame } from "../logic/Types";
-import { BoggleContext, BoggleDispatchContext } from "../logic/Context";
+import { SettingsModal } from "../../shared/components/SettingsModal";
+import SpellingBeeSettings from "./SpellingBeeSettings";
+import {
+  SpellingBeeAction,
+  SpellingBeeActionType,
+  SpellingBeeGame,
+} from "../../shared/logic/Types";
+import {
+  SpellingBeeContext,
+  SpellingBeeDispatchContext,
+} from "../../shared/logic/Context";
+import { initializePlayersData } from "../../shared/logic/scoringHelpers";
+import { getViableLetters } from "../logic/beeHelpers";
 
-export const Header: React.FC<{ playing: boolean }> = ({ playing }) => {
+export const BeeHeader: React.FC<{ playing: boolean }> = ({ playing }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const game = useContext(BoggleContext) as BoggleGame;
-  const dispatch = useContext(BoggleDispatchContext) as Dispatch<BoggleAction>;
+  const game = useContext(SpellingBeeContext) as SpellingBeeGame;
+  const dispatch = useContext(
+    SpellingBeeDispatchContext
+  ) as Dispatch<SpellingBeeAction>;
 
   function endGame() {
     dispatch({
-      type: BoggleActionType.GAME_ENDED,
+      type: SpellingBeeActionType.GAME_ENDED,
     });
   }
 
   function handleGameStart(
-    size: number,
     language: string,
     players: string[],
-    speedMode: boolean,
-    generousMode: boolean
+    speedMode: boolean
   ) {
     const playersData = initializePlayersData(players);
     setShowSettings(false);
+    const { centerLetter, edgeLetters } = getViableLetters(language);
     dispatch({
-      type: BoggleActionType.GAME_STARTED,
-      payload: { size, language, speedMode, generousMode, playersData },
+      type: SpellingBeeActionType.GAME_STARTED,
+      payload: { language, playersData, centerLetter, edgeLetters, speedMode },
     });
   }
 
   return (
     <>
       <SettingsModal isOpen={showSettings}>
-        <Settings
+        <SpellingBeeSettings
+          playerNames={game.playersData.map(({ playerName }) => playerName)}
           handleGameStart={handleGameStart}
           setShowSettings={setShowSettings}
         />
       </SettingsModal>
       <div className="header">
         <h1>
-          Speedy Boggle
+          Spelling Bee
           <button
             className="openSettings"
             onClick={() => setShowSettings(true)}
@@ -57,13 +67,11 @@ export const Header: React.FC<{ playing: boolean }> = ({ playing }) => {
               className="headerBtn"
               onClick={() =>
                 handleGameStart(
-                  game.settings.size,
-                  game.settings.language,
+                  game.language,
                   game.playersData
                     .filter(({ playerName }) => playerName != "BoggleBot")
                     .map(({ playerName }) => playerName),
-                  game.settings.speedMode,
-                  game.settings.generousMode
+                  game.speedMode
                 )
               }
             >

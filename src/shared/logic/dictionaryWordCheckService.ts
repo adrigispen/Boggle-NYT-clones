@@ -78,6 +78,19 @@ export function searchForWord(
 
 // spelling bee helpers
 
+export function pangramExists(letters: string, language: string) {
+  const dictionary =
+    language === "English"
+      ? Object.keys(dictionaryEn.dictionaryTable)
+      : Object.keys(dictionaryDe.dictionaryTable);
+  const r = new RegExp(`^[${letters}]+$`, "i");
+  const word = dictionary.find(
+    (word) =>
+      letters.split("").every((l) => word.indexOf(l) !== -1) && word.match(r)
+  );
+  return word === undefined ? false : true;
+}
+
 export function findAllSpellingBeeWords(
   language: string,
   centerLetter: string,

@@ -117,7 +117,7 @@ export const defaultGame: BoggleGame = {
   },
   playersData: [
     {
-      playerName: "Adrienne",
+      playerName: "Player 1",
       wordsFound: [],
       currentScore: 0,
     },

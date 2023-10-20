@@ -1,24 +1,30 @@
 import { SpellingBeeGame } from "../../shared/logic/Types";
+import { pangramExists } from "../../shared/logic/dictionaryWordCheckService";
 
-export function getNewLetters(language: string): {
+//const { centerLetter, edgeLetters } = getViableLetters("English");
+
+function getLetters(): string[] {
+  const possibleLetters = "abcdefghijklmnopqrstuvwxzy".split("");
+  return Array(7)
+    .fill("")
+    .map(
+      (_, i) =>
+        possibleLetters.splice(
+          Math.floor(Math.random() * (possibleLetters.length - (i + 1))),
+          1
+        )[0]
+    );
+}
+
+export function getViableLetters(language: string): {
   centerLetter: string;
   edgeLetters: string[];
 } {
-  const englishLetters = "abcdefghijklmnopqrstuvwxzy".split("");
-  const germanLetters = "qwertzuiopüasdfghjklöäyxcvbnm".split("");
-  const letters = Array(7)
-    .fill("")
-    .map((_, i) =>
-      language === "English"
-        ? englishLetters.splice(
-            Math.floor(Math.random() * (englishLetters.length - (i + 1))),
-            1
-          )[0]
-        : germanLetters.splice(
-            Math.floor(Math.random() * (germanLetters.length - (i + 1))),
-            1
-          )[0]
-    );
+  let letters = getLetters();
+  while (!pangramExists(letters.join(""), language)) {
+    letters = getLetters();
+    console.log(letters);
+  }
   return { centerLetter: letters[0], edgeLetters: letters.slice(1) };
 }
 
@@ -37,21 +43,19 @@ export function shuffle(letters: string[]): string[] {
   return letters;
 }
 
-export function randomSpellingBee(): SpellingBeeGame {
-  const { centerLetter, edgeLetters } = getNewLetters("English");
-  return {
-    language: "English",
-    centerLetter,
-    edgeLetters,
-    playersData: [
-      {
-        playerName: "Adrienne",
-        wordsFound: [],
-        currentScore: 0,
-      },
-    ],
-    error: "",
-    currentPlayer: 0,
-    playing: true,
-  };
-}
+export const initialSpellingBee: SpellingBeeGame = {
+  language: "English",
+  centerLetter: "e",
+  edgeLetters: ["o", "n", "y", "a", "d", "s"],
+  playersData: [
+    {
+      playerName: "Player 1",
+      wordsFound: [],
+      currentScore: 0,
+    },
+  ],
+  error: "",
+  currentPlayer: 0,
+  speedMode: false,
+  playing: true,
+};
