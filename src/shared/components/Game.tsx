@@ -67,16 +67,17 @@ export const Game: React.FC<{
             playing={game.playing}
             clearError={clearError}
           />
+
+          {gameName === "Speedy Boggle" ? (
+            <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
+          ) : (
+            <SpellingBeeBoard
+              centerLetter={game.centerLetter}
+              edgeLetters={game.edgeLetters}
+              playing={game.playing}
+            />
+          )}
         </div>
-        {gameName === "Speedy Boggle" ? (
-          <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
-        ) : (
-          <SpellingBeeBoard
-            centerLetter={game.centerLetter}
-            edgeLetters={game.edgeLetters}
-            playing={game.playing}
-          />
-        )}
         <div className="resultsPanel">
           {game.playing ? (
             <Scoreboard
