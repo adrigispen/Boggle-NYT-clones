@@ -1,8 +1,5 @@
 import { Dispatch, createContext } from "react";
-import { BoggleAction, SpellingBeeAction } from "./Types";
+import { WordGameAction } from "./Types";
 
-export const BoggleDispatchContext =
-  createContext<Dispatch<BoggleAction> | null>(null);
-
-export const SpellingBeeDispatchContext =
-  createContext<Dispatch<SpellingBeeAction> | null>(null);
+export const WordGameDispatchContext =
+  createContext<Dispatch<WordGameAction> | null>(null);

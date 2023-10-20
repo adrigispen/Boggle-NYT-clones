@@ -18,13 +18,6 @@ export interface LetterSquareProps extends LetterSquare {
   selected: boolean | undefined;
 }
 
-export interface SettingsData {
-  size: number;
-  language: string;
-  generousMode: boolean;
-  speedMode: boolean;
-}
-
 export interface SettingsProps {
   handleGameStart: (
     size: number,
@@ -56,7 +49,6 @@ export interface PlayerData {
 export interface ScoreboardData {
   playerData: PlayerData;
   endTurn: () => void;
-  lastPlayer: boolean;
 }
 
 export interface SettingsModalProps {
@@ -64,55 +56,75 @@ export interface SettingsModalProps {
   children: JSX.Element;
 }
 
-export interface Entry {
-  word: string;
-}
-
-export interface dwdsEntry {
-  lemma: string;
-}
-
 export interface SearchProps {
   onSubmit: (currentSearch: string, playerData: PlayerData) => void;
   error: string;
   playerData: PlayerData;
   playing: boolean;
+  clearError: () => void;
 }
 
-export interface BoggleGame {
-  settings: SettingsData;
+export enum WordGameType {
+  BOGGLE = "BOGGLE",
+  SPELLINGBEE = "SPELLINGBEE",
+}
+
+export interface WordGame {
+  type: WordGameType;
   playersData: PlayerData[];
-  grid: string[][];
-  selectionGrid: boolean[][];
-  currentPlayer: number;
   error: string;
   playing: boolean;
+  currentPlayer: number;
+  speedMode: boolean;
+  language: string;
+  size: number;
+  generousMode: boolean;
+  grid: string[][];
+  selectionGrid: boolean[][];
+  centerLetter: string;
+  edgeLetters: string[];
 }
 
-export enum BoggleActionType {
-  GAME_STARTED = "GAME_STARTED",
-  WORD_SEARCHED = "WORD_SEARCHED",
+export enum WordGameActionType {
   TURN_ENDED = "TURN_ENDED",
-  GRID_UPDATED = "UPDATE_GRID",
   GAME_ENDED = "GAME_ENDED",
+  ERROR_CLEARED = "ERROR_CLEARED",
+  WORD_SEARCHED = "WORD_SEARCHED",
+  GAME_STARTED = "GAME_STARTED",
+  BOARD_UPDATED = "UPDATE_BOARD",
+  SHUFFLED = "SHUFFLED",
 }
 
-export type BoggleAction =
+export type WordGameAction =
   | {
-      type: BoggleActionType.GAME_STARTED;
-      payload: NewGamePayload;
+      type:
+        | WordGameActionType.TURN_ENDED
+        | WordGameActionType.GAME_ENDED
+        | WordGameActionType.ERROR_CLEARED;
     }
   | {
-      type: BoggleActionType.WORD_SEARCHED;
+      type: WordGameActionType.WORD_SEARCHED;
       payload: SearchResultPayload;
     }
   | {
-      type: BoggleActionType.TURN_ENDED | BoggleActionType.GAME_ENDED;
+      type: WordGameActionType.GAME_STARTED;
+      payload: NewGamePayload;
     }
   | {
-      type: BoggleActionType.GRID_UPDATED;
+      type: WordGameActionType.BOARD_UPDATED;
       payload: WordFoundPayload;
+    }
+  | {
+      type: WordGameActionType.SHUFFLED;
+      payload: SpellingBeeShufflePayload;
     };
+
+// export interface BoggleGame extends WordGame {
+//   size: number;
+//   generousMode: boolean;
+//   grid: string[][];
+//   selectionGrid: boolean[][];
+// }
 
 export interface SearchResultPayload {
   error: string;
@@ -125,64 +137,22 @@ export interface WordFoundPayload {
 
 export interface NewGamePayload {
   size?: number;
+  generousMode?: boolean;
   language?: string;
   speedMode?: boolean;
-  generousMode?: boolean;
   playersData?: PlayerData[];
 }
 
-export interface SpellingBeeGame {
-  language: string;
-  centerLetter: string;
-  edgeLetters: string[];
-  playersData: PlayerData[];
-  error: string;
-  currentPlayer: number;
-  speedMode: boolean;
-  playing: boolean;
-}
-
-export enum SpellingBeeActionType {
-  GAME_STARTED = "GAME_STARTED",
-  WORD_SEARCHED = "WORD_SEARCHED",
-  TURN_ENDED = "TURN_ENDED",
-  SHUFFLE = "SHUFFLE",
-  GAME_ENDED = "GAME_ENDED",
-}
-
-export type SpellingBeeAction =
-  | {
-      type: SpellingBeeActionType.GAME_STARTED;
-      payload: NewSpellingBeePayload;
-    }
-  | {
-      type: SpellingBeeActionType.WORD_SEARCHED;
-      payload: SpellingBeeSearchResultPayload;
-    }
-  | {
-      type: SpellingBeeActionType.TURN_ENDED | SpellingBeeActionType.GAME_ENDED;
-    }
-  | {
-      type: SpellingBeeActionType.SHUFFLE;
-      payload: SpellingBeeShufflePayload;
-    };
-
-export interface SpellingBeeSearchResultPayload {
-  error: string;
-  playerData: PlayerData;
-}
+// export interface SpellingBeeGame extends WordGame {
+//   centerLetter: string;
+//   edgeLetters: string[];
+// }
 
 export interface SpellingBeeShufflePayload {
   edgeLetters: string[];
 }
 
-export interface NewSpellingBeePayload {
-  language?: string;
-  playersData?: PlayerData[];
-  speedMode?: boolean;
-}
-
-export interface BoardProps {
+export interface BeeBoardProps {
   edgeLetters: string[];
   centerLetter: string;
   shuffleEdgeLetters: () => void;

@@ -2,17 +2,9 @@ import { Dispatch, useContext, useState } from "react";
 import { SettingsModal } from "./SettingsModal";
 import Settings from "../../boggle/components/Settings";
 import { initializePlayersData } from "../logic/scoringHelpers";
-import {
-  BoggleAction,
-  BoggleActionType,
-  SpellingBeeAction,
-  SpellingBeeActionType,
-} from "../logic/Types";
 import SpellingBeeSettings from "../../spellingBee/components/SpellingBeeSettings";
-import {
-  BoggleDispatchContext,
-  SpellingBeeDispatchContext,
-} from "../logic/Context";
+import { WordGameDispatchContext } from "../logic/Context";
+import { WordGameAction, WordGameActionType } from "../logic/Types";
 
 export const Header: React.FC<{
   gameName: string;
@@ -20,19 +12,14 @@ export const Header: React.FC<{
   playerNames: string[];
 }> = ({ gameName, playing, playerNames }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const bDispatch = useContext(BoggleDispatchContext) as Dispatch<BoggleAction>;
-  const sDispatch = useContext(
-    SpellingBeeDispatchContext
-  ) as Dispatch<SpellingBeeAction>;
+  const dispatch = useContext(
+    WordGameDispatchContext
+  ) as Dispatch<WordGameAction>;
 
   function endGame() {
-    gameName === "Speedy Boggle"
-      ? bDispatch({
-          type: BoggleActionType.GAME_ENDED,
-        })
-      : sDispatch({
-          type: SpellingBeeActionType.GAME_ENDED,
-        });
+    dispatch({
+      type: WordGameActionType.GAME_ENDED,
+    });
   }
 
   function handleBoggleStart(
@@ -48,8 +35,8 @@ export const Header: React.FC<{
       payload = { size, language, speedMode, generousMode, playersData };
     }
     setShowSettings(false);
-    bDispatch({
-      type: BoggleActionType.GAME_STARTED,
+    dispatch({
+      type: WordGameActionType.GAME_STARTED,
       payload,
     });
   }
@@ -65,8 +52,8 @@ export const Header: React.FC<{
       payload = { language, playersData, speedMode };
     }
     setShowSettings(false);
-    sDispatch({
-      type: SpellingBeeActionType.GAME_STARTED,
+    dispatch({
+      type: WordGameActionType.GAME_STARTED,
       payload,
     });
   }

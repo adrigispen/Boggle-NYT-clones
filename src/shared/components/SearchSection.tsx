@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { SearchProps } from "../logic/Types";
 
 export const SearchSection: React.FC<SearchProps> = ({
@@ -5,7 +6,10 @@ export const SearchSection: React.FC<SearchProps> = ({
   error,
   playerData,
   playing,
+  clearError,
 }) => {
+  const ref = useRef<number | null>(null);
+
   return (
     <>
       <form
@@ -13,6 +17,7 @@ export const SearchSection: React.FC<SearchProps> = ({
           e.preventDefault();
           onSubmit(e.currentTarget.search.value, playerData);
           e.currentTarget.reset();
+          ref.current = setTimeout(clearError, 1000);
         }}
       >
         <div className="search">

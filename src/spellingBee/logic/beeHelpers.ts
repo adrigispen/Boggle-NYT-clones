@@ -1,4 +1,4 @@
-import { SpellingBeeGame } from "../../shared/logic/Types";
+import { WordGame, WordGameType } from "../../shared/logic/Types";
 import { pangramExists } from "../../shared/logic/dictionaryWordCheckService";
 
 function getLetters(): string[] {
@@ -44,7 +44,10 @@ export function shuffle(letters: string[]): string[] {
   return letters;
 }
 
-export const initialSpellingBee: SpellingBeeGame = {
+//const { centerLetter, edgeLetters } = getViableLetters("English");
+
+export const initialSpellingBee: WordGame = {
+  type: WordGameType.SPELLINGBEE,
   language: "English",
   centerLetter: "e",
   edgeLetters: ["o", "n", "y", "a", "d", "s"],
@@ -59,4 +62,8 @@ export const initialSpellingBee: SpellingBeeGame = {
   currentPlayer: 0,
   speedMode: false,
   playing: true,
+  size: 4,
+  generousMode: false,
+  grid: [],
+  selectionGrid: [],
 };

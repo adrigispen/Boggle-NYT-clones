@@ -1,69 +1,73 @@
 import { useReducer, useRef } from "react";
-import boggleReducer from "./logic/boggleReducer";
 import { defaultGame } from "./logic/gridHelpers";
-import { BoggleActionType, PlayerData } from "../shared/logic/Types";
-import { BoggleDispatchContext } from "../shared/logic/Context";
+import { PlayerData, WordGameActionType } from "../shared/logic/Types";
+import { WordGameDispatchContext } from "../shared/logic/Context";
 import { SearchSection } from "../shared/components/SearchSection";
 import { Grid } from "./components/Grid";
 import { Scoreboard } from "../shared/components/Scoreboard";
 import { FinalScores } from "../shared/components/FinalScores";
 import { searchForWord } from "../shared/logic/dictionaryWordCheckService";
 import { Header } from "../shared/components/Header";
+import wordGameReducer from "../shared/logic/wordGameReducer";
 
 export const Boggle: React.FC = () => {
-  const [game, dispatch] = useReducer(boggleReducer, defaultGame);
+  const [game, dispatch] = useReducer(wordGameReducer, defaultGame);
   const switchPlayerRef = useRef<number | null>(null);
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     const { error, selectionGrid, newPlayerData } = searchForWord(
       currentSearch,
-      game.settings.language,
+      game.language,
       playerData,
       game.grid,
-      game.settings.generousMode
+      game.generousMode
     );
     dispatch({
-      type: BoggleActionType.WORD_SEARCHED,
+      type: WordGameActionType.WORD_SEARCHED,
       payload: {
         error,
         playerData: newPlayerData ?? playerData,
       },
     });
     if (selectionGrid) updateGrid(selectionGrid);
-    if (game.settings.speedMode) endTurn();
+    if (game.speedMode) endTurn();
   }
 
   function endTurn() {
+    const shouldEndGame = isLastPlayer;
     switchPlayerRef.current = setTimeout(() => {
       dispatch({
-        type: BoggleActionType.TURN_ENDED,
+        type: WordGameActionType.TURN_ENDED,
       });
-      if (!game.playing) endGame();
+      if (shouldEndGame) {
+        dispatch({
+          type: WordGameActionType.GAME_ENDED,
+        });
+      }
     }, 1000);
-  }
-
-  function endGame() {
-    dispatch({
-      type: BoggleActionType.GAME_ENDED,
-    });
   }
 
   function updateGrid(selectionGrid: boolean[][]) {
     dispatch({
-      type: BoggleActionType.GRID_UPDATED,
+      type: WordGameActionType.BOARD_UPDATED,
       payload: {
         selectionGrid,
       },
     });
   }
 
+  function clearError() {
+    dispatch({
+      type: WordGameActionType.ERROR_CLEARED,
+    });
+  }
+
   const isLastPlayer =
-    !game.settings.speedMode &&
-    game.currentPlayer == game.playersData.length - 1;
+    !game.speedMode && game.currentPlayer == game.playersData.length - 1;
 
   return (
     <>
-      <BoggleDispatchContext.Provider value={dispatch}>
+      <WordGameDispatchContext.Provider value={dispatch}>
         <Header
           gameName="Speedy Boggle"
           playing={game.playing}
@@ -76,6 +80,7 @@ export const Boggle: React.FC = () => {
               playerData={game.playersData[game.currentPlayer]}
               onSubmit={handleSearch}
               playing={game.playing}
+              clearError={clearError}
             />
             <Grid
               grid={game.grid}
@@ -88,14 +93,13 @@ export const Boggle: React.FC = () => {
               <Scoreboard
                 playerData={game.playersData[game.currentPlayer]}
                 endTurn={endTurn}
-                lastPlayer={isLastPlayer}
               />
             ) : (
               <FinalScores playersData={game.playersData} />
             )}
           </div>
         </div>
-      </BoggleDispatchContext.Provider>
+      </WordGameDispatchContext.Provider>
     </>
   );
 };

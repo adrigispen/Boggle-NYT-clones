@@ -1,8 +1,8 @@
 import React from "react";
-import { BoardProps } from "../../shared/logic/Types";
+import { BeeBoardProps } from "../../shared/logic/Types";
 import { SpellingBeeTile } from "./SpellingBeeTile";
 
-export const SpellingBeeBoard: React.FC<BoardProps> = ({
+export const SpellingBeeBoard: React.FC<BeeBoardProps> = ({
   centerLetter,
   edgeLetters,
   shuffleEdgeLetters,

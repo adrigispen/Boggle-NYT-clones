@@ -1,4 +1,4 @@
-import { BoggleGame, LetterSquare } from "../../shared/logic/Types";
+import { LetterSquare, WordGame, WordGameType } from "../../shared/logic/Types";
 import {
   de,
   de_16_die,
@@ -108,13 +108,12 @@ export function getWordPath(
   return [];
 }
 
-export const defaultGame: BoggleGame = {
-  settings: {
-    size: 4,
-    language: "English",
-    generousMode: true,
-    speedMode: false,
-  },
+export const defaultGame: WordGame = {
+  type: WordGameType.BOGGLE,
+  size: 4,
+  language: "English",
+  generousMode: true,
+  speedMode: false,
   playersData: [
     {
       playerName: "Player 1",
@@ -127,4 +126,6 @@ export const defaultGame: BoggleGame = {
   currentPlayer: 0,
   error: "",
   playing: true,
+  centerLetter: "",
+  edgeLetters: [],
 };
