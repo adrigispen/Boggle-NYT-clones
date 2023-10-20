@@ -4,29 +4,27 @@ Implementation of variations of NYT's Spelling Bee game and the classic board ga
 
 Boggle has various settings - 'generous' mode to allow you to reuse letters (e.g. if your grid had only 1 u, you could reuse it to spell usual), and 'speed mode' where you switch players with each word.
 
-Spelling Bee is not quite finished - I want to make the tiles (currently circles) into hexagons. 
+Spelling Bee lets you play in speed mode with multiple players. There is at least one pangram (a word that uses all letters) for each board.
+
+Both games are available in German and English, and when you end the game, you can see all possible solutions found by the computer.
 
 ## Status
 
 Not yet done :D
 
-### Boggle todos:
+### Fixes/todos:
 
 - 'End turn' not working perfectly, should really be dispatched right after the highlight is removed...
-- removing the highlight can happen in a ref, not an effect  
-- Refactor CSS (it's terrible)
-
-### Spelling Bee todos:
-
-- make my circles into hexagons :weary:
-- figure out how to reuse the logic I've already written for Boggle
+- Get rid of useEffect
+- Refactor to component-level CSS ?
+- Figure out how to reuse logic in a nicer way
+- Disable speedmode if only 1 player
+- Figure out how to get a random Bee from the jump
 
 ### Next up
 
-- refactor to pull out more shared logic - basically all score-keeping is the same across games. 1)playersData 2)current player 3)end game 4)end turn 5)speedmode - should only be active if 2+ players
-- what's DIFFERENT about the two games? 1)the grid itself, 2)the logic for checking if a word is on the board
-- how to use union types?? 
+- Refactor to pull out more shared logic - basically all score-keeping is the same across games. 1)playersData 2)current player 3)end game 4)end turn 5)speedmode
 - Add Wordle
-- load dictionaries when app loads
-- Err rename repository
+- Load dictionaries when app loads
+- Rename repository
 - Add BE - login, save scores, show stats, let you play with friends, etc. Need to write endpoints to save data and deploy via heroku, would need to rework scoring & gameplay... hmm.

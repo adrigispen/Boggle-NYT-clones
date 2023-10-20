@@ -261,7 +261,7 @@ input[type="checkbox"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 50px 50px 50px 30px;
+  margin: 50px 30px 50px 30px;
 }
 
 .beeButtons {
