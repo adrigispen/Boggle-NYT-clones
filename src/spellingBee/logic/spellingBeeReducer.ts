@@ -4,7 +4,10 @@ import {
   SpellingBeeActionType,
 } from "../../shared/logic/Types";
 import { findAllSpellingBeeWords } from "../../shared/logic/dictionaryWordCheckService";
-import { calculateWinner } from "../../shared/logic/scoringHelpers";
+import {
+  calculateWinner,
+  getNextPlayer,
+} from "../../shared/logic/scoringHelpers";
 
 export default function spellingBeeReducer(
   game: SpellingBeeGame,
@@ -37,10 +40,11 @@ export default function spellingBeeReducer(
     case SpellingBeeActionType.TURN_ENDED: {
       const playersData = game.playersData;
       const error = "";
-      const newPlayer =
-        game.currentPlayer < game.playersData.length - 1
-          ? game.currentPlayer + 1
-          : -1;
+      const newPlayer = getNextPlayer(
+        game.speedMode,
+        game.currentPlayer,
+        game.playersData
+      );
       const playing = newPlayer == -1 ? false : true;
       return {
         ...game,

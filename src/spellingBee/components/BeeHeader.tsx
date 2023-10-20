@@ -69,7 +69,7 @@ export const BeeHeader: React.FC<{ playing: boolean }> = ({ playing }) => {
                 handleGameStart(
                   game.language,
                   game.playersData
-                    .filter(({ playerName }) => playerName != "BoggleBot")
+                    .filter(({ playerName }) => playerName != "SpellingBeeBot")
                     .map(({ playerName }) => playerName),
                   game.speedMode
                 )

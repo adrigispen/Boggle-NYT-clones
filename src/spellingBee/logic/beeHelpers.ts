@@ -1,8 +1,6 @@
 import { SpellingBeeGame } from "../../shared/logic/Types";
 import { pangramExists } from "../../shared/logic/dictionaryWordCheckService";
 
-//const { centerLetter, edgeLetters } = getViableLetters("English");
-
 function getLetters(): string[] {
   const possibleLetters = "abcdefghijklmnopqrstuvwxzy".split("");
   return Array(7)
@@ -14,6 +12,10 @@ function getLetters(): string[] {
           1
         )[0]
     );
+}
+
+export function isPangram(word: string): boolean {
+  return new Set([...word]).size === 7;
 }
 
 export function getViableLetters(language: string): {

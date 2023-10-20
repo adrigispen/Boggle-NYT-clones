@@ -39,7 +39,7 @@ export const Boggle: React.FC = () => {
         type: BoggleActionType.TURN_ENDED,
       });
       if (!game.playing) endGame();
-    }, 2000);
+    }, 1000);
   }
 
   function endGame() {

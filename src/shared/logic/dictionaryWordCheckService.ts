@@ -2,6 +2,7 @@ import { PlayerData } from "./Types";
 import { Typo } from "typo-js-ts";
 import { wordOnBoard, getWordPath } from "../../boggle/logic/gridHelpers";
 import { getScore } from "./scoringHelpers";
+import { isPangram } from "../../spellingBee/logic/beeHelpers";
 
 const dictionaryEn = new Typo("en_US");
 const dictionaryDe = new Typo("de_DE");
@@ -48,7 +49,11 @@ export function isValidWordInLanguage(word: string, language: string): boolean {
 }
 
 function isNewWordForPlayer(word: string, wordsFound: string[]): boolean {
-  return wordsFound.indexOf(word) == -1;
+  const wordR = new RegExp(`^${word}$`, "i");
+  return wordsFound.reduce(
+    (acc, word) => acc && word.match(wordR) == undefined,
+    true
+  );
 }
 
 export function searchForWord(
@@ -103,15 +108,17 @@ export function findAllSpellingBeeWords(
       : Object.keys(dictionaryDe.dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
-      (word.length > 3 || (language === "Deutsch" && word.length > 2)) && // we'll let players have a chance to win - SBB only finds 4+ words in Eng, 3+ in German
+      word.length > 3 && // we'll let players have a chance to win - SBB only finds 4+ words
       word !== word.toUpperCase() && // don't want abbreviations
       (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
-      word.indexOf(centerLetter) !== -1 &&
-      [...word].every(
+      word.toLowerCase().indexOf(centerLetter) !== -1 &&
+      [...word.toLowerCase()].every(
         (letter) => edgeLetters.concat(centerLetter).indexOf(letter) !== -1
       )
-    )
+    ) {
+      if (isPangram(word)) word = word.toUpperCase();
       words = words.concat(word);
+    }
   });
   return {
     playerName: "SpellingBeeBot",
@@ -131,15 +138,16 @@ export function searchForSpellingBeeWord(
     return { error: `Not a valid ${language} word` };
   if (!isNewWordForPlayer(currentSearch, playerData.wordsFound))
     return { error: "Already found!" };
-  if (currentSearch.indexOf(centerLetter) === -1)
+  if (currentSearch.toLowerCase().indexOf(centerLetter) === -1)
     return { error: "Must use center letter!" };
   if (
-    [...currentSearch].some(
+    [...currentSearch.toLowerCase()].some(
       (letter) => edgeLetters.concat(centerLetter).indexOf(letter) === -1
     )
   )
     return { error: "Word is not on the board!" };
   // word is valid, new for the player, uses the center letter, and uses only the 7 letters
+  if (isPangram(currentSearch)) currentSearch = currentSearch.toUpperCase();
   return {
     error: "",
     newPlayerData: {

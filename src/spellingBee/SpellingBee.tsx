@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import spellingBeeReducer from "./logic/spellingBeeReducer";
 import { initialSpellingBee, shuffle } from "./logic/beeHelpers.ts";
 import {
@@ -15,6 +15,7 @@ import { BeeHeader } from "./components/BeeHeader.tsx";
 
 export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(spellingBeeReducer, initialSpellingBee);
+  const switchPlayerRef = useRef<number | null>(null);
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     const { error, newPlayerData } = searchForSpellingBeeWord(
@@ -31,12 +32,15 @@ export const SpellingBee: React.FC = () => {
         playerData: newPlayerData ?? playerData,
       },
     });
+    if (game.speedMode) endTurn();
   }
 
   function endTurn() {
-    dispatch({
-      type: SpellingBeeActionType.TURN_ENDED,
-    });
+    switchPlayerRef.current = setTimeout(() => {
+      dispatch({
+        type: SpellingBeeActionType.TURN_ENDED,
+      });
+    }, 1000);
   }
 
   function shuffleLetters() {
