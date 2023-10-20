@@ -13,17 +13,30 @@ import { getNewGrid, noHighlights } from "./gridHelpers";
 export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
   switch (action.type) {
     case BoggleActionType.GAME_STARTED: {
-      const selectionGrid = noHighlights(action.payload.size);
-      const grid = getNewGrid(action.payload.size, action.payload.language);
+      const { size, language, generousMode, speedMode, playersData } =
+        action.payload;
+      const selectionGrid = noHighlights(size ?? game.settings.size);
+      const grid = getNewGrid(
+        size ?? game.settings.size,
+        language ?? game.settings.language
+      );
       return {
         ...game,
         settings: {
-          size: action.payload.size,
-          language: action.payload.language,
-          speedMode: action.payload.speedMode,
-          generousMode: action.payload.generousMode,
+          size: size ?? game.settings.size,
+          language: language ?? game.settings.language,
+          speedMode: speedMode ?? game.settings.speedMode,
+          generousMode: generousMode ?? game.settings.generousMode,
         },
-        playersData: action.payload.playersData,
+        playersData:
+          playersData ??
+          game.playersData
+            .filter(({ playerName }) => playerName !== "All words")
+            .map(({ playerName }) => ({
+              playerName,
+              wordsFound: [],
+              currentScore: 0,
+            })),
         grid,
         selectionGrid,
         error: "",
@@ -66,15 +79,14 @@ export default function boggleReducer(game: BoggleGame, action: BoggleAction) {
       };
     }
     case BoggleActionType.GAME_ENDED: {
-      let finalPlayersData = game.playersData;
+      const finalPlayersData = calculateWinner(game.playersData);
       if (game.playing) {
-        const boggleBotData = findAllWordsOnBoggleBoard(
+        const allWords = findAllWordsOnBoggleBoard(
           game.grid,
           game.settings.generousMode,
           game.settings.language
         );
-        const newPlayersData = [...game.playersData, boggleBotData];
-        finalPlayersData = calculateWinner(newPlayersData);
+        finalPlayersData.push(allWords);
       }
       return {
         ...game,

@@ -2,46 +2,95 @@ import { Dispatch, useContext, useState } from "react";
 import { SettingsModal } from "./SettingsModal";
 import Settings from "../../boggle/components/Settings";
 import { initializePlayersData } from "../logic/scoringHelpers";
-import { BoggleAction, BoggleActionType, BoggleGame } from "../logic/Types";
-import { BoggleContext, BoggleDispatchContext } from "../logic/Context";
+import {
+  BoggleAction,
+  BoggleActionType,
+  SpellingBeeAction,
+  SpellingBeeActionType,
+} from "../logic/Types";
+import SpellingBeeSettings from "../../spellingBee/components/SpellingBeeSettings";
+import {
+  BoggleDispatchContext,
+  SpellingBeeDispatchContext,
+} from "../logic/Context";
 
-export const Header: React.FC<{ playing: boolean }> = ({ playing }) => {
+export const Header: React.FC<{
+  gameName: string;
+  playing: boolean;
+  playerNames: string[];
+}> = ({ gameName, playing, playerNames }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const game = useContext(BoggleContext) as BoggleGame;
-  const dispatch = useContext(BoggleDispatchContext) as Dispatch<BoggleAction>;
+  const bDispatch = useContext(BoggleDispatchContext) as Dispatch<BoggleAction>;
+  const sDispatch = useContext(
+    SpellingBeeDispatchContext
+  ) as Dispatch<SpellingBeeAction>;
 
   function endGame() {
-    dispatch({
-      type: BoggleActionType.GAME_ENDED,
+    gameName === "Speedy Boggle"
+      ? bDispatch({
+          type: BoggleActionType.GAME_ENDED,
+        })
+      : sDispatch({
+          type: SpellingBeeActionType.GAME_ENDED,
+        });
+  }
+
+  function handleBoggleStart(
+    size?: number,
+    language?: string,
+    players?: string[],
+    speedMode?: boolean,
+    generousMode?: boolean
+  ) {
+    let payload = {};
+    if (players) {
+      const playersData = initializePlayersData(players);
+      payload = { size, language, speedMode, generousMode, playersData };
+    }
+    setShowSettings(false);
+    bDispatch({
+      type: BoggleActionType.GAME_STARTED,
+      payload,
     });
   }
 
-  function handleGameStart(
-    size: number,
-    language: string,
-    players: string[],
-    speedMode: boolean,
-    generousMode: boolean
+  function handleBeeStart(
+    language?: string,
+    players?: string[],
+    speedMode?: boolean
   ) {
-    const playersData = initializePlayersData(players);
+    let payload = {};
+    if (players) {
+      const playersData = initializePlayersData(players);
+      payload = { language, playersData, speedMode };
+    }
     setShowSettings(false);
-    dispatch({
-      type: BoggleActionType.GAME_STARTED,
-      payload: { size, language, speedMode, generousMode, playersData },
+    sDispatch({
+      type: SpellingBeeActionType.GAME_STARTED,
+      payload,
     });
   }
 
   return (
     <>
       <SettingsModal isOpen={showSettings}>
-        <Settings
-          handleGameStart={handleGameStart}
-          setShowSettings={setShowSettings}
-        />
+        {gameName === "Speedy Boggle" ? (
+          <Settings
+            playerNames={playerNames}
+            handleGameStart={handleBoggleStart}
+            setShowSettings={setShowSettings}
+          />
+        ) : (
+          <SpellingBeeSettings
+            playerNames={playerNames}
+            handleGameStart={handleBeeStart}
+            setShowSettings={setShowSettings}
+          />
+        )}
       </SettingsModal>
       <div className="header">
         <h1>
-          Speedy Boggle
+          {gameName}
           <button
             className="openSettings"
             onClick={() => setShowSettings(true)}
@@ -55,17 +104,11 @@ export const Header: React.FC<{ playing: boolean }> = ({ playing }) => {
           ) : (
             <button
               className="headerBtn"
-              onClick={() =>
-                handleGameStart(
-                  game.settings.size,
-                  game.settings.language,
-                  game.playersData
-                    .filter(({ playerName }) => playerName != "BoggleBot")
-                    .map(({ playerName }) => playerName),
-                  game.settings.speedMode,
-                  game.settings.generousMode
-                )
-              }
+              onClick={() => {
+                gameName === "Speedy Boggle"
+                  ? handleBoggleStart()
+                  : handleBeeStart();
+              }}
             >
               New Game
             </button>

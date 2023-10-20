@@ -36,7 +36,7 @@ export function findAllWordsOnBoggleBoard(
       words = words.concat(word);
   });
   return {
-    playerName: "BoggleBot",
+    playerName: "All words",
     wordsFound: words.sort((a, b) => b.length - a.length),
     currentScore: words.reduce((acc, cv) => acc + getScore(cv.length), 0),
   };
@@ -121,7 +121,7 @@ export function findAllSpellingBeeWords(
     }
   });
   return {
-    playerName: "SpellingBeeBot",
+    playerName: "All words",
     wordsFound: words.sort((a, b) => b.length - a.length),
     currentScore: words.reduce((acc, cv) => acc + getScore(cv.length), 0),
   };

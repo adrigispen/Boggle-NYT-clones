@@ -2,7 +2,7 @@ import { useReducer, useRef } from "react";
 import boggleReducer from "./logic/boggleReducer";
 import { defaultGame } from "./logic/gridHelpers";
 import { BoggleActionType, PlayerData } from "../shared/logic/Types";
-import { BoggleContext, BoggleDispatchContext } from "../shared/logic/Context";
+import { BoggleDispatchContext } from "../shared/logic/Context";
 import { SearchSection } from "../shared/components/SearchSection";
 import { Grid } from "./components/Grid";
 import { Scoreboard } from "../shared/components/Scoreboard";
@@ -57,39 +57,45 @@ export const Boggle: React.FC = () => {
     });
   }
 
+  const isLastPlayer =
+    !game.settings.speedMode &&
+    game.currentPlayer == game.playersData.length - 1;
+
   return (
     <>
-      <BoggleContext.Provider value={game}>
-        <BoggleDispatchContext.Provider value={dispatch}>
-          <Header playing={game.playing} />
-
-          <div className="content">
-            <div className="gamePanel">
-              <SearchSection
-                error={game.error}
-                playerData={game.playersData[game.currentPlayer]}
-                onSubmit={handleSearch}
-                playing={game.playing}
-              />
-              <Grid
-                grid={game.grid}
-                selectionGrid={game.selectionGrid}
-                updateGrid={updateGrid}
-              />
-            </div>
-            <div className="resultsPanel">
-              {game.playing ? (
-                <Scoreboard
-                  playerData={game.playersData[game.currentPlayer]}
-                  endTurn={endTurn}
-                />
-              ) : (
-                <FinalScores playersData={game.playersData} />
-              )}
-            </div>
+      <BoggleDispatchContext.Provider value={dispatch}>
+        <Header
+          gameName="Speedy Boggle"
+          playing={game.playing}
+          playerNames={game.playersData.map(({ playerName }) => playerName)}
+        />
+        <div className="content">
+          <div className="gamePanel">
+            <SearchSection
+              error={game.error}
+              playerData={game.playersData[game.currentPlayer]}
+              onSubmit={handleSearch}
+              playing={game.playing}
+            />
+            <Grid
+              grid={game.grid}
+              selectionGrid={game.selectionGrid}
+              updateGrid={updateGrid}
+            />
           </div>
-        </BoggleDispatchContext.Provider>
-      </BoggleContext.Provider>
+          <div className="resultsPanel">
+            {game.playing ? (
+              <Scoreboard
+                playerData={game.playersData[game.currentPlayer]}
+                endTurn={endTurn}
+                lastPlayer={isLastPlayer}
+              />
+            ) : (
+              <FinalScores playersData={game.playersData} />
+            )}
+          </div>
+        </div>
+      </BoggleDispatchContext.Provider>
     </>
   );
 };

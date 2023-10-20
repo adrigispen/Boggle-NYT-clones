@@ -8,6 +8,7 @@ import {
   calculateWinner,
   getNextPlayer,
 } from "../../shared/logic/scoringHelpers";
+import { getViableLetters } from "./beeHelpers";
 
 export default function spellingBeeReducer(
   game: SpellingBeeGame,
@@ -15,14 +16,26 @@ export default function spellingBeeReducer(
 ) {
   switch (action.type) {
     case SpellingBeeActionType.GAME_STARTED: {
+      const { language, playersData, speedMode } = action.payload;
+      const { centerLetter, edgeLetters } = getViableLetters(
+        language ?? game.language
+      );
       return {
-        language: action.payload.language,
-        playersData: action.payload.playersData,
-        centerLetter: action.payload.centerLetter,
-        edgeLetters: action.payload.edgeLetters,
+        language: language ?? game.language,
+        playersData:
+          playersData ??
+          game.playersData
+            .filter(({ playerName }) => playerName !== "All words")
+            .map(({ playerName }) => ({
+              playerName,
+              wordsFound: [],
+              currentScore: 0,
+            })),
+        centerLetter: centerLetter,
+        edgeLetters: edgeLetters,
         error: "",
         currentPlayer: 0,
-        speedMode: action.payload.speedMode,
+        speedMode: speedMode ?? game.speedMode,
         playing: true,
       };
     }
@@ -61,15 +74,14 @@ export default function spellingBeeReducer(
       };
     }
     case SpellingBeeActionType.GAME_ENDED: {
-      let finalPlayersData = game.playersData;
+      const finalPlayersData = calculateWinner(game.playersData);
       if (game.playing) {
-        const spellingBeeBotData = findAllSpellingBeeWords(
+        const allWords = findAllSpellingBeeWords(
           game.language,
           game.centerLetter,
           game.edgeLetters
         );
-        const newPlayersData = [...game.playersData, spellingBeeBotData];
-        finalPlayersData = calculateWinner(newPlayersData);
+        finalPlayersData.push(allWords);
       }
       return {
         ...game,

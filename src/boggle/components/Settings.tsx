@@ -1,15 +1,13 @@
-import { useContext, useState } from "react";
-import { BoggleGame, SettingsProps } from "../../shared/logic/Types";
-import { BoggleContext } from "../../shared/logic/Context";
+import { useState } from "react";
+import { SettingsProps } from "../../shared/logic/Types";
 
 export const Settings: React.FC<SettingsProps> = ({
   handleGameStart,
   setShowSettings,
+  playerNames,
 }) => {
-  const game = useContext(BoggleContext) as BoggleGame;
-  const currentPlayers = game.playersData.map(({ playerName }) => playerName);
 
-  const [players, setPlayers] = useState(currentPlayers);
+  const [players, setPlayers] = useState(playerNames);
   const rows = players.map((name: string, index: number) => (
     <div key={index} className="playerRow">
       <div className="inputCol">

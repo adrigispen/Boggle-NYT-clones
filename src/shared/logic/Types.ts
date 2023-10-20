@@ -34,6 +34,7 @@ export interface SettingsProps {
     generousMode: boolean
   ) => void;
   setShowSettings: (value: boolean) => void;
+  playerNames: string[];
 }
 
 export interface SpellingBeeSettingsProps {
@@ -55,6 +56,7 @@ export interface PlayerData {
 export interface ScoreboardData {
   playerData: PlayerData;
   endTurn: () => void;
+  lastPlayer: boolean;
 }
 
 export interface SettingsModalProps {
@@ -122,11 +124,11 @@ export interface WordFoundPayload {
 }
 
 export interface NewGamePayload {
-  size: number;
-  language: string;
-  speedMode: boolean;
-  generousMode: boolean;
-  playersData: PlayerData[];
+  size?: number;
+  language?: string;
+  speedMode?: boolean;
+  generousMode?: boolean;
+  playersData?: PlayerData[];
 }
 
 export interface SpellingBeeGame {
@@ -175,15 +177,14 @@ export interface SpellingBeeShufflePayload {
 }
 
 export interface NewSpellingBeePayload {
-  language: string;
-  playersData: PlayerData[];
-  centerLetter: string;
-  edgeLetters: string[];
-  speedMode: boolean;
+  language?: string;
+  playersData?: PlayerData[];
+  speedMode?: boolean;
 }
 
 export interface BoardProps {
   edgeLetters: string[];
   centerLetter: string;
   shuffleEdgeLetters: () => void;
+  playing: boolean;
 }

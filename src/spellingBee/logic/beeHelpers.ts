@@ -25,7 +25,6 @@ export function getViableLetters(language: string): {
   let letters = getLetters();
   while (!pangramExists(letters.join(""), language)) {
     letters = getLetters();
-    console.log(letters);
   }
   return { centerLetter: letters[0], edgeLetters: letters.slice(1) };
 }
