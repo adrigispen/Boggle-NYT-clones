@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { SettingsProps } from "../../shared/logic/Types";
+import { SettingsProps } from "../logic/Types";
+import { BoardSizeSettings } from "../../boggle/components/BoardSizeSettings";
 
 export const Settings: React.FC<SettingsProps> = ({
+  gameName,
   handleGameStart,
   setShowSettings,
   playerNames,
 }) => {
-
   const [players, setPlayers] = useState(playerNames);
   const rows = players.map((name: string, index: number) => (
     <div key={index} className="playerRow">
@@ -48,11 +49,15 @@ export const Settings: React.FC<SettingsProps> = ({
         onSubmit={(e) => {
           e.preventDefault();
           handleGameStart(
-            Number(e.currentTarget.boardSize.value),
             e.currentTarget.language.value,
             players,
             e.currentTarget.speedMode.checked,
-            e.currentTarget.generousMode.checked
+            gameName == "Speedy Boggle"
+              ? e.currentTarget.generousMode.checked
+              : false,
+            gameName == "Speedy Boggle"
+              ? Number(e.currentTarget.boardSize.value)
+              : 0
           );
         }}
       >
@@ -75,23 +80,7 @@ export const Settings: React.FC<SettingsProps> = ({
             </div>
           </div>
         </div>
-        <div className="settingsGroup">
-          <h3 className="inputGroupLabel">Board Size</h3>
-          <div className="inputGroup">
-            <label>
-              <input type="radio" name="boardSize" value="3" />
-              3x3
-            </label>
-            <label>
-              <input type="radio" name="boardSize" value="4" defaultChecked />
-              4x4
-            </label>
-            <label>
-              <input type="radio" name="boardSize" value="5" />
-              5x5
-            </label>
-          </div>
-        </div>
+        {gameName == "Speedy Boggle" && <BoardSizeSettings />}
         <div className="settingsGroup">
           <h3 className="inputGroupLabel">Language</h3>
           <div className="inputGroup">
@@ -113,12 +102,18 @@ export const Settings: React.FC<SettingsProps> = ({
         <div className="settingsGroup">
           <h3 className="inputGroupLabel">Game play</h3>
           <div className="inputGroup">
+            {gameName === "Speedy Boggle" && (
+              <label>
+                <input type="checkbox" name="generousMode" defaultChecked />
+                Generous mode
+              </label>
+            )}
             <label>
-              <input type="checkbox" name="generousMode" defaultChecked />
-              Generous mode
-            </label>
-            <label>
-              <input type="checkbox" name="speedMode" />
+              <input
+                type="checkbox"
+                name="speedMode"
+                disabled={players.length < 2}
+              />
               Speed mode
             </label>
           </div>

@@ -1,8 +1,7 @@
 import { Dispatch, useContext, useState } from "react";
 import { SettingsModal } from "./SettingsModal";
-import Settings from "../../boggle/components/Settings";
+import Settings from "./Settings";
 import { initializePlayersData } from "../logic/scoringHelpers";
-import SpellingBeeSettings from "../../spellingBee/components/SpellingBeeSettings";
 import { WordGameDispatchContext } from "../logic/Context";
 import { WordGameAction, WordGameActionType } from "../logic/Types";
 
@@ -22,34 +21,19 @@ export const Header: React.FC<{
     });
   }
 
-  function handleBoggleStart(
-    size?: number,
+  function handleStart(
     language?: string,
     players?: string[],
     speedMode?: boolean,
-    generousMode?: boolean
+    generousMode?: boolean,
+    size?: number
   ) {
     let payload = {};
     if (players) {
       const playersData = initializePlayersData(players);
-      payload = { size, language, speedMode, generousMode, playersData };
-    }
-    setShowSettings(false);
-    dispatch({
-      type: WordGameActionType.GAME_STARTED,
-      payload,
-    });
-  }
-
-  function handleBeeStart(
-    language?: string,
-    players?: string[],
-    speedMode?: boolean
-  ) {
-    let payload = {};
-    if (players) {
-      const playersData = initializePlayersData(players);
-      payload = { language, playersData, speedMode };
+      payload = size
+        ? { size, language, speedMode, generousMode, playersData }
+        : { language, playersData, speedMode };
     }
     setShowSettings(false);
     dispatch({
@@ -61,19 +45,12 @@ export const Header: React.FC<{
   return (
     <>
       <SettingsModal isOpen={showSettings}>
-        {gameName === "Speedy Boggle" ? (
-          <Settings
-            playerNames={playerNames}
-            handleGameStart={handleBoggleStart}
-            setShowSettings={setShowSettings}
-          />
-        ) : (
-          <SpellingBeeSettings
-            playerNames={playerNames}
-            handleGameStart={handleBeeStart}
-            setShowSettings={setShowSettings}
-          />
-        )}
+        <Settings
+          gameName={gameName}
+          playerNames={playerNames}
+          handleGameStart={handleStart}
+          setShowSettings={setShowSettings}
+        />
       </SettingsModal>
       <div className="header">
         <h1>
@@ -89,14 +66,7 @@ export const Header: React.FC<{
               End Game
             </button>
           ) : (
-            <button
-              className="headerBtn"
-              onClick={() => {
-                gameName === "Speedy Boggle"
-                  ? handleBoggleStart()
-                  : handleBeeStart();
-              }}
-            >
+            <button className="headerBtn" onClick={() => handleStart()}>
               New Game
             </button>
           )}

@@ -10,6 +10,7 @@ import {
 import { ScoredWordGame } from "../shared/components/ScoredWordGame.tsx";
 import { SpellingBeeBoard } from "./components/SpellingBeeBoard.tsx";
 
+
 export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee);
 

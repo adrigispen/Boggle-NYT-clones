@@ -18,12 +18,13 @@ export interface LetterSquareProps extends LetterSquare {
 }
 
 export interface SettingsProps {
+  gameName: string;
   handleGameStart: (
-    size: number,
     language: string,
     players: string[],
     speedMode: boolean,
-    generousMode: boolean
+    generousMode?: boolean,
+    size?: number
   ) => void;
   setShowSettings: (value: boolean) => void;
   playerNames: string[];
@@ -117,13 +118,6 @@ export type WordGameAction =
       type: WordGameActionType.SHUFFLED;
       payload: SpellingBeeShufflePayload;
     };
-
-// export interface BoggleGame extends WordGame {
-//   size: number;
-//   generousMode: boolean;
-//   grid: string[][];
-//   selectionGrid: boolean[][];
-// }
 
 export interface SearchResultPayload {
   error: string;

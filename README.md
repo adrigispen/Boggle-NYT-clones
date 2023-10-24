@@ -23,7 +23,6 @@ Not yet done :D
 
 ### Next up
 
-- Refactor to pull out more shared logic - basically all score-keeping is the same across games. 1)playersData 2)current player 3)end game 4)end turn 5)speedmode
 - Add Wordle
 - Load dictionaries when app loads
 - Rename repository
