@@ -205,19 +205,19 @@ input[type="checkbox"] {
 
 .left {
   float: left;
-  border-right: 45px solid darkblue;
-  border-top: 78px solid transparent;
-  border-bottom: 78px solid transparent;
+  border-right: 30px solid darkblue;
+  border-top: 52px solid transparent;
+  border-bottom: 52px solid transparent;
 }
 
 .centerTileLeft {
-  border-right: 45px solid darkgoldenrod;
+  border-right: 30px solid darkgoldenrod;
 }
 
 .center {
   float: left;
-  width: 90px;
-  height: 156px;
+  width: 60px;
+  height: 104px;
   background-color: darkblue;
   z-index: 1;
 }
@@ -229,20 +229,20 @@ input[type="checkbox"] {
 
 .right {
   float: left;
-  border-left: 45px solid darkblue;
-  border-top: 78px solid transparent;
-  border-bottom: 78px solid transparent;
+  border-left: 30px solid darkblue;
+  border-top: 52px solid transparent;
+  border-bottom: 52px solid transparent;
 }
 
 .centerTileRight {
-  border-left: 45px solid darkgoldenrod;
+  border-left: 30px solid darkgoldenrod;
 }
 
 .hex {
   color: aliceblue;
   border-color: aliceblue;
-  font-size: 80px;
-  margin: 3px -20px;
+  font-size: 48px;
+  margin: 2px -13px;
 }
 
 .centerTile {
