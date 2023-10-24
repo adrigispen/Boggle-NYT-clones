@@ -8,7 +8,8 @@ import {
 
 import { searchForWord } from "../shared/logic/dictionaryWordCheckService";
 import wordGameReducer from "../shared/logic/wordGameReducer";
-import { Game } from "../shared/components/Game";
+import { ScoredWordGame } from "../shared/components/ScoredWordGame";
+import { Grid } from "./components/Grid";
 
 export const Boggle: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, defaultGame);
@@ -44,7 +45,9 @@ export const Boggle: React.FC = () => {
     <>
       <WordGameContext.Provider value={game}>
         <WordGameDispatchContext.Provider value={dispatch}>
-          <Game handleSearch={handleSearch} gameName="Speedy Boggle" />
+          <ScoredWordGame handleSearch={handleSearch} gameName="Speedy Boggle">
+            <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
+          </ScoredWordGame>
         </WordGameDispatchContext.Provider>
       </WordGameContext.Provider>
     </>

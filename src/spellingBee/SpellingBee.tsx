@@ -7,7 +7,8 @@ import {
   WordGameContext,
   WordGameDispatchContext,
 } from "../shared/logic/Context.ts";
-import { Game } from "../shared/components/Game.tsx";
+import { ScoredWordGame } from "../shared/components/ScoredWordGame.tsx";
+import { SpellingBeeBoard } from "./components/SpellingBeeBoard.tsx";
 
 export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee);
@@ -32,7 +33,13 @@ export const SpellingBee: React.FC = () => {
   return (
     <WordGameContext.Provider value={game}>
       <WordGameDispatchContext.Provider value={dispatch}>
-        <Game handleSearch={handleSearch} gameName="Spelling Bee" />
+        <ScoredWordGame handleSearch={handleSearch} gameName="Spelling Bee">
+          <SpellingBeeBoard
+            centerLetter={game.centerLetter}
+            edgeLetters={game.edgeLetters}
+            playing={game.playing}
+          />
+        </ScoredWordGame>
       </WordGameDispatchContext.Provider>
     </WordGameContext.Provider>
   );

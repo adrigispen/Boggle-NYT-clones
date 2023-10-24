@@ -9,14 +9,13 @@ import { Header } from "./Header";
 import { SearchSection } from "./SearchSection";
 import { Scoreboard } from "./Scoreboard";
 import { FinalScores } from "./FinalScores";
-import { SpellingBeeBoard } from "../../spellingBee/components/SpellingBeeBoard";
-import { Grid } from "../../boggle/components/Grid";
 import { WordGameContext, WordGameDispatchContext } from "../logic/Context";
 
-export const Game: React.FC<{
+export const ScoredWordGame: React.FC<{
   handleSearch: (currentSearch: string, playerData: PlayerData) => void;
   gameName: string;
-}> = ({ handleSearch, gameName }) => {
+  children: JSX.Element;
+}> = ({ handleSearch, gameName, children }) => {
   const dispatch = useContext(
     WordGameDispatchContext
   ) as Dispatch<WordGameAction>;
@@ -67,16 +66,7 @@ export const Game: React.FC<{
             playing={game.playing}
             clearError={clearError}
           />
-
-          {gameName === "Speedy Boggle" ? (
-            <Grid grid={game.grid} selectionGrid={game.selectionGrid} />
-          ) : (
-            <SpellingBeeBoard
-              centerLetter={game.centerLetter}
-              edgeLetters={game.edgeLetters}
-              playing={game.playing}
-            />
-          )}
+          {children}
         </div>
         <div className="resultsPanel">
           {game.playing ? (
