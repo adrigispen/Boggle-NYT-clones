@@ -1,7 +1,10 @@
 import { useReducer } from "react";
 import { initialSpellingBee } from "./logic/beeHelpers.ts";
 import { PlayerData, WordGameActionType } from "../shared/logic/Types";
-import { searchForSpellingBeeWord } from "../shared/logic/dictionaryWordCheckService.ts";
+import {
+  findAllSpellingBeeWords,
+  searchForSpellingBeeWord,
+} from "../shared/logic/dictionaryWordCheckService.ts";
 import wordGameReducer from "../shared/logic/wordGameReducer.ts";
 import {
   WordGameContext,
@@ -9,7 +12,8 @@ import {
 } from "../shared/logic/Context.ts";
 import { ScoredWordGame } from "../shared/components/ScoredWordGame.tsx";
 import { SpellingBeeBoard } from "./components/SpellingBeeBoard.tsx";
-
+import { Header } from "../shared/components/Header.tsx";
+import { initializePlayersData } from "../shared/logic/scoringHelpers.ts";
 
 export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee);
@@ -31,10 +35,46 @@ export const SpellingBee: React.FC = () => {
     });
   }
 
+  function handleEndGame() {
+    dispatch({
+      type: WordGameActionType.GAME_ENDED,
+      payload: {
+        allWords: findAllSpellingBeeWords(
+          game.language,
+          game.centerLetter,
+          game.edgeLetters
+        ),
+      },
+    });
+  }
+
+  function handleStartGame(
+    language?: string,
+    players?: string[],
+    speedMode?: boolean
+  ) {
+    let payload = {};
+    if (players) {
+      const playersData = initializePlayersData(players);
+      payload = { language, playersData, speedMode };
+    }
+    dispatch({
+      type: WordGameActionType.GAME_STARTED,
+      payload,
+    });
+  }
+
   return (
     <WordGameContext.Provider value={game}>
       <WordGameDispatchContext.Provider value={dispatch}>
-        <ScoredWordGame handleSearch={handleSearch} gameName="Spelling Bee">
+        <Header
+          gameName="Spelling Bee"
+          playing={game.playing}
+          playerNames={game.playersData.map(({ playerName }) => playerName)}
+          onGameStart={handleStartGame}
+          onGameEnd={handleEndGame}
+        />
+        <ScoredWordGame onSearch={handleSearch} onEndGame={handleEndGame}>
           <SpellingBeeBoard
             centerLetter={game.centerLetter}
             edgeLetters={game.edgeLetters}

@@ -19,7 +19,7 @@ export interface LetterSquareProps extends LetterSquare {
 
 export interface SettingsProps {
   gameName: string;
-  handleGameStart: (
+  onGameStart: (
     language: string,
     players: string[],
     speedMode: boolean,
@@ -85,6 +85,20 @@ export interface WordGame {
   edgeLetters: string[];
 }
 
+export interface BoggleGame extends WordGame {
+  type: WordGameType.BOGGLE;
+  size: number;
+  generousMode: boolean;
+  grid: string[][];
+  selectionGrid: boolean[][];
+}
+
+export interface SpellingBeeGame extends WordGame {
+  type: WordGameType.SPELLINGBEE;
+  centerLetter: string;
+  edgeLetters: string[];
+}
+
 export enum WordGameActionType {
   TURN_ENDED = "TURN_ENDED",
   GAME_ENDED = "GAME_ENDED",
@@ -97,10 +111,11 @@ export enum WordGameActionType {
 
 export type WordGameAction =
   | {
-      type:
-        | WordGameActionType.TURN_ENDED
-        | WordGameActionType.GAME_ENDED
-        | WordGameActionType.ERROR_CLEARED;
+      type: WordGameActionType.TURN_ENDED | WordGameActionType.ERROR_CLEARED;
+    }
+  | {
+      type: WordGameActionType.GAME_ENDED;
+      payload: GameEndedPayload;
     }
   | {
       type: WordGameActionType.WORD_SEARCHED;
@@ -124,6 +139,10 @@ export interface SearchResultPayload {
   playerData: PlayerData;
 }
 
+export interface GameEndedPayload {
+  allWords: PlayerData;
+}
+
 export interface WordFoundPayload {
   selectionGrid: boolean[][];
 }
@@ -135,11 +154,6 @@ export interface NewGamePayload {
   speedMode?: boolean;
   playersData?: PlayerData[];
 }
-
-// export interface SpellingBeeGame extends WordGame {
-//   centerLetter: string;
-//   edgeLetters: string[];
-// }
 
 export interface SpellingBeeShufflePayload {
   edgeLetters: string[];

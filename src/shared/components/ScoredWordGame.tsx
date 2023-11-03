@@ -5,17 +5,16 @@ import {
   WordGameAction,
   WordGameActionType,
 } from "../logic/Types";
-import { Header } from "./Header";
 import { SearchSection } from "./SearchSection";
 import { Scoreboard } from "./Scoreboard";
 import { FinalScores } from "./FinalScores";
 import { WordGameContext, WordGameDispatchContext } from "../logic/Context";
 
 export const ScoredWordGame: React.FC<{
-  handleSearch: (currentSearch: string, playerData: PlayerData) => void;
-  gameName: string;
+  onSearch: (currentSearch: string, playerData: PlayerData) => void;
+  onEndGame: () => void;
   children: JSX.Element;
-}> = ({ handleSearch, gameName, children }) => {
+}> = ({ onSearch, onEndGame, children }) => {
   const dispatch = useContext(
     WordGameDispatchContext
   ) as Dispatch<WordGameAction>;
@@ -29,9 +28,7 @@ export const ScoredWordGame: React.FC<{
         type: WordGameActionType.TURN_ENDED,
       });
       if (shouldEndGame) {
-        dispatch({
-          type: WordGameActionType.GAME_ENDED,
-        });
+        onEndGame();
       }
     }, 1000);
   }
@@ -43,7 +40,7 @@ export const ScoredWordGame: React.FC<{
   }
 
   function searchAndSwitch(currentSearch: string, playerData: PlayerData) {
-    handleSearch(currentSearch, playerData);
+    onSearch(currentSearch, playerData);
     if (game.speedMode) endTurn();
   }
 
@@ -52,11 +49,6 @@ export const ScoredWordGame: React.FC<{
 
   return (
     <>
-      <Header
-        gameName={gameName}
-        playing={game.playing}
-        playerNames={game.playersData.map(({ playerName }) => playerName)}
-      />
       <div className="content">
         <div className="gamePanel">
           <SearchSection

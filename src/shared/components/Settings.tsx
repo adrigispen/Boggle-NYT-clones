@@ -4,7 +4,7 @@ import { BoardSizeSettings } from "../../boggle/components/BoardSizeSettings";
 
 export const Settings: React.FC<SettingsProps> = ({
   gameName,
-  handleGameStart,
+  onGameStart,
   setShowSettings,
   playerNames,
 }) => {
@@ -48,7 +48,7 @@ export const Settings: React.FC<SettingsProps> = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleGameStart(
+          onGameStart(
             e.currentTarget.language.value,
             players,
             e.currentTarget.speedMode.checked,
@@ -59,6 +59,7 @@ export const Settings: React.FC<SettingsProps> = ({
               ? Number(e.currentTarget.boardSize.value)
               : 0
           );
+          setShowSettings(false);
         }}
       >
         <h2>Settings</h2>

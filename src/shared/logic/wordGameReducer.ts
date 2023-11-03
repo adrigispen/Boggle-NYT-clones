@@ -6,10 +6,6 @@ import {
   WordGameActionType,
   WordGameType,
 } from "./Types";
-import {
-  findAllSpellingBeeWords,
-  findAllWordsOnBoggleBoard,
-} from "./dictionaryWordCheckService";
 import { calculateWinner, getNextPlayer } from "./scoringHelpers";
 
 export default function wordGameReducer(
@@ -32,21 +28,7 @@ export default function wordGameReducer(
     }
     case WordGameActionType.GAME_ENDED: {
       const finalPlayersData = calculateWinner(game.playersData);
-      if (game.type === WordGameType.BOGGLE) {
-        const allWords = findAllWordsOnBoggleBoard(
-          game.grid,
-          game.generousMode,
-          game.language
-        );
-        finalPlayersData.push(allWords);
-      } else {
-        const allWords = findAllSpellingBeeWords(
-          game.language,
-          game.centerLetter,
-          game.edgeLetters
-        );
-        finalPlayersData.push(allWords);
-      }
+      finalPlayersData.push(action.payload.allWords);
       return {
         ...game,
         playersData: finalPlayersData,

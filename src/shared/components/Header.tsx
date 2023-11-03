@@ -1,46 +1,15 @@
-import { Dispatch, useContext, useState } from "react";
+import { useState } from "react";
 import { SettingsModal } from "./SettingsModal";
 import Settings from "./Settings";
-import { initializePlayersData } from "../logic/scoringHelpers";
-import { WordGameDispatchContext } from "../logic/Context";
-import { WordGameAction, WordGameActionType } from "../logic/Types";
 
 export const Header: React.FC<{
   gameName: string;
   playing: boolean;
   playerNames: string[];
-}> = ({ gameName, playing, playerNames }) => {
+  onGameStart: () => void;
+  onGameEnd: () => void;
+}> = ({ gameName, playing, playerNames, onGameStart, onGameEnd }) => {
   const [showSettings, setShowSettings] = useState(false);
-  const dispatch = useContext(
-    WordGameDispatchContext
-  ) as Dispatch<WordGameAction>;
-
-  function endGame() {
-    dispatch({
-      type: WordGameActionType.GAME_ENDED,
-    });
-  }
-
-  function handleStart(
-    language?: string,
-    players?: string[],
-    speedMode?: boolean,
-    generousMode?: boolean,
-    size?: number
-  ) {
-    let payload = {};
-    if (players) {
-      const playersData = initializePlayersData(players);
-      payload = size
-        ? { size, language, speedMode, generousMode, playersData }
-        : { language, playersData, speedMode };
-    }
-    setShowSettings(false);
-    dispatch({
-      type: WordGameActionType.GAME_STARTED,
-      payload,
-    });
-  }
 
   return (
     <>
@@ -48,7 +17,7 @@ export const Header: React.FC<{
         <Settings
           gameName={gameName}
           playerNames={playerNames}
-          handleGameStart={handleStart}
+          onGameStart={onGameStart}
           setShowSettings={setShowSettings}
         />
       </SettingsModal>
@@ -62,11 +31,15 @@ export const Header: React.FC<{
             ⚙️
           </button>
           {playing ? (
-            <button className="headerBtn" onClick={endGame} disabled={!playing}>
+            <button
+              className="headerBtn"
+              onClick={onGameEnd}
+              disabled={!playing}
+            >
               End Game
             </button>
           ) : (
-            <button className="headerBtn" onClick={() => handleStart()}>
+            <button className="headerBtn" onClick={onGameStart}>
               New Game
             </button>
           )}
