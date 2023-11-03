@@ -1,6 +1,11 @@
-import { useReducer } from "react";
-import { initialSpellingBee } from "./logic/beeHelpers.ts";
-import { PlayerData, WordGameActionType } from "../shared/logic/Types";
+import { Dispatch, useReducer } from "react";
+import { getViableLetters, initialSpellingBee } from "./logic/beeHelpers.ts";
+import {
+  PlayerData,
+  SpellingBeeGame,
+  WordGameAction,
+  WordGameActionType,
+} from "../shared/logic/Types";
 import {
   findAllSpellingBeeWords,
   searchForSpellingBeeWord,
@@ -16,7 +21,10 @@ import { Header } from "../shared/components/Header.tsx";
 import { initializePlayersData } from "../shared/logic/scoringHelpers.ts";
 
 export const SpellingBee: React.FC = () => {
-  const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee);
+  const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee) as [
+    SpellingBeeGame,
+    Dispatch<WordGameAction>
+  ];
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     const { error, newPlayerData } = searchForSpellingBeeWord(
@@ -53,14 +61,31 @@ export const SpellingBee: React.FC = () => {
     players?: string[],
     speedMode?: boolean
   ) {
-    let payload = {};
-    if (players) {
-      const playersData = initializePlayersData(players);
-      payload = { language, playersData, speedMode };
-    }
+    const { centerLetter, edgeLetters } = getViableLetters(
+      language ?? game.language
+    );
+    const newGame = {
+      ...game,
+      language: language ?? game.language,
+      speedMode: speedMode ?? game.speedMode,
+      error: "",
+      currentPlayer: 0,
+      playing: true,
+      playersData: players
+        ? initializePlayersData(players)
+        : game.playersData
+            .filter(({ playerName }) => playerName !== "All words")
+            .map(({ playerName }) => ({
+              playerName,
+              wordsFound: [],
+              currentScore: 0,
+            })),
+      centerLetter: centerLetter,
+      edgeLetters: edgeLetters,
+    };
     dispatch({
       type: WordGameActionType.GAME_STARTED,
-      payload,
+      payload: { game: newGame },
     });
   }
 

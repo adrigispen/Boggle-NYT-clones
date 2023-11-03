@@ -1,7 +1,9 @@
 import { Dispatch, createContext } from "react";
-import { WordGame, WordGameAction } from "./Types";
+import { BoggleGame, SpellingBeeGame, WordGameAction } from "./Types";
 
 export const WordGameDispatchContext =
   createContext<Dispatch<WordGameAction> | null>(null);
 
-export const WordGameContext = createContext<WordGame | null>(null);
+export const WordGameContext = createContext<
+  SpellingBeeGame | BoggleGame | null
+>(null);

@@ -70,19 +70,12 @@ export enum WordGameType {
 }
 
 export interface WordGame {
-  type: WordGameType;
   playersData: PlayerData[];
   error: string;
   playing: boolean;
   currentPlayer: number;
   speedMode: boolean;
   language: string;
-  size: number;
-  generousMode: boolean;
-  grid: string[][];
-  selectionGrid: boolean[][];
-  centerLetter: string;
-  edgeLetters: string[];
 }
 
 export interface BoggleGame extends WordGame {
@@ -148,11 +141,7 @@ export interface WordFoundPayload {
 }
 
 export interface NewGamePayload {
-  size?: number;
-  generousMode?: boolean;
-  language?: string;
-  speedMode?: boolean;
-  playersData?: PlayerData[];
+  game: BoggleGame | SpellingBeeGame;
 }
 
 export interface SpellingBeeShufflePayload {

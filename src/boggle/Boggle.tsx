@@ -1,6 +1,11 @@
-import { useReducer } from "react";
-import { defaultGame } from "./logic/gridHelpers";
-import { PlayerData, WordGameActionType } from "../shared/logic/Types";
+import { Dispatch, useReducer } from "react";
+import { defaultGame, getNewGrid, noHighlights } from "./logic/gridHelpers";
+import {
+  BoggleGame,
+  PlayerData,
+  WordGameAction,
+  WordGameActionType,
+} from "../shared/logic/Types";
 import {
   WordGameContext,
   WordGameDispatchContext,
@@ -17,7 +22,10 @@ import { Header } from "../shared/components/Header";
 import { initializePlayersData } from "../shared/logic/scoringHelpers";
 
 export const Boggle: React.FC = () => {
-  const [game, dispatch] = useReducer(wordGameReducer, defaultGame);
+  const [game, dispatch] = useReducer(wordGameReducer, defaultGame) as [
+    BoggleGame,
+    Dispatch<WordGameAction>
+  ];
 
   function handleSearch(currentSearch: string, playerData: PlayerData) {
     const { error, selectionGrid, newPlayerData } = searchForWord(
@@ -66,16 +74,33 @@ export const Boggle: React.FC = () => {
     generousMode?: boolean,
     size?: number
   ) {
-    let payload = {};
-    if (players) {
-      const playersData = initializePlayersData(players);
-      payload = size
-        ? { size, language, speedMode, generousMode, playersData }
-        : { language, playersData, speedMode };
-    }
+    const selectionGrid = noHighlights(size ?? game.size);
+    const grid = getNewGrid(size ?? game.size, language ?? game.language);
+    let newGame = { ...game };
+    newGame = {
+      ...game,
+      language: language ?? game.language,
+      speedMode: speedMode ?? game.speedMode,
+      error: "",
+      currentPlayer: 0,
+      playing: true,
+      playersData: players
+        ? initializePlayersData(players)
+        : game.playersData
+            .filter(({ playerName }) => playerName !== "All words")
+            .map(({ playerName }) => ({
+              playerName,
+              wordsFound: [],
+              currentScore: 0,
+            })),
+      size: size ?? game.size,
+      generousMode: generousMode ?? game.generousMode,
+      grid,
+      selectionGrid,
+    };
     dispatch({
       type: WordGameActionType.GAME_STARTED,
-      payload,
+      payload: { game: newGame },
     });
   }
 

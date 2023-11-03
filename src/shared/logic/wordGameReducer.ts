@@ -1,17 +1,15 @@
-import { getNewGrid, noHighlights } from "../../boggle/logic/gridHelpers";
-import { getViableLetters } from "../../spellingBee/logic/beeHelpers";
 import {
-  WordGame,
+  SpellingBeeGame,
+  BoggleGame,
   WordGameAction,
   WordGameActionType,
-  WordGameType,
 } from "./Types";
 import { calculateWinner, getNextPlayer } from "./scoringHelpers";
 
 export default function wordGameReducer(
-  game: WordGame,
+  game: BoggleGame | SpellingBeeGame,
   action: WordGameAction
-) {
+): BoggleGame | SpellingBeeGame {
   switch (action.type) {
     case WordGameActionType.TURN_ENDED: {
       const playersData = game.playersData;
@@ -43,48 +41,7 @@ export default function wordGameReducer(
       };
     }
     case WordGameActionType.GAME_STARTED: {
-      const { language, playersData, speedMode } = action.payload;
-      let newGame = {
-        ...game,
-        language: language ?? game.language,
-        speedMode: speedMode ?? game.speedMode,
-        error: "",
-        currentPlayer: 0,
-        playing: true,
-        playersData:
-          playersData ??
-          game.playersData
-            .filter(({ playerName }) => playerName !== "All words")
-            .map(({ playerName }) => ({
-              playerName,
-              wordsFound: [],
-              currentScore: 0,
-            })),
-      };
-      if (game.type === WordGameType.BOGGLE) {
-        const { size, generousMode } = action.payload;
-        const selectionGrid = noHighlights(size ?? game.size);
-        const grid = getNewGrid(size ?? game.size, language ?? game.language);
-        newGame = {
-          ...newGame,
-          type: WordGameType.BOGGLE,
-          size: size ?? game.size,
-          generousMode: generousMode ?? game.generousMode,
-          grid,
-          selectionGrid,
-        };
-      } else {
-        const { centerLetter, edgeLetters } = getViableLetters(
-          language ?? game.language
-        );
-        newGame = {
-          ...newGame,
-          type: WordGameType.SPELLINGBEE,
-          centerLetter: centerLetter,
-          edgeLetters: edgeLetters,
-        };
-      }
-      return newGame;
+      return action.payload.game;
     }
     case WordGameActionType.WORD_SEARCHED: {
       const { playerData, error } = action.payload;
@@ -101,14 +58,14 @@ export default function wordGameReducer(
       return {
         ...game,
         edgeLetters: action.payload.edgeLetters,
-      };
+      } as SpellingBeeGame;
     }
     case WordGameActionType.BOARD_UPDATED: {
       const selectionGrid = action.payload.selectionGrid;
       return {
         ...game,
         selectionGrid,
-      };
+      } as BoggleGame;
     }
   }
 }
