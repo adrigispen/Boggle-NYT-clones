@@ -26,4 +26,3 @@ Not yet done :D
 - Add Wordle
 - Load dictionaries when app loads
 - Rename repository
-- Add BE - login, save scores, show stats, let you play with friends, etc. Need to write endpoints to save data and deploy via heroku, would need to rework scoring & gameplay... hmm.
