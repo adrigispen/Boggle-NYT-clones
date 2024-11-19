@@ -13,6 +13,9 @@ export default function Root() {
             <li>
               <Link to={`/spelling-bee`}>Spelling Bee</Link>
             </li>
+            <li>
+              <Link to={`/wordle`}>Wordle</Link>
+            </li>
           </ul>
         </nav>
       </div>

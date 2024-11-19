@@ -34,13 +34,37 @@ input {
   align-items: center;
 }
 
-.letterSquare {
+.letterSquare,
+.guess {
   width: 100px;
   height: 100px;
   color: aliceblue;
   background-color: darkblue;
   border-color: aliceblue;
   font-size: 48px;
+}
+
+.white {
+  background-color: white;
+  color: black;
+}
+
+.green {
+  background-color: green;
+  border-color: aquamarine;
+  color: white;
+}
+
+.yellow {
+  background-color: darkgoldenrod;
+  border-color: darkorange;
+  color: white;
+}
+
+.grey {
+  background-color: gray;
+  border-color: lightgray;
+  color: lightgray;
 }
 
 .selected {

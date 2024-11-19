@@ -4,6 +4,25 @@ export interface LetterSquare {
   letter: string;
 }
 
+export enum GuessStatus {
+  CORRECT = "green",
+  WRONG_POSITION = "yellow",
+  INCORRECT = "grey",
+  OPEN = "white",
+}
+
+export interface GuessSlot {
+  row: number;
+  col: number;
+  letter: string;
+  color: GuessStatus;
+}
+
+export interface WordleProps {
+  grid: string[][];
+  answer: string;
+}
+
 export interface FinalScoresProps {
   playersData: PlayerData[];
 }
@@ -67,6 +86,7 @@ export interface SearchProps {
 export enum WordGameType {
   BOGGLE = "BOGGLE",
   SPELLINGBEE = "SPELLINGBEE",
+  WORDLE = "WORDLE",
 }
 
 export interface WordGame {
@@ -76,6 +96,12 @@ export interface WordGame {
   currentPlayer: number;
   speedMode: boolean;
   language: string;
+}
+
+export interface WordleGame extends WordGame {
+  type: WordGameType.WORDLE;
+  grid: string[][];
+  answer: string;
 }
 
 export interface BoggleGame extends WordGame {
