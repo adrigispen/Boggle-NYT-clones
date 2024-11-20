@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root from "./routes/root.tsx";
 import ErrorPage from "./error-page.tsx";
@@ -8,7 +8,7 @@ import { SpellingBee } from "./spellingBee/SpellingBee.tsx";
 import { Boggle } from "./boggle/Boggle.tsx";
 import { Wordle } from "./wordle/Wordle.tsx";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Root />,

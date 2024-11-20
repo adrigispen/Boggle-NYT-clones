@@ -1,8 +1,9 @@
 {
-  "name": "boggle",
+  "name": "Boggle-NYT-clones",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://adrigispen.github.io/Boggle-NYT-clones",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
