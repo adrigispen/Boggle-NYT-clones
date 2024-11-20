@@ -5,10 +5,10 @@ import { defaultGame, getWordleWord, isLegalWord } from "./logic/helpers.ts";
 
 export const Wordle: React.FC = () => {
   const [game, setGame] = useState(defaultGame);
+  const [error, setError] = useState("");
 
   function handleGuess(guess: string, attempt: number) {
     const newGrid = game.grid;
-    let newError = "";
     let newPlayersData = game.playersData;
     if (isLegalWord(guess)) {
       newGrid[attempt] = [...guess];
@@ -21,11 +21,10 @@ export const Wordle: React.FC = () => {
           : playerData
       );
     } else {
-      newError = "Invalid attempt!";
+      setError("Invalid attempt!");
     }
     const newGame = {
       ...game,
-      error: newError,
       grid: newGrid,
       playersData: newPlayersData,
     };
@@ -56,6 +55,10 @@ export const Wordle: React.FC = () => {
     alert(`Game over! ${game.answer}`);
   }
 
+  function clearError() {
+    setError("");
+  }
+
   return (
     <>
       <Header
@@ -75,6 +78,7 @@ export const Wordle: React.FC = () => {
                 game.playersData[game.currentPlayer].wordsFound.length
               );
               e.currentTarget.reset();
+              setTimeout(clearError, 1000);
             }}
           >
             <div className="search">
@@ -92,9 +96,7 @@ export const Wordle: React.FC = () => {
               </button>
             </div>
           </form>
-          <div>
-            {game.error && <label className="error">{game.error}</label>}
-          </div>
+          <div>{error && <label className="error">{error}</label>}</div>
           <WordleBoard grid={game.grid} answer={game.answer} />
         </div>
       </div>
