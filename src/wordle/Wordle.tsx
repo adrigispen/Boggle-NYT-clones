@@ -31,7 +31,7 @@ export const Wordle: React.FC = () => {
     setGame(newGame);
     if (
       game.answer === guess.toUpperCase() ||
-      game.playersData[0].wordsFound.length === 6
+      game.playersData[0].wordsFound.length === 5
     ) {
       handleGameEnd();
     }
@@ -52,8 +52,13 @@ export const Wordle: React.FC = () => {
   }
   function handleGameEnd() {
     setGame({ ...game, playing: false });
-    alert(`Game over! ${game.answer}`);
+    setTimeout(displayAnswer, 1000);
+    
   }
+
+  function displayAnswer() {
+    alert(`Game over! ${game.answer}`);
+}
 
   function clearError() {
     setError("");
@@ -74,7 +79,7 @@ export const Wordle: React.FC = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleGuess(
-                e.currentTarget.search.value,
+                e.currentTarget.search.value.toUpperCase(),
                 game.playersData[game.currentPlayer].wordsFound.length
               );
               e.currentTarget.reset();

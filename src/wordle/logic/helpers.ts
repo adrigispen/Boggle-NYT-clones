@@ -1,5 +1,9 @@
 import { isValidWordInLanguage } from "../../shared/logic/dictionaryWordCheckService";
-import { WordGameType, WordleGame } from "../../shared/logic/Types";
+import {
+  GuessStatus,
+  WordGameType,
+  WordleGame,
+} from "../../shared/logic/Types";
 
 export const defaultGame: WordleGame = {
   playersData: [{ playerName: "", wordsFound: [], currentScore: 0 }],
@@ -294,4 +298,61 @@ export function getWordleWord(): string {
 
 export function isLegalWord(guess: string) {
   return isValidWordInLanguage(guess, "English") && guess.length === 5;
+}
+
+export function getGuessStatus(
+  grid: string[][],
+  row: number,
+  col: number,
+  letter: string,
+  answer: string
+): GuessStatus {
+  if (letter === "") {
+    return GuessStatus.OPEN;
+  } else if (answer[col] === letter) {
+    return GuessStatus.CORRECT;
+  } else if (answer.indexOf(letter.toUpperCase()) !== -1) {
+    const remainders = removeGreenAndPriorYellows(
+      grid[row].join(""),
+      answer,
+      col
+    );
+    console.log(remainders);
+    if (
+      remainders.newAnswer.indexOf(letter) !== -1
+    ) {
+      return GuessStatus.WRONG_POSITION;
+    }
+    return GuessStatus.INCORRECT;
+  } else {
+    return GuessStatus.INCORRECT;
+  }
+}
+
+export function removeGreenAndPriorYellows(
+  guess: string,
+  answer: string, 
+  index: number,
+): { newGuess: string; newAnswer: string; } {
+  //remove correctly positioned letters
+  let newGuess = [...guess]
+    .map((letter, i) => {
+      if (answer[i] === letter) {
+        return "";
+      } else {
+        return letter;
+      }
+    })
+    .join("").toUpperCase();
+  let newAnswer = [...answer]
+    .map((letter, i) => (guess[i] === letter ? "" : letter))
+    .join("").toUpperCase();
+  
+  //remove duplicate yellows
+  if (newAnswer.split(guess[index]).length < newGuess.split(guess[index]).length && newGuess.indexOf(guess[index]) < index) {
+    newAnswer = newAnswer.replace(guess[index], "");
+    newGuess = newGuess.replace(guess[index], "");
+    console.log(newAnswer.split(guess[index]), newGuess.split(guess[index]));
+  }
+  return { newGuess, newAnswer };
 }
