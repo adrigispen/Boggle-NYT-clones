@@ -179,3 +179,11 @@ export interface BeeBoardProps {
   centerLetter: string;
   playing: boolean;
 }
+
+export type Entry = {
+  word: string;
+};
+
+export type dwdsEntry = {
+  lemma: string;
+};
