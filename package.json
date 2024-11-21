@@ -1,9 +1,8 @@
 {
-  "name": "Boggle-NYT-clones",
+  "name": "english-german-word-games",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://adrigispen.github.io/Boggle-NYT-clones",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

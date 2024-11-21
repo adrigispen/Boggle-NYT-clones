@@ -187,3 +187,7 @@ export type Entry = {
 export type dwdsEntry = {
   lemma: string;
 };
+
+export type TypoModified = {
+  dictionaryTable: { string: unknown }[];
+};

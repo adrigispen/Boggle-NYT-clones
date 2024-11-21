@@ -1,4 +1,4 @@
-import { PlayerData } from "./Types";
+import { PlayerData, TypoModified } from "./Types";
 import { Typo } from "typo-js-ts";
 import { wordOnBoard, getWordPath } from "../../boggle/logic/gridHelpers";
 import { getScore } from "./scoringHelpers";
@@ -24,8 +24,8 @@ export function findAllWordsOnBoggleBoard(
   let words: string[] = [];
   const dictionaryWords =
     language === "English"
-      ? Object.keys(dictionaryEn.dictionaryTable)
-      : Object.keys(dictionaryDe.dictionaryTable);
+      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
+      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
       word.length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
@@ -86,8 +86,8 @@ export function searchForWord(
 export function pangramExists(letters: string, language: string) {
   const dictionary =
     language === "English"
-      ? Object.keys(dictionaryEn.dictionaryTable)
-      : Object.keys(dictionaryDe.dictionaryTable);
+      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
+      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
   const r = new RegExp(`^[${letters}]+$`, "i");
   const word = dictionary.find(
     (word) =>
@@ -104,8 +104,8 @@ export function findAllSpellingBeeWords(
   let words: string[] = [];
   const dictionaryWords =
     language === "English"
-      ? Object.keys(dictionaryEn.dictionaryTable)
-      : Object.keys(dictionaryDe.dictionaryTable);
+      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
+      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
       word.length > 3 && // we'll let players have a chance to win - SBB only finds 4+ words
