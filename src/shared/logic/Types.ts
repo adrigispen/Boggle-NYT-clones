@@ -98,7 +98,9 @@ export interface WordGame {
   language: string;
 }
 
-export interface WordleGame extends WordGame {
+export interface WordleGame {
+  playerData: PlayerData;
+  playing: boolean;
   type: WordGameType.WORDLE;
   grid: string[][];
   answer: string;

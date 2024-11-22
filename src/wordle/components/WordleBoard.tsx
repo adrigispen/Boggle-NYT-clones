@@ -12,7 +12,7 @@ export const WordleBoard: React.FC<WordleProps> = ({ grid, answer }) => {
           row={index}
           col={i}
           letter={letter}
-          color={getGuessStatus(grid, index, i, letter, answer)}
+          color={getGuessStatus(grid[index].join(""), i, answer)}
         />
       ))}
     </div>

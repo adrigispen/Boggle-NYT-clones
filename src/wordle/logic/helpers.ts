@@ -6,12 +6,8 @@ import {
 } from "../../shared/logic/Types";
 
 export const defaultGame: WordleGame = {
-  playersData: [{ playerName: "", wordsFound: [], currentScore: 0 }],
-  error: "",
+  playerData: { playerName: "", wordsFound: [], currentScore: 0 },
   playing: true,
-  currentPlayer: 0,
-  speedMode: false,
-  language: "English",
   type: WordGameType.WORDLE,
   grid: [
     ["", "", "", "", ""],
@@ -301,26 +297,17 @@ export function isLegalWord(guess: string) {
 }
 
 export function getGuessStatus(
-  grid: string[][],
-  row: number,
+  guess: string,
   col: number,
-  letter: string,
   answer: string
 ): GuessStatus {
-  if (letter === "") {
+  if (guess === "") {
     return GuessStatus.OPEN;
-  } else if (answer[col] === letter) {
+  } else if (answer[col] === guess[col]) {
     return GuessStatus.CORRECT;
-  } else if (answer.indexOf(letter.toUpperCase()) !== -1) {
-    const remainders = removeGreenAndPriorYellows(
-      grid[row].join(""),
-      answer,
-      col
-    );
-    console.log(remainders);
-    if (
-      remainders.newAnswer.indexOf(letter) !== -1
-    ) {
+  } else if (answer.indexOf(guess[col]) !== -1) {
+    const remainder = removeGreenAndPriorYellows(guess, answer, col);
+    if (remainder.indexOf(guess[col]) !== -1) {
       return GuessStatus.WRONG_POSITION;
     }
     return GuessStatus.INCORRECT;
@@ -331,11 +318,11 @@ export function getGuessStatus(
 
 export function removeGreenAndPriorYellows(
   guess: string,
-  answer: string, 
-  index: number,
-): { newGuess: string; newAnswer: string; } {
+  answer: string,
+  index: number
+): string {
   //remove correctly positioned letters
-  let newGuess = [...guess]
+  let rGuess = [...guess]
     .map((letter, i) => {
       if (answer[i] === letter) {
         return "";
@@ -343,16 +330,19 @@ export function removeGreenAndPriorYellows(
         return letter;
       }
     })
-    .join("").toUpperCase();
-  let newAnswer = [...answer]
+    .join("");
+  let rAnswer = [...answer]
     .map((letter, i) => (guess[i] === letter ? "" : letter))
-    .join("").toUpperCase();
-  
+    .join("");
+
   //remove duplicate yellows
-  if (newAnswer.split(guess[index]).length < newGuess.split(guess[index]).length && newGuess.indexOf(guess[index]) < index) {
-    newAnswer = newAnswer.replace(guess[index], "");
-    newGuess = newGuess.replace(guess[index], "");
-    console.log(newAnswer.split(guess[index]), newGuess.split(guess[index]));
+  if (
+    rAnswer.split(guess[index]).length < rGuess.split(guess[index]).length &&
+    rGuess.indexOf(guess[index]) < index
+  ) {
+    rAnswer = rAnswer.replace(guess[index], "");
+    rGuess = rGuess.replace(guess[index], "");
+    console.log(rAnswer.split(guess[index]), rGuess.split(guess[index]));
   }
-  return { newGuess, newAnswer };
+  return rAnswer;
 }

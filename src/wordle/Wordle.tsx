@@ -9,29 +9,25 @@ export const Wordle: React.FC = () => {
 
   function handleGuess(guess: string, attempt: number) {
     const newGrid = game.grid;
-    let newPlayersData = game.playersData;
+    let newPlayerData = game.playerData;
     if (isLegalWord(guess)) {
       newGrid[attempt] = [...guess];
-      newPlayersData = game.playersData.map((playerData, i) =>
-        i === game.currentPlayer
-          ? {
-              ...playerData,
-              wordsFound: game.playersData[i].wordsFound.concat(guess),
-            }
-          : playerData
-      );
+      newPlayerData = {
+        ...game.playerData,
+        wordsFound: game.playerData.wordsFound.concat(guess),
+      };
     } else {
       setError("Invalid attempt!");
     }
     const newGame = {
       ...game,
       grid: newGrid,
-      playersData: newPlayersData,
+      playerData: newPlayerData,
     };
     setGame(newGame);
     if (
       game.answer === guess.toUpperCase() ||
-      game.playersData[0].wordsFound.length === 5
+      game.playerData.wordsFound.length === 5
     ) {
       handleGameEnd();
     }
@@ -53,12 +49,11 @@ export const Wordle: React.FC = () => {
   function handleGameEnd() {
     setGame({ ...game, playing: false });
     setTimeout(displayAnswer, 1000);
-    
   }
 
   function displayAnswer() {
     alert(`Game over! ${game.answer}`);
-}
+  }
 
   function clearError() {
     setError("");
@@ -80,7 +75,7 @@ export const Wordle: React.FC = () => {
               e.preventDefault();
               handleGuess(
                 e.currentTarget.search.value.toUpperCase(),
-                game.playersData[game.currentPlayer].wordsFound.length
+                game.playerData.wordsFound.length
               );
               e.currentTarget.reset();
               setTimeout(clearError, 1000);
