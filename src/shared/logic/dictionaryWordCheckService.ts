@@ -28,7 +28,7 @@ export function findAllWordsOnBoggleBoard(
       : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
   dictionaryWords.forEach((word) => {
     if (
-      word.length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
+      word.split("/")[0].length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
       word !== word.toUpperCase() && // don't want abbreviations
       (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
       wordOnBoard(word, grid, canReuseSquares)

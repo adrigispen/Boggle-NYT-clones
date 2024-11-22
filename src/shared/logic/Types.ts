@@ -189,5 +189,5 @@ export type dwdsEntry = {
 };
 
 export type TypoModified = {
-  dictionaryTable: Record<string, unknown>;
+  dictionaryTable: Record<string, string[][]>;
 };
