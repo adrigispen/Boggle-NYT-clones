@@ -1,8 +1,10 @@
-import { PlayerData, TypoModified } from "./Types";
+import { PlayerData } from "./Types";
 import { Typo } from "typo-js-ts";
 import { wordOnBoard, getWordPath } from "../../boggle/logic/gridHelpers";
 import { getScore } from "./scoringHelpers";
 import { isPangram } from "../../spellingBee/logic/beeHelpers";
+import { enDictionaryWords } from "../../../dictionaries/en_US/words";
+import { deDictionaryWords } from "../../../dictionaries/de_DE/woerter";
 
 const dictionaryEn = new Typo("en_US");
 const dictionaryDe = new Typo("de_DE");
@@ -23,9 +25,7 @@ export function findAllWordsOnBoggleBoard(
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
-    language === "English"
-      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
-      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
+    language === "English" ? enDictionaryWords : deDictionaryWords;
   dictionaryWords.forEach((word) => {
     if (
       word.split("/")[0].length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
@@ -84,15 +84,15 @@ export function searchForWord(
 // spelling bee helpers
 
 export function pangramExists(letters: string, language: string) {
+  console.log(language);
   const dictionary =
-    language === "English"
-      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
-      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
+    language === "English" ? enDictionaryWords : deDictionaryWords;
   const r = new RegExp(`^[${letters}]+$`, "i");
   const word = dictionary.find(
     (word) =>
       letters.split("").every((l) => word.indexOf(l) !== -1) && word.match(r)
   );
+  console.log(word);
   return word === undefined ? false : true;
 }
 
@@ -103,9 +103,7 @@ export function findAllSpellingBeeWords(
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
-    language === "English"
-      ? Object.keys((dictionaryEn as unknown as TypoModified).dictionaryTable)
-      : Object.keys((dictionaryDe as unknown as TypoModified).dictionaryTable);
+    language === "English" ? enDictionaryWords : deDictionaryWords;
   dictionaryWords.forEach((word) => {
     if (
       word.length > 3 && // we'll let players have a chance to win - SBB only finds 4+ words
