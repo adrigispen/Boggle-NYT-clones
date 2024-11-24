@@ -1,21 +1,9 @@
 import { PlayerData } from "./Types";
-import { Typo } from "typo-js-ts";
 import { wordOnBoard, getWordPath } from "../../boggle/logic/gridHelpers";
 import { getScore } from "./scoringHelpers";
 import { isPangram } from "../../spellingBee/logic/beeHelpers";
 import { enDictionaryWords } from "../../../dictionaries/en_US/words";
 import { deDictionaryWords } from "../../../dictionaries/de_DE/woerter";
-
-const dictionaryEn = new Typo("en_US");
-const dictionaryDe = new Typo("de_DE");
-
-dictionaryDe.ready.then(() => {
-  console.log("bereit");
-});
-
-dictionaryEn.ready.then(() => {
-  console.log("ready");
-});
 
 // boggle helpers
 export function findAllWordsOnBoggleBoard(
@@ -44,8 +32,8 @@ export function findAllWordsOnBoggleBoard(
 
 export function isValidWordInLanguage(word: string, language: string): boolean {
   return language === "English"
-    ? dictionaryEn.check(word)
-    : dictionaryDe.check(word);
+    ? enDictionaryWords.includes(word)
+    : deDictionaryWords.includes(word);
 }
 
 function isNewWordForPlayer(word: string, wordsFound: string[]): boolean {
