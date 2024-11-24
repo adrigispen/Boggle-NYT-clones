@@ -8,9 +8,10 @@ export const Wordle: React.FC = () => {
   const [error, setError] = useState("");
 
   function handleGuess(guess: string, attempt: number) {
+    console.log(guess);
     const newGrid = game.grid;
     let newPlayerData = game.playerData;
-    if (isLegalWord(guess)) {
+    if (isLegalWord(guess.toLowerCase())) {
       newGrid[attempt] = [...guess];
       newPlayerData = {
         ...game.playerData,
