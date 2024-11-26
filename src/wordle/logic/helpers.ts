@@ -1,3 +1,4 @@
+import { LANGUAGE } from "../../shared/logic/constants";
 import { isValidWordInLanguage } from "../../shared/logic/dictionaryWordCheckService";
 import {
   GuessStatus,
@@ -293,7 +294,7 @@ export function getWordleWord(): string {
 }
 
 export function isLegalWord(guess: string) {
-  return isValidWordInLanguage(guess, "English") && guess.length === 5;
+  return isValidWordInLanguage(guess, LANGUAGE.ENGLISH) && guess.length === 5;
 }
 
 export function getGuessStatus(
@@ -342,7 +343,6 @@ export function removeGreenAndPriorYellows(
   ) {
     rAnswer = rAnswer.replace(guess[index], "");
     rGuess = rGuess.replace(guess[index], "");
-    console.log(rAnswer.split(guess[index]), rGuess.split(guess[index]));
   }
   return rAnswer;
 }
