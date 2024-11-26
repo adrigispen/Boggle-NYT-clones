@@ -1,4 +1,4 @@
-# Deutsch/English Word Games
+# English/Deutsch Word Games
 
 Implementation of variations of NYT's Spelling Bee game and the classic board game Boggle, checking for word validity using a spell-check dictionary (this does lead to some issues - not all words are recognized, and some proper nouns are recognized that wouldn't count in either of these games, but they're still playable).
 
