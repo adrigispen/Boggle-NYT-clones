@@ -9,8 +9,8 @@ import {
   en_US,
   en_US_16_die,
   en_US_25_die,
-  LANGUAGE,
 } from "../../shared/logic/constants";
+import { LANGUAGE } from "../../shared/logic/Types";
 
 export function getLetter(
   language: string,

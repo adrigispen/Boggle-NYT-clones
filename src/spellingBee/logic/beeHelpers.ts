@@ -1,5 +1,5 @@
 import { SpellingBeeGame, WordGameType } from "../../shared/logic/Types";
-import { LANGUAGE } from "../../shared/logic/constants";
+import { LANGUAGE } from "../../shared/logic/Types";
 import { pangramExists } from "../../shared/logic/dictionaryWordCheckService";
 
 function getLetters(): string[] {
@@ -19,7 +19,7 @@ export function isPangram(word: string): boolean {
   return new Set([...word]).size === 7;
 }
 
-export function getViableLetters(language: string): {
+export function getViableLetters(language: LANGUAGE): {
   centerLetter: string;
   edgeLetters: string[];
 } {

@@ -1,4 +1,4 @@
-import { LANGUAGE } from "../../shared/logic/constants";
+import { LANGUAGE } from "../../shared/logic/Types";
 import { isValidWordInLanguage } from "../../shared/logic/dictionaryWordCheckService";
 import {
   GuessStatus,

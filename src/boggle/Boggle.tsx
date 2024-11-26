@@ -20,6 +20,7 @@ import { ScoredWordGame } from "../shared/components/ScoredWordGame";
 import { Grid } from "./components/Grid";
 import { Header } from "../shared/components/Header";
 import { initializePlayersData } from "../shared/logic/scoringHelpers";
+import { LANGUAGE } from "../shared/logic/Types";
 
 export const Boggle: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, defaultGame) as [
@@ -68,18 +69,21 @@ export const Boggle: React.FC = () => {
   }
 
   function handleStartGame(
-    language?: string,
+    language?: LANGUAGE,
     players?: string[],
     speedMode?: boolean,
     generousMode?: boolean,
     size?: number
   ) {
+    if (!language || typeof language !== "string") {
+      language = game.language;
+    }
     const selectionGrid = noHighlights(size ?? game.size);
-    const grid = getNewGrid(size ?? game.size, language ?? game.language);
+    const grid = getNewGrid(size ?? game.size, language);
     let newGame = { ...game };
     newGame = {
       ...game,
-      language: language ?? game.language,
+      language,
       speedMode: speedMode ?? game.speedMode,
       error: "",
       currentPlayer: 0,
@@ -98,6 +102,7 @@ export const Boggle: React.FC = () => {
       grid,
       selectionGrid,
     };
+    console.log(newGame);
     dispatch({
       type: WordGameActionType.GAME_STARTED,
       payload: { game: newGame },

@@ -294,8 +294,3 @@ export const ponsApiSecret =
   "f06f4cec449369eee1abc5fa987dbf35e421d03b4f772bd42fc531bd6af95bde";
 
 export const dudenKey = "lS0kNVnlGJ2kXY1fI62vN2AZrcfrsN6Q5KUOcSel";
-
-export enum LANGUAGE {
-  ENGLISH = "ENGLISH",
-  GERMAN = "GERMAN,",
-}

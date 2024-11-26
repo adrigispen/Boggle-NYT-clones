@@ -19,6 +19,7 @@ import { ScoredWordGame } from "../shared/components/ScoredWordGame.tsx";
 import { SpellingBeeBoard } from "./components/SpellingBeeBoard.tsx";
 import { Header } from "../shared/components/Header.tsx";
 import { initializePlayersData } from "../shared/logic/scoringHelpers.ts";
+import { LANGUAGE } from "../shared/logic/Types.ts";
 
 export const SpellingBee: React.FC = () => {
   const [game, dispatch] = useReducer(wordGameReducer, initialSpellingBee) as [
@@ -57,16 +58,17 @@ export const SpellingBee: React.FC = () => {
   }
 
   function handleStartGame(
-    language?: string,
+    language?: LANGUAGE,
     players?: string[],
     speedMode?: boolean
   ) {
-    const { centerLetter, edgeLetters } = getViableLetters(
-      language ?? game.language
-    );
+    if (!language || typeof language !== "string") {
+      language = game.language;
+    }
+    const { centerLetter, edgeLetters } = getViableLetters(language);
     const newGame = {
       ...game,
-      language: language ?? game.language,
+      language,
       speedMode: speedMode ?? game.speedMode,
       error: "",
       currentPlayer: 0,

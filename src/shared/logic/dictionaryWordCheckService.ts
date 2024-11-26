@@ -4,13 +4,13 @@ import { getScore } from "./scoringHelpers";
 import { isPangram } from "../../spellingBee/logic/beeHelpers";
 import { enDictionaryWords } from "../../../dictionaries/en_US/words";
 import { deDictionaryWords } from "../../../dictionaries/de_DE/woerter";
-import { LANGUAGE } from "./constants";
+import { LANGUAGE } from "./Types";
 
 // boggle helpers
 export function findAllWordsOnBoggleBoard(
   grid: string[][],
   canReuseSquares: boolean,
-  language: string
+  language: LANGUAGE
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
@@ -31,7 +31,10 @@ export function findAllWordsOnBoggleBoard(
   };
 }
 
-export function isValidWordInLanguage(word: string, language: string): boolean {
+export function isValidWordInLanguage(
+  word: string,
+  language: LANGUAGE
+): boolean {
   return language === LANGUAGE.ENGLISH
     ? enDictionaryWords.includes(word)
     : deDictionaryWords.includes(word);
@@ -47,7 +50,7 @@ function isNewWordForPlayer(word: string, wordsFound: string[]): boolean {
 
 export function searchForWord(
   currentSearch: string,
-  language: string,
+  language: LANGUAGE,
   playerData: PlayerData,
   grid: string[][],
   generousMode: boolean
@@ -72,7 +75,7 @@ export function searchForWord(
 
 // spelling bee helpers
 
-export function pangramExists(letters: string, language: string) {
+export function pangramExists(letters: string, language: LANGUAGE) {
   console.log(language);
   const dictionary =
     language === LANGUAGE.ENGLISH ? enDictionaryWords : deDictionaryWords;
@@ -81,12 +84,11 @@ export function pangramExists(letters: string, language: string) {
     (word) =>
       letters.split("").every((l) => word.indexOf(l) !== -1) && word.match(r)
   );
-  console.log(word);
   return word === undefined ? false : true;
 }
 
 export function findAllSpellingBeeWords(
-  language: string,
+  language: LANGUAGE,
   centerLetter: string,
   edgeLetters: string[]
 ): PlayerData {
@@ -97,7 +99,7 @@ export function findAllSpellingBeeWords(
     if (
       word.length > 3 && // we'll let players have a chance to win - SBB only finds 4+ words
       word !== word.toUpperCase() && // don't want abbreviations
-      (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
+      (language === LANGUAGE.GERMAN || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
       word.toLowerCase().indexOf(centerLetter) !== -1 &&
       [...word.toLowerCase()].every(
         (letter) => edgeLetters.concat(centerLetter).indexOf(letter) !== -1
@@ -116,7 +118,7 @@ export function findAllSpellingBeeWords(
 
 export function searchForSpellingBeeWord(
   currentSearch: string,
-  language: string,
+  language: LANGUAGE,
   playerData: PlayerData,
   centerLetter: string,
   edgeLetters: string[]

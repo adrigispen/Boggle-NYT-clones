@@ -95,7 +95,7 @@ export interface WordGame {
   playing: boolean;
   currentPlayer: number;
   speedMode: boolean;
-  language: string;
+  language: LANGUAGE;
 }
 
 export interface WordleGame {
@@ -189,3 +189,7 @@ export type Entry = {
 export type dwdsEntry = {
   lemma: string;
 };
+export enum LANGUAGE {
+  ENGLISH = "ENGLISH",
+  GERMAN = "DEUTSCH",
+}

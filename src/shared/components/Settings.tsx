@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SettingsProps } from "../logic/Types";
 import { BoardSizeSettings } from "../../boggle/components/BoardSizeSettings";
-import { LANGUAGE } from "../logic/constants";
+import { LANGUAGE } from "../logic/Types";
 
 export const Settings: React.FC<SettingsProps> = ({
   gameName,
