@@ -9,6 +9,7 @@ import {
   en_US,
   en_US_16_die,
   en_US_25_die,
+  LANGUAGE,
 } from "../../shared/logic/constants";
 
 export function getLetter(
@@ -17,7 +18,7 @@ export function getLetter(
   index: number
 ): string {
   const randomIndex = Math.floor(Math.random() * 6);
-  if (language == "English") {
+  if (language == LANGUAGE.ENGLISH) {
     return size == 4
       ? en_US_16_die[index][randomIndex]
       : size == 5
@@ -115,7 +116,7 @@ export function getWordPath(
 export const defaultGame: BoggleGame = {
   type: WordGameType.BOGGLE,
   size: 4,
-  language: "English",
+  language: LANGUAGE.ENGLISH,
   generousMode: true,
   speedMode: false,
   playersData: [
@@ -125,7 +126,7 @@ export const defaultGame: BoggleGame = {
       currentScore: 0,
     },
   ],
-  grid: getNewGrid(4, "English"),
+  grid: getNewGrid(4, LANGUAGE.ENGLISH),
   selectionGrid: noHighlights(4),
   currentPlayer: 0,
   error: "",

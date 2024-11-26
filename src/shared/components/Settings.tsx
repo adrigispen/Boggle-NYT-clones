@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SettingsProps } from "../logic/Types";
 import { BoardSizeSettings } from "../../boggle/components/BoardSizeSettings";
+import { LANGUAGE } from "../logic/constants";
 
 export const Settings: React.FC<SettingsProps> = ({
   gameName,
@@ -89,13 +90,13 @@ export const Settings: React.FC<SettingsProps> = ({
               <input
                 type="radio"
                 name="language"
-                value="English"
+                value={LANGUAGE.ENGLISH}
                 defaultChecked
               />
               English
             </label>
             <label>
-              <input type="radio" name="language" value="Deutsch" />
+              <input type="radio" name="language" value={LANGUAGE.GERMAN} />
               Deutsch
             </label>
           </div>

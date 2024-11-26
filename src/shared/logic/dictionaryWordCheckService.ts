@@ -4,6 +4,7 @@ import { getScore } from "./scoringHelpers";
 import { isPangram } from "../../spellingBee/logic/beeHelpers";
 import { enDictionaryWords } from "../../../dictionaries/en_US/words";
 import { deDictionaryWords } from "../../../dictionaries/de_DE/woerter";
+import { LANGUAGE } from "./constants";
 
 // boggle helpers
 export function findAllWordsOnBoggleBoard(
@@ -13,12 +14,12 @@ export function findAllWordsOnBoggleBoard(
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
-    language === "English" ? enDictionaryWords : deDictionaryWords;
+    language === LANGUAGE.ENGLISH ? enDictionaryWords : deDictionaryWords;
   dictionaryWords.forEach((word) => {
     if (
       word.split("/")[0].length > 4 && // we'll let players have a chance to win - BB only finds 5+ words
       word !== word.toUpperCase() && // don't want abbreviations
-      (language === "Deutsch" || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
+      (language === LANGUAGE.GERMAN || word === word.toLowerCase()) && // if we're looking for English words, they shouldn't be capitalized
       wordOnBoard(word, grid, canReuseSquares)
     )
       words = words.concat(word);
@@ -31,7 +32,7 @@ export function findAllWordsOnBoggleBoard(
 }
 
 export function isValidWordInLanguage(word: string, language: string): boolean {
-  return language === "English"
+  return language === LANGUAGE.ENGLISH
     ? enDictionaryWords.includes(word)
     : deDictionaryWords.includes(word);
 }
@@ -74,7 +75,7 @@ export function searchForWord(
 export function pangramExists(letters: string, language: string) {
   console.log(language);
   const dictionary =
-    language === "English" ? enDictionaryWords : deDictionaryWords;
+    language === LANGUAGE.ENGLISH ? enDictionaryWords : deDictionaryWords;
   const r = new RegExp(`^[${letters}]+$`, "i");
   const word = dictionary.find(
     (word) =>
@@ -91,7 +92,7 @@ export function findAllSpellingBeeWords(
 ): PlayerData {
   let words: string[] = [];
   const dictionaryWords =
-    language === "English" ? enDictionaryWords : deDictionaryWords;
+    language === LANGUAGE.ENGLISH ? enDictionaryWords : deDictionaryWords;
   dictionaryWords.forEach((word) => {
     if (
       word.length > 3 && // we'll let players have a chance to win - SBB only finds 4+ words
